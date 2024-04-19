@@ -101,12 +101,35 @@ class PacketHandler():
         txpacket[index+1] = lowByte(crc)
 
         # tx packet
+        port.clearPort()
         written_packet_length = port.writePort(txpacket)
         if total_packet_length != written_packet_length:
             port.is_using = False
             return COMM_TX_FAIL
 
-        port.clearPort()
         port.is_using = False
 
         return COMM_SUCCESS
+
+    def rxPacket(self, port):
+        rxpacket = []
+
+        result = COMM_TX_FAIL
+        rx_length = 0
+        wait_length = 8  # minimum length
+
+        while True:
+            if port.getBytesAvailable():
+                rx_length = port.getBytesAvailable()
+                rxpacket = port.readPort(rx_length)
+
+            else:
+                if port.isPacketTimeout():
+                    if rx_length == 0:
+                        result = COMM_RX_TIMEOUT
+                    else:
+                        result = COMM_RX_CORRUPT
+                    break
+
+        port.is_using = False
+        return rxpacket, result

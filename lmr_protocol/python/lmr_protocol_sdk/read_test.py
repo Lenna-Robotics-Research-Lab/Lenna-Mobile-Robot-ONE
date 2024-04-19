@@ -12,10 +12,7 @@ serial.openPort()
 
 packet = PacketHandler()
 
-while True:
-    packet.txPacket(serial, 0xA0, [0xABCD])
-
-# txpacket = [0xFF, 0xFF, 0x00, 0x02, 0x0F, 0x0F, 0xAB, 0xCD]
-
-# while True:
-#     serial.writePort(txpacket)
+while True: 
+    if serial.getBytesAvailable():
+        a = serial.readPort(8)
+        print(a)

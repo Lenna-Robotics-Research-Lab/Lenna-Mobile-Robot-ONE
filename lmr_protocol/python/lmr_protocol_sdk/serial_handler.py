@@ -80,14 +80,13 @@ class SerialHandler():
         return self.baudrate
 
     def getBytesAvailable(self):
-        return self.ser.in_waiting
+        return self.ser.inWaiting()
 
     def readPort(self, length):
         # NOTE: only works for python 3
         return self.ser.read(length)
 
     def writePort(self, packet):
-        self.clearPort()
         return self.ser.write(packet)
 
     def setPacketTimeout(self, packet_length, latency_timer=16):
