@@ -12,6 +12,9 @@ COMM_RX_TIMEOUT = -3001     # There is no status packet
 COMM_RX_CORRUPT = -3002     # Incorrect status packet
 COMM_NOT_AVAILABLE = -9000
 
+# INSTRUCTION ADRESS TABLE
+INST_MOTION_CONTROL = 0x01
+
 def combine2Word(a, b):
     return (a & 0xFFFF) | (b & 0xFFFF) << 16
 

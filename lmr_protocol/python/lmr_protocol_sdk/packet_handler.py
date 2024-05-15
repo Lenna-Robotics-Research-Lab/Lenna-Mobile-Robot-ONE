@@ -3,6 +3,8 @@
 
 from field_ops import *
 
+MIN_LEN_PACKET = 8
+
 TXPACKET_MAX_LEN = 144
 RXPACKET_MAX_LEN = 144
 
@@ -17,6 +19,9 @@ PKT_CRC_H = 6
 PKT_CRC_L = 7
 
 class PacketHandler():
+    def __init__(self, port):
+        self.port = port
+
     def getProtocolVersion(self):
         return "v0.0.1"
 
@@ -66,17 +71,17 @@ class PacketHandler():
 
         return crc_accum
 
-    def txPacket(self, port, instruction, parameters):
-        if port.is_using:
+    def txPacket(self, instruction, parameters):
+        if self.port.is_using:
             return COMM_PORT_BUSY
-        port.is_using = True
+        self.port.is_using = True
 
         packet_length = 1 + (2 * len(parameters)) + 2
 
         # check max packet length
         total_packet_length = packet_length + 3
         if total_packet_length > TXPACKET_MAX_LEN:
-            port.is_using = False
+            self.port.is_using = False
             return COMM_TX_ERROR
 
         txpacket = [0] * total_packet_length
@@ -101,35 +106,32 @@ class PacketHandler():
         txpacket[index+1] = lowByte(crc)
 
         # tx packet
-        port.clearPort()
-        written_packet_length = port.writePort(txpacket)
+        self.port.clearPort()
+        written_packet_length = self.port.writePort(txpacket)
         if total_packet_length != written_packet_length:
-            port.is_using = False
+            self.port.is_using = False
             return COMM_TX_FAIL
 
-        port.is_using = False
+        self.port.is_using = False
 
         return COMM_SUCCESS
 
-    def rxPacket(self, port):
+    def rxPacket(self):
         rxpacket = []
+        rxlength = 0
 
         result = COMM_TX_FAIL
-        rx_length = 0
-        wait_length = 8  # minimum length
 
         while True:
-            if port.getBytesAvailable():
-                rx_length = port.getBytesAvailable()
-                rxpacket = port.readPort(rx_length)
+            if self.port.getBytesAvailable():
+                rxlength = self.port.getBytesAvailable()
+                rxpacket = self.port.readPort(rxlength)
 
-            else:
-                if port.isPacketTimeout():
-                    if rx_length == 0:
-                        result = COMM_RX_TIMEOUT
-                    else:
-                        result = COMM_RX_CORRUPT
-                    break
+                result = COMM_SUCCESS
+                break
 
-        port.is_using = False
-        return rxpacket, result
+        self.port.is_using = False
+        return rxpacket, rxlength, result
+
+    def setMotorSpeed(self, motor_speed_left, motor_speed_right):
+        return self.txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])

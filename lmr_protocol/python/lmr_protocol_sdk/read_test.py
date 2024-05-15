@@ -10,9 +10,16 @@ BAUDRATE = 115200
 serial = SerialHandler(DEVICENAME, BAUDRATE)
 serial.openPort()
 
-packet = PacketHandler()
+packet = PacketHandler(serial)
 
-while True: 
-    if serial.getBytesAvailable():
-        a = serial.readPort(8)
-        print(a)
+while True:
+    data, _, _ = packet.rxPacket()
+    print(data)
+
+# while True: 
+#     data = packet.rxPacket(serial)
+#     print(data)
+
+    # if serial.getBytesAvailable():
+    #     a = serial.readPort(8)
+    #     print(a)
