@@ -3,6 +3,7 @@
 
 from serial_handler import *
 from packet_handler import *
+from lenna_mobile_robot import *
 
 DEVICENAME = '/dev/ttyTHS1'
 BAUDRATE = 115200
@@ -10,12 +11,9 @@ BAUDRATE = 115200
 serial = SerialHandler(DEVICENAME, BAUDRATE)
 serial.openPort()
 
-packet = PacketHandler()
+packet = PacketHandler(serial)
+lenna = LennaMobileRobot(packet)
 
 while True:
-    packet.txPacket(serial, 0xA0, [0xABCD])
-
-# txpacket = [0xFF, 0xFF, 0x00, 0x02, 0x0F, 0x0F, 0xAB, 0xCD]
-
-# while True:
-#     serial.writePort(txpacket)
+    lenna.setMotorSpeed(100, 150)
+    time.sleep(1)
