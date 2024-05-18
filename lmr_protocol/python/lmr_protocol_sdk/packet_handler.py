@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from field_ops import *
+import time 
 
 MIN_LEN_PACKET = 8
 
@@ -116,18 +117,26 @@ class PacketHandler():
 
         return COMM_SUCCESS
 
-    def rxPacket(self):
+    def rxPacket(self, timout = 100):
         rxpacket = []
         rxlength = 0
 
+        if self.port.is_using:
+            return rxpacket, rxlength, COMM_PORT_BUSY
+        self.port.is_using = True
+        
         result = COMM_TX_FAIL
 
+        initial_time = self.port.getCurrentTime() 
         while True:
             if self.port.getBytesAvailable():
                 rxlength = self.port.getBytesAvailable()
                 rxpacket = self.port.readPort(rxlength)
 
                 result = COMM_SUCCESS
+                break
+            elif self.port.getCurrentTime() - initial_time >= timout:
+                result = COMM_RX_FAIL
                 break
 
         self.port.is_using = False

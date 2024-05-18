@@ -24,14 +24,11 @@ def combine2Byte(a, b):
 def lowWord(l):
     return l & 0xFFFF
 
-
 def highWord(l):
     return (l >> 16) & 0xFFFF
 
-
 def lowByte(w):
     return w & 0xFF
-
 
 def highByte(w):
     return (w >> 8) & 0xFF
