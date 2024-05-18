@@ -1,7 +1,8 @@
-../Core/Src/main.c:200:1:__io_putchar	16	static
-../Core/Src/main.c:215:5:main	32	static
-../Core/Src/main.c:324:6:SystemClock_Config	88	static
-../Core/Src/main.c:377:6:HAL_UART_RxCpltCallback	16	static
-../Core/Src/main.c:392:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:402:6:HAL_I2C_MemRxCpltCallback	16	static
-../Core/Src/main.c:426:6:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/main.c:203:1:__io_putchar	16	static
+../Core/Src/main.c:218:5:main	88	static
+../Core/Src/main.c:416:6:SystemClock_Config	88	static
+../Core/Src/main.c:460:16:updateCRC	24	static
+../Core/Src/main.c:521:6:HAL_UART_RxCpltCallback	16	static
+../Core/Src/main.c:536:6:HAL_TIM_PeriodElapsedCallback	16	static
+../Core/Src/main.c:546:6:HAL_I2C_MemRxCpltCallback	16	static
+../Core/Src/main.c:570:6:Error_Handler	4	static,ignoring_inline_asm

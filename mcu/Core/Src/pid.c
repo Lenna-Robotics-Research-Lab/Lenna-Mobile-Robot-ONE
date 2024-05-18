@@ -13,7 +13,7 @@ void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup)
 	pid_cfg->Control_Signal = 0;
 	}
 
-void LRL_PID_Update(pid_cfgType *pid_cfg,float measurement,float set_point)
+void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 	{
 	pid_cfg->Error = set_point - measurement;
 	pid_cfg->Error = pid_cfg->Error * Speed2PWM_Rate;
