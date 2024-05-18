@@ -1,0 +1,2 @@
+../Core/Src/utilities.c:13:6:LRL_Delay_Init	32	static
+../Core/Src/utilities.c:45:6:LRL_Delay_Us	16	static

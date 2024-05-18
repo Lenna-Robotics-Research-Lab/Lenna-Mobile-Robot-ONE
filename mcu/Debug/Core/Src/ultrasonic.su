@@ -1,0 +1,5 @@
+../Core/Src/ultrasonic.c:39:6:LRL_US_Init	8	static
+../Core/Src/ultrasonic.c:59:6:LRL_US_Trig	8	static
+../Core/Src/ultrasonic.c:70:6:LRL_US_TMR_OVF_ISR	16	static
+../Core/Src/ultrasonic.c:78:6:LRL_US_TMR_IC_ISR	24	static
+../Core/Src/ultrasonic.c:119:7:LRL_US_Read	8	static
