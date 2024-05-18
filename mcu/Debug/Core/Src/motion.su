@@ -1,0 +1,2 @@
+../Core/Src/motion.c:26:6:LRL_Motor_Speed	16	static
+../Core/Src/motion.c:49:6:LRL_Motion_Control	32	static
