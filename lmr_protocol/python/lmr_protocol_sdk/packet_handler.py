@@ -132,6 +132,3 @@ class PacketHandler():
 
         self.port.is_using = False
         return rxpacket, rxlength, result
-
-    def setMotorSpeed(self, motor_speed_left, motor_speed_right):
-        return self.txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])
