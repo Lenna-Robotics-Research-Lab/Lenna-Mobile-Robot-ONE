@@ -289,8 +289,8 @@ int main(void)
   HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
 
   // ####################   memory allocation    ####################
-  float * motor_speed_right = (float *) malloc(sizeof(float));
-  float * motor_speed_left = (float *) malloc(sizeof(float));
+  float motor_speed_right = 0;
+  float motor_speed_left = 0;
 
 
   /* USER CODE END 2 */
@@ -315,12 +315,12 @@ int main(void)
 
 			if (rxBuffer[3] == 0x01)
 			{
-				*motor_speed_left = (float)((rxBuffer[4] << 8) | rxBuffer[5]);
-				*motor_speed_right = (float)((rxBuffer[6] << 8) | rxBuffer[7]);
+				motor_speed_left = (float)((rxBuffer[4] << 8) | rxBuffer[5]);
+				motor_speed_right = (float)((rxBuffer[6] << 8) | rxBuffer[7]);
 			}
 
 
-			//HAL_UART_Transmit(&huart1, rxBuffer, total_pkt_length, 0xFF);
+//			HAL_UART_Transmit(&huart1, rxBuffer, total_pkt_length, 0xFF);
 
 			HAL_UART_Transmit_IT(&huart2, txBuffer, 8);
 
@@ -391,11 +391,12 @@ int main(void)
 		  angular_speed_left = left_enc_diff * Tick2RMP_Rate ;
 		  angular_speed_right = right_enc_diff * Tick2RMP_Rate;
 
-		  LRL_PID_Update(&pid_motor_left, angular_speed_left, *motor_speed_left);
-		  LRL_PID_Update(&pid_motor_right, angular_speed_right, *motor_speed_right);
+		  LRL_PID_Update(&pid_motor_left, angular_speed_left, motor_speed_left);
+		  LRL_PID_Update(&pid_motor_right, angular_speed_right, motor_speed_right);
 
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal, pid_motor_right.Control_Signal);
-
+//		  motor_speed_right = (float*)realloc(motor_speed_right,sizeof(float));
+//		  motor_speed_left = (float*)realloc(motor_speed_left,sizeof(float));
 		  pid_tim_flag = 0;
 
 		sprintf(MSG, "speed L:%6.2f \t R:%6.2f \r\n", angular_speed_left, angular_speed_right);
