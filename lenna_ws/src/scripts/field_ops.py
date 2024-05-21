@@ -32,3 +32,12 @@ def lowByte(w):
 
 def highByte(w):
     return (w >> 8) & 0xFF
+
+def getSigned(nums):
+    signed = []
+    for num in nums:
+        if num & 0x8000:
+            signed.append(num - 2**16)
+        else:
+            signed.append(num)
+    return signed
