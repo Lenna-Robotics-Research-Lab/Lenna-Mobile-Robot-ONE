@@ -15,7 +15,7 @@ uint8_t _reg;
 
 float heading;
 
-float HMC5883L_Set_Declination(int16_t declination_degs , int16_t declination_mins, char declination_dir)
+float LRL_HMC5883L_Set_Declination(int16_t declination_degs , int16_t declination_mins, char declination_dir)
 {
 	int8_t _dir = 0;
 
@@ -31,7 +31,7 @@ float HMC5883L_Set_Declination(int16_t declination_degs , int16_t declination_mi
 	return ((_dir)* ( declination_degs + (1/60 * declination_mins)) * (M_PI / 180));
 }
 
-void HMC5883L_init(I2C_HandleTypeDef *hi2c)
+void LRL_HMC5883L_Init(I2C_HandleTypeDef *hi2c)
 {
     _hi2c = hi2c;
 
@@ -56,7 +56,7 @@ void HMC5883L_init(I2C_HandleTypeDef *hi2c)
 	HAL_Delay(6);
 }
 
-void HMC5883L_readHeading(int16_t *x, int16_t *y, int16_t *z, float *headingDegrees)
+void LRL_HMC5883L_ReadHeading(int16_t *x, int16_t *y, int16_t *z, float *headingDegrees)
 {
 
 	// write MODE register
@@ -76,7 +76,7 @@ void HMC5883L_readHeading(int16_t *x, int16_t *y, int16_t *z, float *headingDegr
 
 	heading = atan2(*x, *y);
 
-	heading += HMC5883L_Set_Declination(5, 3, 'E');
+	heading += LRL_HMC5883L_Set_Declination(5, 3, 'E');
 
 	// Correct for when signs are reversed.
     if(heading < 0)

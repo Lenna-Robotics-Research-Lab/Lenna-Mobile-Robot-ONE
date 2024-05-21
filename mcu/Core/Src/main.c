@@ -67,7 +67,7 @@ uint8_t min_len_packet = 8;
 uint8_t max_len_packet = 32;
 uint8_t rxBuffer[144] = {0};
 uint8_t protocol_data[144] = {0};
-uint8_t txBuffer[8] = {0xFF, 0xFF, 0x05, 0xA0, 0xAB, 0xCD, 0xB4, 0xFC};
+uint8_t txBuffer[144]; //= {0xFF, 0xFF, 0x05, 0xA0, 0xAB, 0xCD, 0xB4, 0xFC};
 
 bool flag_uart_cb = 0;
 bool flag_remain_packet = 1;
@@ -79,6 +79,7 @@ unsigned short temp_crc = 0;
 
 
 char MSG[128];
+
 
 uint8_t input_speed ;// step given by MATLAB code
 uint16_t left_enc_temp = 0, right_enc_temp = 0 , right_enc_diff = 0, left_enc_diff = 0;
@@ -277,16 +278,20 @@ int main(void)
 
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
-//  LRL_MPU_Init(&imu);
-//
-  LRL_MPU_Bypass(&imu);
-  HMC5883L_init(&hi2c3);
+  LRL_MPU_Bypass_Enable(&imu, 0);
+  LRL_MPU_Init(&imu);
+
+  LRL_MPU_Bypass_Enable(&imu,1);
+  LRL_HMC5883L_Init(&hi2c3);
+
 
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
   HAL_Delay(1000);
 
   HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
 
+  txBuffer[0] = 0xFF;
+  txBuffer[1] = 0xFF;
   // ####################   memory allocation    ####################
   float motor_speed_right = 0;
   float motor_speed_left = 0;
@@ -321,7 +326,7 @@ int main(void)
 
 //			HAL_UART_Transmit(&huart1, rxBuffer, total_pkt_length, 0xFF);
 
-			HAL_UART_Transmit_IT(&huart2, txBuffer, 8);
+//			HAL_UART_Transmit_IT(&huart2, txBuffer, 8);
 
 			memset(rxBuffer, 0, max_len_packet*sizeof(rxBuffer[0]));
 			HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
@@ -396,19 +401,71 @@ int main(void)
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal, pid_motor_right.Control_Signal);
 //		  motor_speed_right = (float*)realloc(motor_speed_right,sizeof(float));
 //		  motor_speed_left = (float*)realloc(motor_speed_left,sizeof(float));
+
 		  pid_tim_flag = 0;
 
-		sprintf(MSG, "speed L:%6.2f \t R:%6.2f \r\n", angular_speed_left, angular_speed_right);
-		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
+		  LRL_MPU_Bypass_Enable(&imu , 0);
+
+		  LRL_MPU_Read_All(&imu);
+
+		  LRL_MPU_Bypass_Enable(&imu , 1);
+		  LRL_HMC5883L_ReadHeading(&val_x, &val_y, &val_z, &val_heading);
+
+		  uint16_t tmp_heading = (uint16_t)val_heading;
+		  uint16_t tmp_angular_left = (uint16_t) angular_speed_left;
+		  uint16_t tmp_angular_right = (uint16_t) angular_speed_right;
+		  uint16_t tmp_acc_x = (uint16_t)(imu.final_accel_x * 10000);
+		  uint16_t tmp_acc_y = (uint16_t)(imu.final_accel_y * 10000);
+		  int16_t tmp_gyr_x = (int16_t)(imu.final_gyro_x * 100);
+		  uint16_t tmp_CRC;
+
+		  txBuffer[2] = (uint8_t)(tmp_heading >> 8);
+		  txBuffer[3] = (uint8_t)(tmp_heading & 0x00FF);
+
+		  txBuffer[4] = (uint8_t)(tmp_angular_left >> 8);
+		  txBuffer[5] = (uint8_t)(tmp_angular_left & 0x00FF);
+
+		  txBuffer[6] = (uint8_t)(tmp_angular_right >> 8);
+		  txBuffer[7] = (uint8_t)(tmp_angular_right & 0x00FF);
+
+		  txBuffer[8] = (uint8_t)(tmp_acc_x>> 8);
+		  txBuffer[9] = (uint8_t)(tmp_acc_x & 0x00FF);
+
+		  txBuffer[10] = (uint8_t)(tmp_acc_y>> 8);
+		  txBuffer[11] = (uint8_t)(tmp_acc_y & 0x00FF);
+
+		  txBuffer[12] = (uint8_t)(tmp_gyr_x>> 8);
+		  txBuffer[13] = (uint8_t)(tmp_gyr_x & 0x00FF);
+
+		  tmp_CRC = updateCRC(0, &txBuffer, 14);
+
+		  txBuffer[14] = (uint8_t)(tmp_CRC >> 8);
+		  txBuffer[15] = (uint8_t)(tmp_CRC & 0x00FF);
+
+		  HAL_UART_Transmit_IT(&huart2, txBuffer, 16);
+
+		  sprintf(MSG,"something is : %d\t %d\t %d\t %d\t %d\t %d\t\n\r", tmp_heading, tmp_angular_left,tmp_angular_right,tmp_acc_x,tmp_acc_y,tmp_gyr_x);
+
+		  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 5);
+
+//		sprintf(MSG, "speed L:%6.2f \t R:%6.2f \r\n", angular_speed_left, angular_speed_right);
+//		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
 	}
 //		sprintf(MSG, "speed L:%5.1f \t R:%5.1f \r\n", angular_speed_left, angular_speed_right);
+
 //		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
+	//  LRL_MPU_Bypass_Enable(&imu);
+
+
+//	  LRL_HMC5883L_ReadHeading(&val_x, &val_y, &val_z, &val_heading);
+//	  sprintf(MSG,"heading is : %05.2f\n\r",val_heading);
+//	  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
+//	  HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
-  LRL_MPU_Bypass(&imu);
-  LRL_HM
+
 
   /* USER CODE END 3 */
 }

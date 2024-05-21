@@ -80,8 +80,9 @@ void LRL_Read_Accel(imu_cfgType *imu);
 void LRL_Read_Gyro(imu_cfgType *imu);
 void LRL_MPU_Init(imu_cfgType *imu);
 //void LRL_Kalman_Filter(imu_cfgType *imu);
+void LRL_MPU_Read_All(imu_cfgType *imu);
 void LRL_Complementary_Filter(imu_cfgType *imu);
-void LRL_MPU_Bypass(imu_cfgType *imu);
+void LRL_MPU_Bypass_Enable(imu_cfgType *imu,uint8_t);
 //
 ////=========================================== Gy-80 ========================================
 //

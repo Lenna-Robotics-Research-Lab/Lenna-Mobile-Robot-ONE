@@ -84,8 +84,8 @@
 
 #define DELAY_TIMEOUT				HAL_MAX_DELAY
 
-void HMC5883L_init(I2C_HandleTypeDef *hi2c);
-void HMC5883L_readHeading(int16_t *x, int16_t *y, int16_t *z, float *headingDegrees);
-float HMC5883L_Set_Declination(int16_t declination_degs , int16_t declination_mins, char declination_dir);
+void LRL_HMC5883L_Init(I2C_HandleTypeDef *hi2c);
+void LRL_HMC5883L_ReadHeading(int16_t *x, int16_t *y, int16_t *z, float *headingDegrees);
+float LRL_HMC5883L_Set_Declination(int16_t declination_degs , int16_t declination_mins, char declination_dir);
 
 #endif /* INC_HMC5883L_H_ */
