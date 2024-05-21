@@ -176,7 +176,7 @@ pid_cfgType pid_motor_right =
 
 // ####################   IMU struct Value Setting   ###################
 
-imu_cfgType gy80=
+imu_cfgType imu=
 {
 	&hi2c3,
 	0,
@@ -277,11 +277,10 @@ int main(void)
 
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
-//  LRL_MPU_Init(&gy80);
+//  LRL_MPU_Init(&imu);
 //
-//  LRL_MPU_Bypass(&gy80);
-//
-//  HMC5883L_init(&hi2c3);
+  LRL_MPU_Bypass(&imu);
+  HMC5883L_init(&hi2c3);
 
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
   HAL_Delay(1000);
@@ -408,6 +407,9 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
   }
+  LRL_MPU_Bypass(&imu);
+  LRL_HM
+
   /* USER CODE END 3 */
 }
 
@@ -548,9 +550,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){
 if(hi2c == &hi2c3)
 	{
-////		LRL_IMU_Read(&gy80);
+////		LRL_IMU_Read(&imu);
 		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-//	LRL_GYRO_Read(&gy80);
+//	LRL_GYRO_Read(&imu);
 	}
 }
 //void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
