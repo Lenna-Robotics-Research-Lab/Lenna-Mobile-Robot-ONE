@@ -9,9 +9,6 @@ from serial_handler import *
 from packet_handler import *
 from lenna_mobile_robot import *
 
-l = 0.2 # in meters SI unit
-r = 0.0375
-
 DEVICENAME = '/dev/ttyTHS1'
 BAUDRATE = 115200
 
@@ -24,11 +21,17 @@ lenna = LennaMobileRobot(packet)
 # Topic callback function.
 def twistSubscriberCallback(data):
     rospy.loginfo('linear x: %f, angular z: %f', data.linear.x, data.angular.z)
-    vel_right = (data.linear.x) + (data.angular.z * l / 4)
-    vel_left = (data.linear.x) - (data.angular.z * l / 4)
+    vel_right = (data.linear.x) + (data.angular.z * lenna.wheel_distance / 4)
+    vel_left = (data.linear.x) - (data.angular.z * lenna.wheel_distance / 4)
 
-    vel_left = int(vel_left * 60 / (2*np.pi*r))
-    vel_right = int(vel_right * 60 / (2*np.pi*r))
+    vel_left = int(vel_left * 60 / (2*np.pi*lenna.wheel_radius))
+    vel_right = int(vel_right * 60 / (2*np.pi*lenna.wheel_radius))
+
+    if (abs(vel_left) >= lenna.max_motor_speed):
+        vel_left = (vel_left/abs(vel_left)) * lenna.max_motor_speed
+    
+    if (abs(vel_right) >= lenna.max_motor_speed):
+        vel_right = (vel_right/abs(vel_right)) * lenna.max_motor_speed
 
     rospy.loginfo('motor speeds L: %f, R: %f', vel_left, vel_right)
 
