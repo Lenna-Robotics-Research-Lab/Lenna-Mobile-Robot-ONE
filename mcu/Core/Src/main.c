@@ -321,9 +321,24 @@ int main(void)
 
 			if (rxBuffer[3] == 0x01)
 			{
-
 				motor_speed_left = (int16_t)((rxBuffer[4] << 8) | rxBuffer[5]);
 				motor_speed_right = (int16_t)((rxBuffer[6] << 8) | rxBuffer[7]);
+				if(motor_speed_left > 0)
+				{
+					dir_left = 1;
+				}
+				else
+				{
+					dir_left = -1;
+				}
+				if(motor_speed_right > 0)
+				{
+					dir_right = 1;
+				}
+				else
+				{
+					dir_right = -1;
+				}
 			}
 
 
@@ -346,12 +361,10 @@ int main(void)
 			  if(encoder_tick[1] - right_enc_temp >= 0)
 			  {
 				  right_enc_diff = encoder_tick[1] - right_enc_temp;
-				  dir_right = 1;
 			  }
 			  else
 			  {
 				  right_enc_diff = (48960 - right_enc_temp) + encoder_tick[1];
-				  dir_right = 1;
 			  }
 			  right_enc_temp = encoder_tick[1];
 		  }
@@ -360,12 +373,10 @@ int main(void)
 			  if(right_enc_temp - encoder_tick[1] >= 0)
 			  {
 				  right_enc_diff = -(encoder_tick[1] - right_enc_temp);
-				  dir_right = -1;
 			  }
 			  else
 			  {
 				  right_enc_diff = (48960 - encoder_tick[1]) + right_enc_temp;
-				  dir_right = -1;
 			  }
 			  right_enc_temp = encoder_tick[1];
 		  }
@@ -377,12 +388,10 @@ int main(void)
 		  if(encoder_tick[0] - left_enc_temp >= 0)
 		  {
 			  left_enc_diff = encoder_tick[0] - left_enc_temp;
-			  dir_left = 1;
 		  }
 		  else
 		  {
 			  left_enc_diff = (48960 - left_enc_temp) + encoder_tick[0];
-			  dir_left = 1;
 		  }
 		  left_enc_temp = encoder_tick[0];
 		}
@@ -391,25 +400,23 @@ int main(void)
 		  if(left_enc_temp - encoder_tick[0] >= 0)
 		  {
 			  left_enc_diff = -(encoder_tick[0] - left_enc_temp);
-			  dir_left = -1;
 		  }
 		  else
 		  {
 			  left_enc_diff = (48960 - encoder_tick[0]) + left_enc_temp;
-			  dir_left = -1;
 		  }
 		  left_enc_temp = encoder_tick[0];
 		}
 
 
 		// PID
-		  angular_speed_left = dir_left*left_enc_diff * Tick2RMP_Rate ;
-		  angular_speed_right = dir_right*right_enc_diff * Tick2RMP_Rate;
+		  angular_speed_left = left_enc_diff * Tick2RMP_Rate ;
+		  angular_speed_right = right_enc_diff * Tick2RMP_Rate;
 
-		  LRL_PID_Update(&pid_motor_left, angular_speed_left, motor_speed_left);
-		  LRL_PID_Update(&pid_motor_right, angular_speed_right, motor_speed_right);
+		  LRL_PID_Update(&pid_motor_left, abs(angular_speed_left), abs(motor_speed_left));
+		  LRL_PID_Update(&pid_motor_right, abs(angular_speed_right),abs( motor_speed_right));
 
-		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal, pid_motor_right.Control_Signal);
+		  LRL_Motion_Control(diff_robot, dir_left*pid_motor_left.Control_Signal, dir_right*pid_motor_right.Control_Signal);
 //		  motor_speed_right = (float*)realloc(motor_speed_right,sizeof(float));
 //		  motor_speed_left = (float*)realloc(motor_speed_left,sizeof(float));
 

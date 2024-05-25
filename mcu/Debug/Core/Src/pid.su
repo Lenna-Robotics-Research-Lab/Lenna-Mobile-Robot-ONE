@@ -1,2 +1,2 @@
 ../Core/Src/pid.c:6:6:LRL_PID_Init	16	static
-../Core/Src/pid.c:16:6:LRL_PID_Update	32	static
+../Core/Src/pid.c:16:6:LRL_PID_Update	24	static
