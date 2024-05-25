@@ -1,0 +1,8 @@
+prefix=/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_teleop
+
+Name: lenna_teleop
+Description: Description of lenna_teleop
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

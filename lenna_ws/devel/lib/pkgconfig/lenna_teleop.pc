@@ -1,0 +1,1 @@
+/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_teleop/lib/pkgconfig/lenna_teleop.pc
