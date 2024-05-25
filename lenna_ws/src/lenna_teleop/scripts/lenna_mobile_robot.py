@@ -9,6 +9,10 @@ class LennaMobileRobot():
     def __init__(self, protocol):
         self.protocol = protocol
         self.odometry_length = 16
+        self.min_motor_speed = 0
+        self.max_motor_speed = 300 # rpm
+        self.wheel_radius = 0.0375 # meter
+        self.wheel_distance = 0.20 # meter
 
     def setMotorSpeed(self, motor_speed_left, motor_speed_right):
         return self.protocol.txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])
