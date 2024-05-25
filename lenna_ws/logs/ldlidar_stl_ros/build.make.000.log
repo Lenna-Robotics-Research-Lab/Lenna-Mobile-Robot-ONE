@@ -1,0 +1,11 @@
+[35m[1mScanning dependencies of target ldlidar_stl_ros_listen_node[0m
+[35m[1mScanning dependencies of target ldlidar_stl_ros_node[0m
+[ 14%] [32mBuilding CXX object CMakeFiles/ldlidar_stl_ros_node.dir/src/publish_node/main.cpp.o[0m
+[ 28%] [32mBuilding CXX object CMakeFiles/ldlidar_stl_ros_listen_node.dir/src/listen_node/listen_node.cpp.o[0m
+[ 42%] [32mBuilding CXX object CMakeFiles/ldlidar_stl_ros_node.dir/include/ldlidar_driver/cmd_interface_linux.cpp.o[0m
+[ 57%] [32mBuilding CXX object CMakeFiles/ldlidar_stl_ros_node.dir/include/ldlidar_driver/lipkg.cpp.o[0m
+[ 71%] [32mBuilding CXX object CMakeFiles/ldlidar_stl_ros_node.dir/include/ldlidar_driver/tofbf.cpp.o[0m
+[ 85%] [32m[1mLinking CXX executable /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/ldlidar_stl_ros/lib/ldlidar_stl_ros/ldlidar_stl_ros_listen_node[0m
+[100%] [32m[1mLinking CXX executable /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/ldlidar_stl_ros/lib/ldlidar_stl_ros/ldlidar_stl_ros_node[0m
+[100%] Built target ldlidar_stl_ros_listen_node
+[100%] Built target ldlidar_stl_ros_node
