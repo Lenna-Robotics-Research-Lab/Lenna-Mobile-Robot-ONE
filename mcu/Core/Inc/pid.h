@@ -43,7 +43,7 @@ typedef struct
 	float Differentiator_Amount;
 	float Prev_Measurement;
 	float Prev_Error;
-	uint8_t Control_Signal;
+	int8_t Control_Signal;
 	uint8_t Anti_windup_EN;
 	float Wind_Up_Amount;
 	float Error;

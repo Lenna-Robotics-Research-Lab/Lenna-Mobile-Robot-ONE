@@ -9,6 +9,8 @@
  */
 
 #include "utilities.h"
+#include "stdlib.h"
+#include "stdio.h"
 
 void LRL_Delay_Init()
 {
@@ -47,3 +49,5 @@ void LRL_Delay_Us(volatile uint16_t delay_us)
 	__HAL_TIM_SET_COUNTER(&htim1, 0);
 	while (__HAL_TIM_GET_COUNTER (&htim1) < delay_us);
 }
+
+

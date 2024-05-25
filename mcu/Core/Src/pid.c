@@ -15,6 +15,14 @@ void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup)
 
 void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 	{
+	int8_t dir;
+	if(measurement >= 0){
+		dir = 1;
+	}
+	else
+	{
+		dir = -1;
+	}
 	pid_cfg->Error = set_point - measurement;
 	pid_cfg->Error = pid_cfg->Error * Speed2PWM_Rate;
 	// Setting Values
@@ -30,36 +38,59 @@ void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
      */
 
 
-	pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Integrator_Amount + pid_cfg->Differentiator_Amount;
+	pid_cfg->Control_Signal = (int8_t)((pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Integrator_Amount + pid_cfg->Differentiator_Amount);
 
 	if(pid_cfg->Anti_windup_EN == 1)
 	{
-
-		if(pid_cfg->Control_Signal <= Upper_Saturation_Limit)
-			{
-			//pid_cfg->Integrator_Amount += (pid_cfg->Ts*(pid_cfg->Ki * (pid_cfg->Error + pid_cfg->Prev_Error)));
-			HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-			pid_cfg->Wind_Up_Amount = pid_cfg->Integrator_Amount;
-			}
+		if(dir > 0)
+		{
+			if(pid_cfg->Control_Signal <= Upper_Saturation_Limit && pid_cfg->Control_Signal >= Lower_Saturation_Limit)
+				{
+				//pid_cfg->Integrator_Amount += (pid_cfg->Ts*(pid_cfg->Ki * (pid_cfg->Error + pid_cfg->Prev_Error)));
+				pid_cfg->Wind_Up_Amount = pid_cfg->Integrator_Amount;
+				}
+			else
+				{
+				pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Wind_Up_Amount + pid_cfg->Differentiator_Amount;
+				}
+		}
 		else
+		{
+			if(pid_cfg->Control_Signal >= -Upper_Saturation_Limit && pid_cfg->Control_Signal <= Lower_Saturation_Limit)
 			{
-			pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Wind_Up_Amount + pid_cfg->Differentiator_Amount;
-			HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
+				pid_cfg->Wind_Up_Amount = pid_cfg->Integrator_Amount;
+			}
+			else
+			{
+				pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Wind_Up_Amount + pid_cfg->Differentiator_Amount;
 			}
 		}
+	}
 
 
 	//pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Integrator_Amount + pid_cfg->Differentiator_Amount;
-
-	if(pid_cfg->Control_Signal > pid_cfg->Upper_Limit_Saturation)
-	  {
-		pid_cfg->Control_Signal = pid_cfg->Upper_Limit_Saturation;
-	  }
-	else if(pid_cfg->Control_Signal < pid_cfg->Lower_Limit_Saturation)
-	  {
-		pid_cfg->Control_Signal = pid_cfg->Lower_Limit_Saturation;
-	  }
-
+	if(dir>0)
+	{
+		if(pid_cfg->Control_Signal > pid_cfg->Upper_Limit_Saturation)
+		  {
+			pid_cfg->Control_Signal = pid_cfg->Upper_Limit_Saturation;
+		  }
+		else if(pid_cfg->Control_Signal < pid_cfg->Lower_Limit_Saturation)
+		  {
+			pid_cfg->Control_Signal = pid_cfg->Lower_Limit_Saturation;
+		  }
+	}
+	else
+	{
+		if(pid_cfg->Control_Signal < pid_cfg->Upper_Limit_Saturation)
+		  {
+			pid_cfg->Control_Signal = -pid_cfg->Upper_Limit_Saturation;
+		  }
+		else if(pid_cfg->Control_Signal > pid_cfg->Lower_Limit_Saturation)
+		  {
+			pid_cfg->Control_Signal = pid_cfg->Lower_Limit_Saturation;
+		  }
+	}
 
 	pid_cfg->Prev_Measurement = measurement;
 	pid_cfg->Prev_Error = pid_cfg->Error;

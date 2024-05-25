@@ -38,6 +38,7 @@
 #include "pid.h"
 #include "imu.h"
 #include "hmc5883l.h"
+#include "math.h"
 //#include "mpu6050.h"
 
 
@@ -83,6 +84,7 @@ char MSG[128];
 
 uint8_t input_speed ;// step given by MATLAB code
 uint16_t left_enc_temp = 0, right_enc_temp = 0 , right_enc_diff = 0, left_enc_diff = 0;
+int8_t dir_right,dir_left;
 uint16_t encoder_tick[2] = {0};
 float angular_speed_left,angular_speed_right;
 uint16_t tst;
@@ -319,8 +321,9 @@ int main(void)
 
 			if (rxBuffer[3] == 0x01)
 			{
-				motor_speed_left = (float)((rxBuffer[4] << 8) | rxBuffer[5]);
-				motor_speed_right = (float)((rxBuffer[6] << 8) | rxBuffer[7]);
+
+				motor_speed_left = (int16_t)((rxBuffer[4] << 8) | rxBuffer[5]);
+				motor_speed_right = (int16_t)((rxBuffer[6] << 8) | rxBuffer[7]);
 			}
 
 
@@ -343,10 +346,12 @@ int main(void)
 			  if(encoder_tick[1] - right_enc_temp >= 0)
 			  {
 				  right_enc_diff = encoder_tick[1] - right_enc_temp;
+				  dir_right = 1;
 			  }
 			  else
 			  {
 				  right_enc_diff = (48960 - right_enc_temp) + encoder_tick[1];
+				  dir_right = 1;
 			  }
 			  right_enc_temp = encoder_tick[1];
 		  }
@@ -355,10 +360,12 @@ int main(void)
 			  if(right_enc_temp - encoder_tick[1] >= 0)
 			  {
 				  right_enc_diff = -(encoder_tick[1] - right_enc_temp);
+				  dir_right = -1;
 			  }
 			  else
 			  {
 				  right_enc_diff = (48960 - encoder_tick[1]) + right_enc_temp;
+				  dir_right = -1;
 			  }
 			  right_enc_temp = encoder_tick[1];
 		  }
@@ -370,10 +377,12 @@ int main(void)
 		  if(encoder_tick[0] - left_enc_temp >= 0)
 		  {
 			  left_enc_diff = encoder_tick[0] - left_enc_temp;
+			  dir_left = 1;
 		  }
 		  else
 		  {
 			  left_enc_diff = (48960 - left_enc_temp) + encoder_tick[0];
+			  dir_left = 1;
 		  }
 		  left_enc_temp = encoder_tick[0];
 		}
@@ -382,18 +391,20 @@ int main(void)
 		  if(left_enc_temp - encoder_tick[0] >= 0)
 		  {
 			  left_enc_diff = -(encoder_tick[0] - left_enc_temp);
+			  dir_left = -1;
 		  }
 		  else
 		  {
 			  left_enc_diff = (48960 - encoder_tick[0]) + left_enc_temp;
+			  dir_left = -1;
 		  }
 		  left_enc_temp = encoder_tick[0];
 		}
 
 
 		// PID
-		  angular_speed_left = left_enc_diff * Tick2RMP_Rate ;
-		  angular_speed_right = right_enc_diff * Tick2RMP_Rate;
+		  angular_speed_left = dir_left*left_enc_diff * Tick2RMP_Rate ;
+		  angular_speed_right = dir_right*right_enc_diff * Tick2RMP_Rate;
 
 		  LRL_PID_Update(&pid_motor_left, angular_speed_left, motor_speed_left);
 		  LRL_PID_Update(&pid_motor_right, angular_speed_right, motor_speed_right);
@@ -444,8 +455,9 @@ int main(void)
 
 		  HAL_UART_Transmit_IT(&huart2, txBuffer, 16);
 
-		  sprintf(MSG,"something is : %d\t %d\t %d\t %d\t %d\t %d\t\n\r", tmp_heading, tmp_angular_left,tmp_angular_right,tmp_acc_x,tmp_acc_y,tmp_gyr_x);
 
+//		  sprintf(MSG,"something is :%d %d\t %d\t %d\t %d\t %d\t %d\t\n\r", tmp_heading, tmp_angular_left,tmp_angular_right,tmp_acc_x,tmp_acc_y,tmp_gyr_x);
+		  sprintf(MSG,"something is :%5.1f \t%5.1f\t%d \t %d \n\r", angular_speed_left,angular_speed_right,dir_left,dir_right);
 		  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 5);
 
 //		sprintf(MSG, "speed L:%6.2f \t R:%6.2f \r\n", angular_speed_left, angular_speed_right);
