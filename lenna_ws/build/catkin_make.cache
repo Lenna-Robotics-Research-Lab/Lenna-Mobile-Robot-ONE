@@ -1,2 +1,0 @@
-
--DCATKIN_DEVEL_PREFIX=/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel -DCMAKE_INSTALL_PREFIX=/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/install -G Unix Makefiles
