@@ -1,0 +1,18 @@
+LENNA:
+  right_wheel_joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 20
+
+  right_wheel_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: right_wheel_joint
+    pid: {p: 5.0, i: 0.1, d: 0.0005}
+
+  left_wheel_joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 20
+
+  left_wheel_velocity_controller:
+    type: velocity_controllers/JointVelocityController
+    joint: left_wheel_joint
+    pid: {p: 5.0, i: 0.1, d: 0.0005}
