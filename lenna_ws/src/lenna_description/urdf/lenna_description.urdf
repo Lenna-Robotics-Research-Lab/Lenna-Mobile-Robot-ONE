@@ -2,6 +2,7 @@
 <robot
   name="lenna_description">
 
+<!--   JOINTS' TRANSMISSIONS AND ACTUATION   
   <link 
     name="world"/>
   <joint 
@@ -15,6 +16,9 @@
       rpy="0 0 0" 
       xyz="0.0 0.0 0.02"/>
   </joint>
+-->
+
+<!-- 0.14 default wheel z offset-->
 
   <link
     name="base_link">
@@ -100,7 +104,7 @@
     name="right_wheel_joint"
     type="continuous">
     <origin
-      xyz="6.9033E-05 -0.08975 0.014"
+      xyz="6.9033E-05 -0.08975 0.0150125"
       rpy="1.5708 0 0" />
     <parent
       link="base_link" />
@@ -159,7 +163,7 @@
     name="left_wheel_joint"
     type="continuous">
     <origin
-      xyz="6.9033E-05 0.08975 0.014"
+      xyz="6.9033E-05 0.08975 0.0150125"
       rpy="-1.5708 0 0" />
     <parent
       link="base_link" />
@@ -174,6 +178,7 @@
       damping="0.01"
       friction="0.6" />
   </joint>
+
   <link
     name="laser_scanner_link">
     <inertial>

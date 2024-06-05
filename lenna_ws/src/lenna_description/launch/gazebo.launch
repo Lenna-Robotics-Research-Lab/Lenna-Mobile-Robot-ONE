@@ -33,10 +33,8 @@
     command="load" />
 
   <!-- LOAD THE CONTROLLERS -->
-  <node name="wheel_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" 
-        args="right_wheel_velocity_controller 
-              left_wheel_velocity_controller 
-              joint_state_controller 
+  <node name="joint_state_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" 
+        args="joint_state_controller 
               --shutdown-timeout 3"/>
 
   <!-- CONVERT JOINT STATES TO TF TRANSFORMS AND REMAP TO ARBITRARY TOPIC -->
