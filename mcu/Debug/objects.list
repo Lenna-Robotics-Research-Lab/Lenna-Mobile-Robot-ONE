@@ -5,6 +5,7 @@
 "./Core/Src/main.o"
 "./Core/Src/motion.o"
 "./Core/Src/odometry.o"
+"./Core/Src/packet_handler.o"
 "./Core/Src/pid.o"
 "./Core/Src/spi.o"
 "./Core/Src/stm32f4xx_hal_msp.o"

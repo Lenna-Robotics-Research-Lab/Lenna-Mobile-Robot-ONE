@@ -148,11 +148,11 @@ typedef struct
 {
 	TIM_HandleTypeDef * htim;
 
-	uint16_t 			MAX_ARR;
-	float 				TICK2RPM;
+	uint16_t 	MAX_ARR;
+	float 		TICK2RPM;
 
-	uint16_t tick;
-	uint16_t tick_prev;
+	uint16_t 	tick;
+	uint16_t 	tick_prev;
 } encoder_cfgType;
 
 typedef struct

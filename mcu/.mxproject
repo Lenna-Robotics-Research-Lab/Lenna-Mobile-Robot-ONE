@@ -37,3 +37,6 @@ SourceFolderListSize=1
 SourcePath#0=..\Core\Src
 SourceFiles=;
 
+[]
+SourceFiles=;;
+

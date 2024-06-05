@@ -38,13 +38,11 @@ void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 		if(pid_cfg->Control_Signal <= Upper_Saturation_Limit)
 			{
 			//pid_cfg->Integrator_Amount += (pid_cfg->Ts*(pid_cfg->Ki * (pid_cfg->Error + pid_cfg->Prev_Error)));
-			HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
 			pid_cfg->Wind_Up_Amount = pid_cfg->Integrator_Amount;
 			}
 		else
 			{
 			pid_cfg->Control_Signal = (pid_cfg->Kp * pid_cfg->Error) + pid_cfg->Wind_Up_Amount + pid_cfg->Differentiator_Amount;
-			HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
 			}
 		}
 

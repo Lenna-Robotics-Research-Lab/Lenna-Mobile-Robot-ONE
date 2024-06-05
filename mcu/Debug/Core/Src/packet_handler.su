@@ -1,0 +1,3 @@
+../Core/Src/packet_handler.c:12:6:LRL_UpdateCRC	32	static
+../Core/Src/packet_handler.c:69:6:LRL_RX_Init	16	static
+../Core/Src/packet_handler.c:73:6:LRL_rxPacket	24	static
