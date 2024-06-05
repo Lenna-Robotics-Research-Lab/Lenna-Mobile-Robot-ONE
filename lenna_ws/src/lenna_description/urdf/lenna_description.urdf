@@ -5,7 +5,7 @@
   <link 
     name="world"/>
   <joint 
-    name="base_joint" 
+    name="world_joint" 
     type="fixed">
     <parent 
       link="world"/>
@@ -280,16 +280,8 @@
     <axis
       xyz="0 0 0" />
   </joint>
-  
 
-  <!--   GAZEBO RELATED PART   -->
-
-  <gazebo>
-    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
-      <robotNamespace>/LENNA</robotNamespace>
-    </plugin>
-  </gazebo>
-
+  <!--   JOINTS' TRANSMISSIONS AND ACTUATION   -->
   <transmission 
     name="right_wheel_link_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -316,4 +308,26 @@
     </actuator>
   </transmission>
 
+  <!--   GAZEBO PLUGINS AND CONFIGURATIONS   -->
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/LENNA</robotNamespace>
+    </plugin>
+  </gazebo>
+
+  <gazebo reference="right_wheel_link">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <material>Gazebo/Grey</material>
+  </gazebo>
+
+  <gazebo reference="left_wheel_link">
+    <mu1 value="200.0"/>
+    <mu2 value="100.0"/>
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+    <material>Gazebo/Grey</material>
+  </gazebo>
 </robot>
