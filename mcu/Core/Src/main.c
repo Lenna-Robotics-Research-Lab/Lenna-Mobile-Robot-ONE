@@ -17,6 +17,7 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+
 #include "main.h"
 #include "adc.h"
 #include "eth.h"
@@ -31,15 +32,16 @@
 #include "stdio.h"
 #include "stdlib.h"
 #include "stdbool.h"
-#include "mcu_layout.h"
 #include "ultrasonic.h"
 #include "utilities.h"
 #include "motion.h"
 #include "pid.h"
-#include "imu.h"
-#include "hmc5883l.h"
+//#include "imu.h"
+//#include "hmc5883l.h"
 #include "math.h"
-//#include "mpu6050.h"
+#include "odometry.h"
+#include "mcu_config.h"
+
 
 
 /* USER CODE END Includes */
@@ -90,6 +92,33 @@ float angular_speed_left,angular_speed_right;
 uint16_t tst;
 
 uint8_t flag_tx = 0, pid_tim_flag = 0, dir_flag = 0;
+
+// ####################   ODOMETRY  ###################
+const imu_cfgType imu =
+{
+	&hi2c3
+};
+
+const encoder_cfgType enc_right =
+{
+	&htim3,
+	48960,
+	0.1225f		// 6000/48960
+};
+
+const encoder_cfgType enc_left =
+{
+	&htim2,
+	48960,
+	0.1225f		// 6000/48960
+};
+
+odom_cfgType odom =
+{
+	imu,
+	enc_right,
+	enc_left
+};
 
 
 
@@ -179,13 +208,13 @@ pid_cfgType pid_motor_right =
 
 // ####################   IMU struct Value Setting   ###################
 
-imu_cfgType imu=
-{
-	&hi2c3,
-	0,
-	0,
-	0
-};
+//imu_cfgType imu=
+//{
+//	&hi2c3,
+//	0,
+//	0,
+//	0
+//};
 
 int16_t val_x;
 int16_t val_y;
@@ -272,25 +301,21 @@ int main(void)
 //  printf("Lenna Robotics Research Lab. \r\n");
 //  HAL_Delay(1000);
 
-// ####################   Encoder Initialization   ####################
-  TIM2->CNT = 0;
-  TIM3->CNT = 0;
-  encoder_tick[0] = (TIM2->CNT);
-  encoder_tick[1] = (TIM3->CNT);
+// #################### Initializations   ####################
 
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
-  LRL_MPU_Bypass_Enable(&imu, 0);
-  LRL_MPU_Init(&imu);
 
-  LRL_MPU_Bypass_Enable(&imu,1);
-  LRL_HMC5883L_Init(&hi2c3);
+  LRL_Encoder_Init(&odom);
 
+  LRL_MPU6050_Init(&odom);
+
+  LRL_HMC5883L_Init(&odom);
 
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
   HAL_Delay(1000);
 
-  HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
+//  HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
 
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
@@ -305,6 +330,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+/*scratch pad
 		if(flag_uart_cb)
 		{
 			flag_uart_cb = 0;
@@ -480,7 +506,18 @@ int main(void)
 //	  sprintf(MSG,"heading is : %05.2f\n\r",val_heading);
 //	  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
 //	  HAL_Delay(100);
-    /* USER CODE END WHILE */
+*/
+
+	  if(pid_tim_flag == 1)
+	  {
+		LRL_MPU6050_ReadAll(&odom);
+		LRL_MPU6050_ComplementaryFilter(&odom);
+		LRL_Encoder_ReadAngularSpeed(&odom);
+		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
+		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
+		pid_tim_flag = 0;
+	  }
+	  /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }

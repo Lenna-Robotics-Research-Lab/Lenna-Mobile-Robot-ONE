@@ -1,3 +1,0 @@
-../Core/Src/hmc5883l.c:18:7:LRL_HMC5883L_Set_Declination	24	static
-../Core/Src/hmc5883l.c:34:6:LRL_HMC5883L_Init	32	static
-../Core/Src/hmc5883l.c:59:6:LRL_HMC5883L_ReadHeading	48	static

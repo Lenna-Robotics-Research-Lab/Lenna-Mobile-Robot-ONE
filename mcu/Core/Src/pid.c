@@ -1,6 +1,6 @@
+#include <mcu_config.h>
 #include "pid.h"
 #include "main.h"
-#include "mcu_layout.h"
 
 
 void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup)
