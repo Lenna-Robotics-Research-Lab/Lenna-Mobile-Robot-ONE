@@ -1,17 +1,21 @@
 <launch>
+  <!-- DEFINE PARAMETERS -->
   <param 
     name="robot_description" 
     command="cat $(find lenna_description)/urdf/lenna_description.urdf" />
 
+  <!-- LOAD AN EMPTY WORLD -->
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" />
 
+  <!-- MAKE A STATIC TRANSFOR -->
   <node
     name="tf_footprint_base"
     pkg="tf"
     type="static_transform_publisher"
     args="0 0 0 0 0 0 base_link base_footprint 40" />
 
+  <!-- LOAD THE URDF SPAWNER -->
   <node 
     name="urdf_spawner" 
     pkg="gazebo_ros" 
@@ -20,16 +24,24 @@
     output="screen" 
     args="-file $(find lenna_description)/urdf/lenna_description.urdf -urdf -model LENNA_URDF" />
 
-  <!-- load the controllers -->
+  <!-- LOAD THE CONFIG YAML FILES -->
   <rosparam 
-    file="$(find lenna_description)/config/config.yaml" 
+    file="$(find lenna_description)/config/control.yaml" 
+    command="load" />
+  <rosparam 
+    file="$(find lenna_description)/config/joints.yaml" 
     command="load" />
 
-  <node name="right_wheel_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" args="right_wheel_velocity_controller right_wheel_joint_state_controller --shutdown-timeout 5"/>
-  <node name="left_wheel_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" args="left_wheel_velocity_controller left_wheel_joint_state_controller --shutdown-timeout 5"/>
+  <!-- LOAD THE CONTROLLERS -->
+  <node name="wheel_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" 
+        args="right_wheel_velocity_controller 
+              left_wheel_velocity_controller 
+              joint_state_controller 
+              --shutdown-timeout 3"/>
 
-  <!-- converts joint states to TF transforms -->
+  <!-- CONVERT JOINT STATES TO TF TRANSFORMS AND REMAP TO ARBITRARY TOPIC -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
     <remap from="joint_state" to="/LENNA/joint_states" />
   </node>
 </launch>
