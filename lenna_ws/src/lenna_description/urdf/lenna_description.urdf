@@ -2,8 +2,7 @@
 <robot
   name="lenna_description">
 
-<!--   JOINTS' TRANSMISSIONS AND ACTUATION   
-  <link 
+  <!-- <link 
     name="world"/>
   <joint 
     name="world_joint" 
@@ -15,10 +14,7 @@
     <origin 
       rpy="0 0 0" 
       xyz="0.0 0.0 0.02"/>
-  </joint>
--->
-
-<!-- 0.14 default wheel z offset-->
+  </joint> -->
 
   <link
     name="base_link">

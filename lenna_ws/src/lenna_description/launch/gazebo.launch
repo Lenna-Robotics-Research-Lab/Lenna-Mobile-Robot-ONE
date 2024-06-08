@@ -8,12 +8,24 @@
   <include
     file="$(find gazebo_ros)/launch/empty_world.launch" />
 
-  <!-- MAKE A STATIC TRANSFOR -->
+  <!-- MAKE A STATIC TRANSFORMS -->
   <node
     name="tf_footprint_base"
     pkg="tf"
     type="static_transform_publisher"
-    args="0 0 0 0 0 0 base_link base_footprint 40" />
+    args="0 0 0 0 0 0 base_link base_footprint 100" />
+
+  <node
+  name="tf_right_wheel"
+  pkg="tf"
+  type="static_transform_publisher"
+  args="6.9033E-05 -0.08975 0.015 0.0 1.5708 1.5708 base_link right_wheel_link 100" />
+
+  <node
+  name="tf_left_wheel"
+  pkg="tf"
+  type="static_transform_publisher"
+  args="6.9033E-05 0.08975 0.015 0.0 -1.5708 -1.5708 base_link left_wheel_link 100" />
 
   <!-- LOAD THE URDF SPAWNER -->
   <node 
