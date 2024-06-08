@@ -47,6 +47,7 @@ typedef struct
 	uint8_t Anti_windup_EN;
 	float Wind_Up_Amount;
 	float Error;
+	int8_t dir;
 	}pid_cfgType;
 
 void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup);

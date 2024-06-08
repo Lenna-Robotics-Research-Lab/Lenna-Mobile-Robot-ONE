@@ -15,8 +15,21 @@ void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup)
 
 void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 	{
+	if(set_point > 0)
+	{
+		pid_cfg->dir = 1;
+	}
+	else
+	{
+		pid_cfg->dir = -1;
+	}
+	measurement = abs(measurement);
+	set_point = abs(set_point);
+
 	pid_cfg->Error = set_point - measurement;
 	pid_cfg->Error = pid_cfg->Error * Speed2PWM_Rate;
+
+
 	// Setting Values
 //	float P = pid_cfg->Kp * pid_cfg->Error;
 	pid_cfg->Integrator_Amount += (pid_cfg->Ts*(pid_cfg->Ki * (pid_cfg->Error + pid_cfg->Prev_Error)));
@@ -57,7 +70,6 @@ void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 	  {
 		pid_cfg->Control_Signal = pid_cfg->Lower_Limit_Saturation;
 	  }
-
 
 	pid_cfg->Prev_Measurement = measurement;
 	pid_cfg->Prev_Error = pid_cfg->Error;

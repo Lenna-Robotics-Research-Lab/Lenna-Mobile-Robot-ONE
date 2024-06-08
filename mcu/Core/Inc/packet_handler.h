@@ -13,21 +13,28 @@
 
 typedef struct
 {
+	uint16_t right_velocity;
+	uint16_t left_velocity;
+} packet_data;
+
+typedef struct
+{
 	UART_HandleTypeDef *huart;
 	uint8_t				min_pkt_lenght;
 	uint8_t				max_pkt_lenght;
 	uint8_t				rx_dataValid;
 	uint8_t				rx_byteReady;
 	uint8_t 			buffer[144];
-	int16_t 			left;
-	int16_t				right;
+	uint8_t				ack;
+	packet_data			data;
 
 } packet_cfgType;
 
 
 void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
-void LRL_RX_Init(packet_cfgType *packet);
+void LRL_Packet_Init(packet_cfgType *packet);
 void LRL_rxPacket(packet_cfgType *packet);
+void LRL_handShake(packet_cfgType *packet);
 
 
 

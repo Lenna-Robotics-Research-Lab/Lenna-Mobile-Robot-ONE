@@ -283,8 +283,6 @@ int main(void)
   MX_TIM1_Init();
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
-  LRL_Delay_Init();			// TIMER Initialization for Delay us
-  LRL_US_Init(us_front); 	// TIMER Initialization for Ultrasonics
 
   HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_2);
@@ -309,17 +307,19 @@ int main(void)
   LRL_HMC5883L_Init(&odom);
 
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
+
   HAL_Delay(1000);
+  LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
-  LRL_RX_Init(&rx_packet);
+  LRL_Packet_Init(&rx_packet);
 
 //  HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
 
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
 
-  uint8_t motor_speed_left,motor_speed_right;
+ int16_t motor_speed_left, motor_speed_right;
   // ####################   memory allocation    ####################
 
   /* USER CODE END 2 */
@@ -509,24 +509,9 @@ int main(void)
 //	  if(rx_packet.rx_dataValid)
 //	  {
 
-	    motor_speed_left = rx_packet.left;
-	    motor_speed_right = rx_packet.right;
-		if(motor_speed_left > 0)
-		{
-			dir_left = 1;
-		}
-		else
-		{
-			dir_left = -1;
-		}
-		if(motor_speed_right > 0)
-		{
-			dir_right = 1;
-		}
-		else
-		{
-			dir_right = -1;
-		}
+	    motor_speed_left = rx_packet.data.left_velocity;
+	    motor_speed_right = rx_packet.data.right_velocity;
+
 //	  }
 	  if(pid_tim_flag == 1)
 	  {
@@ -536,8 +521,10 @@ int main(void)
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
 		LRL_Encoder_ReadAngularSpeed(&odom);
-		LRL_PID_Update(&pid_motor_left, abs(odom.vel.left), abs(motor_speed_left));
-		LRL_PID_Update(&pid_motor_right, abs(odom.vel.right),abs( motor_speed_right));
+		sprintf(MSG,"data is : %d\t %d \r\n",odom.vel.left,odom.vel.right);
+		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 10);
+		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
+		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		LRL_Motion_Control(diff_robot, dir_left*pid_motor_left.Control_Signal, dir_right*pid_motor_right.Control_Signal);
 		pid_tim_flag = 0;
 	  }

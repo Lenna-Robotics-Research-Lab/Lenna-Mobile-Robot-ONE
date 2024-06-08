@@ -140,8 +140,8 @@ typedef struct
 
 typedef struct
 {
-	uint16_t	right;
-	uint16_t	left;
+	int16_t	right;
+	int16_t	left;
 } motor_velocity;
 
 typedef struct

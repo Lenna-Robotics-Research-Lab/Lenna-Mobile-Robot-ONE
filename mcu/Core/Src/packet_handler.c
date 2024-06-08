@@ -9,6 +9,9 @@
 #include "usart.h"
 
 
+uint8_t _ack_data[10] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
+
+
 void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final )
 {
   uint16_t i, j;
@@ -66,7 +69,7 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 //}
 
 
-void LRL_RX_Init(packet_cfgType *packet)
+void LRL_Packet_Init(packet_cfgType *packet)
 {
 	HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 }
@@ -100,13 +103,30 @@ void LRL_rxPacket(packet_cfgType *packet)
 		{
 			packet->rx_dataValid = 0;
 		}
-	    packet->left = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
-	    packet->right = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
+	    packet->data.left_velocity = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
+	    packet->data.right_velocity = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
 		HAL_UART_Transmit(&huart1, packet->buffer, 3+packet->buffer[2], 10);
 		memset(packet->buffer, 0, packet->max_pkt_lenght*sizeof(packet->buffer[0]));
 		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 
 	}
+}
+
+void LRL_handShake(packet_cfgType *packet)
+{
+	int _out;
+	while(_out != 1)
+	{
+		HAL_UART_Transmit(packet->huart,&_ack_data,5,10);
+		HAL_UART_Receive(packet->huart, &packet->ack, 1,10);
+		if(packet->ack)
+		{
+			_out = 1;
+		}
+		HAL_Delay(500);
+	}
+	HAL_UART_Transmit(&huart1,"Surprise motherfuckers",sizeof("Surprise motherfuckers"),10);
+
 }
 
 //txBuffer[2] = (uint8_t)(tmp_heading >> 8);
