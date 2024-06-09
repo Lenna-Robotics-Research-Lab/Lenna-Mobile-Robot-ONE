@@ -41,7 +41,7 @@ typedef struct
 	int8_t Upper_Limit_Saturation;
 	float Integrator_Amount;
 	float Differentiator_Amount;
-	float Prev_Measurement;
+	int16_t Prev_Measurement;
 	float Prev_Error;
 	int8_t Control_Signal;
 	uint8_t Anti_windup_EN;
@@ -51,6 +51,6 @@ typedef struct
 	}pid_cfgType;
 
 void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup);
-void LRL_PID_Update(pid_cfgType *pid_cfg,float measurement,float set_point);
+void LRL_PID_Update(pid_cfgType *pid_cfg,int16_t measurement,int16_t set_point);
 
 #endif /* INC_PID_H_ */

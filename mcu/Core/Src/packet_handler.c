@@ -7,10 +7,9 @@
 #include "odometry.h"
 #include "packet_handler.h"
 #include "usart.h"
-
+#include "stdlib.h"
 
 uint8_t _ack_data[10] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
-
 
 void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final )
 {
@@ -73,6 +72,7 @@ void LRL_Packet_Init(packet_cfgType *packet)
 {
 	HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 }
+
 void LRL_rxPacket(packet_cfgType *packet)
 {
 	if(packet->rx_byteReady)
@@ -95,7 +95,7 @@ void LRL_rxPacket(packet_cfgType *packet)
 
 		LRL_UpdateCRC(0, packet->buffer, total_pkt_len - 2 ,temp_crc);
 
-		if(temp_crc == (packet->buffer[total_pkt_len - 2]<<8)|(packet->buffer[total_pkt_len - 1]))
+		if(temp_crc == ((packet->buffer[total_pkt_len - 2]<<8)|(packet->buffer[total_pkt_len - 1])))
 		{
 			packet->rx_dataValid = 1;
 		}
@@ -105,7 +105,7 @@ void LRL_rxPacket(packet_cfgType *packet)
 		}
 	    packet->data.left_velocity = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
 	    packet->data.right_velocity = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
-		HAL_UART_Transmit(&huart1, packet->buffer, 3+packet->buffer[2], 10);
+//		HAL_UART_Transmit(&huart1, packet->buffer, 3+packet->buffer[2], 10);
 		memset(packet->buffer, 0, packet->max_pkt_lenght*sizeof(packet->buffer[0]));
 		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 

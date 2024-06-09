@@ -13,8 +13,8 @@
 
 typedef struct
 {
-	uint16_t right_velocity;
-	uint16_t left_velocity;
+	int16_t right_velocity;
+	int16_t left_velocity;
 } packet_data;
 
 typedef struct

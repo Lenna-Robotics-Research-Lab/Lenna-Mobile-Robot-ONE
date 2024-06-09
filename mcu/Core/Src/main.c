@@ -100,14 +100,14 @@ const encoder_cfgType enc_right =
 {
 	&htim3,
 	48960,
-	0.1225f		// 6000/48960
+	0.1225		// 6000/48960
 };
 
 const encoder_cfgType enc_left =
 {
 	&htim2,
 	48960,
-	0.1225f		// 6000/48960
+	0.1225		// 6000/48960
 };
 
 odom_cfgType odom =
@@ -308,7 +308,7 @@ int main(void)
 
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
-  HAL_Delay(1000);
+//  HAL_Delay(1000);
   LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
@@ -319,192 +319,14 @@ int main(void)
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
 
- int16_t motor_speed_left, motor_speed_right;
   // ####################   memory allocation    ####################
-
+int16_t motor_speed_left, motor_speed_right;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-/*scratch pad
-		if(flag_uart_cb)
-		{
-			flag_uart_cb = 0;
-
-			total_pkt_length = rxBuffer[2] + 3;
-			remain_pkt_length = total_pkt_length - min_len_packet;
-
-			if(remain_pkt_length)
-			{
-				HAL_UART_Receive(&huart2, &rxBuffer[8], remain_pkt_length, 1);
-			}
-
-			temp_crc = updateCRC(0, &rxBuffer, total_pkt_length-2);
-
-			if (rxBuffer[3] == 0x01)
-			{
-				motor_speed_left = (int16_t)((rxBuffer[4] << 8) | rxBuffer[5]);
-				motor_speed_right = (int16_t)((rxBuffer[6] << 8) | rxBuffer[7]);
-				if(motor_speed_left > 0)
-				{
-					dir_left = 1;
-				}
-				else
-				{
-					dir_left = -1;
-				}
-				if(motor_speed_right > 0)
-				{
-					dir_right = 1;
-				}
-				else
-				{
-					dir_right = -1;
-				}
-			}
-
-
-//			HAL_UART_Transmit(&huart1, rxBuffer, total_pkt_length, 0xFF);
-
-//			HAL_UART_Transmit_IT(&huart2, txBuffer, 8);
-
-			memset(rxBuffer, 0, max_len_packet*sizeof(rxBuffer[0]));
-			HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
-		}
-
-
-		if(pid_tim_flag == 1)
-		{
-		  encoder_tick[0] = (TIM2->CNT); 	// Left Motor Encoder
-		  encoder_tick[1] = (TIM3->CNT); 	// Right Motor Encoder
-
-		  if(__HAL_TIM_IS_TIM_COUNTING_DOWN(&htim3) == 0)
-		  {
-			  if(encoder_tick[1] - right_enc_temp >= 0)
-			  {
-				  right_enc_diff = encoder_tick[1] - right_enc_temp;
-			  }
-			  else
-			  {
-				  right_enc_diff = (48960 - right_enc_temp) + encoder_tick[1];
-			  }
-			  right_enc_temp = encoder_tick[1];
-		  }
-		  else
-		  {
-			  if(right_enc_temp - encoder_tick[1] >= 0)
-			  {
-				  right_enc_diff = -(encoder_tick[1] - right_enc_temp);
-			  }
-			  else
-			  {
-				  right_enc_diff = (48960 - encoder_tick[1]) + right_enc_temp;
-			  }
-			  right_enc_temp = encoder_tick[1];
-		  }
-
-
-		// Reading the Encoder for the left Motor
-		if(__HAL_TIM_IS_TIM_COUNTING_DOWN(&htim2) == 0)
-		{
-		  if(encoder_tick[0] - left_enc_temp >= 0)
-		  {
-			  left_enc_diff = encoder_tick[0] - left_enc_temp;
-		  }
-		  else
-		  {
-			  left_enc_diff = (48960 - left_enc_temp) + encoder_tick[0];
-		  }
-		  left_enc_temp = encoder_tick[0];
-		}
-		else
-		{
-		  if(left_enc_temp - encoder_tick[0] >= 0)
-		  {
-			  left_enc_diff = -(encoder_tick[0] - left_enc_temp);
-		  }
-		  else
-		  {
-			  left_enc_diff = (48960 - encoder_tick[0]) + left_enc_temp;
-		  }
-		  left_enc_temp = encoder_tick[0];
-		}
-
-
-		// PID
-		  angular_speed_left = left_enc_diff * Tick2RMP_Rate ;
-		  angular_speed_right = right_enc_diff * Tick2RMP_Rate;
-
-		  LRL_PID_Update(&pid_motor_left, abs(angular_speed_left), abs(motor_speed_left));
-		  LRL_PID_Update(&pid_motor_right, abs(angular_speed_right),abs( motor_speed_right));
-
-		  LRL_Motion_Control(diff_robot, dir_left*pid_motor_left.Control_Signal, dir_right*pid_motor_right.Control_Signal);
-//		  motor_speed_right = (float*)realloc(motor_speed_right,sizeof(float));
-//		  motor_speed_left = (float*)realloc(motor_speed_left,sizeof(float));
-
-		  pid_tim_flag = 0;
-
-		  LRL_MPU_Bypass_Enable(&imu , 0);
-
-		  LRL_MPU_Read_All(&imu);
-
-		  LRL_MPU_Bypass_Enable(&imu , 1);
-		  LRL_HMC5883L_ReadHeading(&val_x, &val_y, &val_z, &val_heading);
-
-		  uint16_t tmp_heading = (uint16_t)val_heading;
-		  uint16_t tmp_angular_left = (uint16_t) angular_speed_left;
-		  uint16_t tmp_angular_right = (uint16_t) angular_speed_right;
-		  uint16_t tmp_acc_x = (uint16_t)(imu.final_accel_x * 10000);
-		  uint16_t tmp_acc_y = (uint16_t)(imu.final_accel_y * 10000);
-		  int16_t tmp_gyr_x = (int16_t)(imu.final_gyro_x * 100);
-		  uint16_t tmp_CRC;
-
-		  txBuffer[2] = (uint8_t)(tmp_heading >> 8);
-		  txBuffer[3] = (uint8_t)(tmp_heading & 0x00FF);
-
-		  txBuffer[4] = (uint8_t)(tmp_angular_left >> 8);
-		  txBuffer[5] = (uint8_t)(tmp_angular_left & 0x00FF);
-
-		  txBuffer[6] = (uint8_t)(tmp_angular_right >> 8);
-		  txBuffer[7] = (uint8_t)(tmp_angular_right & 0x00FF);
-
-		  txBuffer[8] = (uint8_t)(tmp_acc_x>> 8);
-		  txBuffer[9] = (uint8_t)(tmp_acc_x & 0x00FF);
-
-		  txBuffer[10] = (uint8_t)(tmp_acc_y>> 8);
-		  txBuffer[11] = (uint8_t)(tmp_acc_y & 0x00FF);
-
-		  txBuffer[12] = (uint8_t)(tmp_gyr_x>> 8);
-		  txBuffer[13] = (uint8_t)(tmp_gyr_x & 0x00FF);
-
-		  tmp_CRC = updateCRC(0, &txBuffer, 14);
-
-		  txBuffer[14] = (uint8_t)(tmp_CRC >> 8);
-		  txBuffer[15] = (uint8_t)(tmp_CRC & 0x00FF);
-
-		  HAL_UART_Transmit_IT(&huart2, txBuffer, 16);
-
-
-//		  sprintf(MSG,"something is :%d %d\t %d\t %d\t %d\t %d\t %d\t\n\r", tmp_heading, tmp_angular_left,tmp_angular_right,tmp_acc_x,tmp_acc_y,tmp_gyr_x);
-		  sprintf(MSG,"something is :%5.1f \t%5.1f\t%d \t %d \n\r", angular_speed_left,angular_speed_right,dir_left,dir_right);
-		  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 5);
-
-//		sprintf(MSG, "speed L:%6.2f \t R:%6.2f \r\n", angular_speed_left, angular_speed_right);
-//		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
-	}
-//		sprintf(MSG, "speed L:%5.1f \t R:%5.1f \r\n", angular_speed_left, angular_speed_right);
-
-//		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
-	//  LRL_MPU_Bypass_Enable(&imu);
-
-
-//	  LRL_HMC5883L_ReadHeading(&val_x, &val_y, &val_z, &val_heading);
-//	  sprintf(MSG,"heading is : %05.2f\n\r",val_heading);
-//	  HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 0xFF);
-//	  HAL_Delay(100);
-*/
 	  LRL_rxPacket(&rx_packet);
 //	  if(rx_packet.rx_dataValid)
 //	  {
@@ -521,19 +343,19 @@ int main(void)
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
 		LRL_Encoder_ReadAngularSpeed(&odom);
-		sprintf(MSG,"data is : %d\t %d \r\n",odom.vel.left,odom.vel.right);
-		HAL_UART_Transmit(&huart1, MSG, sizeof(MSG), 10);
+
+		sprintf(MSG,"data is : %d\t %d\t %d\t %d\t \r\n",motor_speed_left, motor_speed_right, odom.vel.left,odom.vel.right);
+		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
+
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-		LRL_Motion_Control(diff_robot, dir_left*pid_motor_left.Control_Signal, dir_right*pid_motor_right.Control_Signal);
+		LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+
 		pid_tim_flag = 0;
 	  }
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
   }
-
-
   /* USER CODE END 3 */
 }
 

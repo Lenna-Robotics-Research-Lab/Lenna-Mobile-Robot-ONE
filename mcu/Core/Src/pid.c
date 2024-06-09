@@ -13,16 +13,12 @@ void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup)
 	pid_cfg->Control_Signal = 0;
 	}
 
-void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
+void LRL_PID_Update(pid_cfgType *pid_cfg, int16_t measurement, int16_t set_point)
 	{
-	if(set_point > 0)
-	{
-		pid_cfg->dir = 1;
-	}
-	else
-	{
-		pid_cfg->dir = -1;
-	}
+	int8_t _dir;
+
+	_dir = set_point / abs(set_point);
+
 	measurement = abs(measurement);
 	set_point = abs(set_point);
 
@@ -71,6 +67,7 @@ void LRL_PID_Update(pid_cfgType *pid_cfg, float measurement, float set_point)
 		pid_cfg->Control_Signal = pid_cfg->Lower_Limit_Saturation;
 	  }
 
+	pid_cfg->Control_Signal = pid_cfg->Control_Signal * _dir;
 	pid_cfg->Prev_Measurement = measurement;
 	pid_cfg->Prev_Error = pid_cfg->Error;
 
