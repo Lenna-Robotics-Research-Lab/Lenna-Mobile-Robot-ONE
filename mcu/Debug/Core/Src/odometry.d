@@ -35,7 +35,7 @@ Core/Src/odometry.o: ../Core/Src/odometry.c ../Core/Inc/odometry.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/tim.h ../Core/Inc/mcu_config.h
+ ../Core/Inc/tim.h ../Core/Inc/motion.h ../Core/Inc/mcu_config.h
 ../Core/Inc/odometry.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/main.h:
@@ -75,4 +75,5 @@ Core/Src/odometry.o: ../Core/Src/odometry.c ../Core/Inc/odometry.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/tim.h:
+../Core/Inc/motion.h:
 ../Core/Inc/mcu_config.h:

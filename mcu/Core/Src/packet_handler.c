@@ -62,10 +62,43 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 }
 
 
-//void LRL_txPacket(odom_cfgType *odom)
-//{
-//
-//}
+void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
+{
+	uint8_t  _buffer[144];
+	unsigned short _tmp_crc;
+
+	_buffer[0] = 0xFF;
+	_buffer[1] = 0xFF;
+
+	_buffer[2] = 0x01;
+	_buffer[3] = 0x0C; //this is the size of the bytes
+
+	_buffer[4] = (uint8_t)(odom->mag.heading >> 8);
+	_buffer[5] = (uint8_t)(odom->mag.heading & 0x00FF);
+
+	_buffer[6] = (uint8_t)(odom->vel.left >> 8);
+	_buffer[7] = (uint8_t)(odom->vel.left & 0x00FF);
+
+	_buffer[8] = (uint8_t)(odom->vel.right >> 8);
+	_buffer[9] = (uint8_t)(odom->vel.right & 0x00FF);
+
+	_buffer[10] = (uint8_t)(odom->accel.x >> 8);
+	_buffer[11] = (uint8_t)(odom->accel.x & 0x00FF);
+
+	_buffer[12] = (uint8_t)(odom->accel.y>> 8);
+	_buffer[13] = (uint8_t)(odom->accel.y & 0x00FF);
+
+	_buffer[14] = (uint8_t)(odom->gyro.x >> 8);
+	_buffer[15] = (uint8_t)(odom->gyro.x & 0x00FF);
+
+	updateCRC(0, &_buffer, 16,_tmp_crc);
+
+	_buffer[14] = (uint8_t)(_tmp_crc >> 8);
+	_buffer[15] = (uint8_t)(_tmp_crc & 0x00FF);
+
+
+
+}
 
 
 void LRL_Packet_Init(packet_cfgType *packet)
@@ -129,25 +162,3 @@ void LRL_handShake(packet_cfgType *packet)
 
 }
 
-//txBuffer[2] = (uint8_t)(tmp_heading >> 8);
-//txBuffer[3] = (uint8_t)(tmp_heading & 0x00FF);
-//
-//txBuffer[4] = (uint8_t)(tmp_angular_left >> 8);
-//txBuffer[5] = (uint8_t)(tmp_angular_left & 0x00FF);
-//
-//txBuffer[6] = (uint8_t)(tmp_angular_right >> 8);
-//txBuffer[7] = (uint8_t)(tmp_angular_right & 0x00FF);
-//
-//txBuffer[8] = (uint8_t)(tmp_acc_x>> 8);
-//txBuffer[9] = (uint8_t)(tmp_acc_x & 0x00FF);
-//
-//txBuffer[10] = (uint8_t)(tmp_acc_y>> 8);
-//txBuffer[11] = (uint8_t)(tmp_acc_y & 0x00FF);
-//
-//txBuffer[12] = (uint8_t)(tmp_gyr_x>> 8);
-//txBuffer[13] = (uint8_t)(tmp_gyr_x & 0x00FF);
-//
-//tmp_CRC = updateCRC(0, &txBuffer, 14);
-//
-//txBuffer[14] = (uint8_t)(tmp_CRC >> 8);
-//txBuffer[15] = (uint8_t)(tmp_CRC & 0x00FF);

@@ -90,32 +90,7 @@ uint16_t tst;
 
 uint8_t flag_tx = 0, pid_tim_flag = 0, dir_flag = 0;
 
-// ####################   ODOMETRY  ###################
-const imu_cfgType imu =
-{
-	&hi2c3
-};
 
-const encoder_cfgType enc_right =
-{
-	&htim3,
-	48960,
-	0.1225		// 6000/48960
-};
-
-const encoder_cfgType enc_left =
-{
-	&htim2,
-	48960,
-	0.1225		// 6000/48960
-};
-
-odom_cfgType odom =
-{
-	imu,
-	enc_right,
-	enc_left
-};
 
 
 
@@ -149,8 +124,36 @@ const diffDrive_cfgType diff_robot =
 {
 	motor_right,
 	motor_left,
-	65,
+	37.5,
 	200
+};
+
+// ####################   ODOMETRY  ###################
+const imu_cfgType imu =
+{
+	&hi2c3
+};
+
+const encoder_cfgType enc_right =
+{
+	&htim3,
+	48960,
+	0.1225		// 6000/48960
+};
+
+const encoder_cfgType enc_left =
+{
+	&htim2,
+	48960,
+	0.1225		// 6000/48960
+};
+
+odom_cfgType odom =
+{
+	imu,
+	enc_right,
+	enc_left,
+	diff_robot
 };
 
 const ultrasonic_cfgType us_front =
@@ -309,7 +312,7 @@ int main(void)
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
 //  HAL_Delay(1000);
-  LRL_handShake(&rx_packet);
+//  LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
   LRL_Packet_Init(&rx_packet);
@@ -319,8 +322,14 @@ int main(void)
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
 
+  odom.dist.right = 0;
+  odom.dist.left = 0;
+
+
   // ####################   memory allocation    ####################
-int16_t motor_speed_left, motor_speed_right;
+
+  int16_t motor_speed_left, motor_speed_right;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -331,8 +340,8 @@ int16_t motor_speed_left, motor_speed_right;
 //	  if(rx_packet.rx_dataValid)
 //	  {
 
-	    motor_speed_left = rx_packet.data.left_velocity;
-	    motor_speed_right = rx_packet.data.right_velocity;
+	  motor_speed_left = rx_packet.data.left_velocity;
+	  motor_speed_right = rx_packet.data.right_velocity;
 
 //	  }
 	  if(pid_tim_flag == 1)
@@ -344,7 +353,7 @@ int16_t motor_speed_left, motor_speed_right;
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
 		LRL_Encoder_ReadAngularSpeed(&odom);
 
-		sprintf(MSG,"data is : %d\t %d\t %d\t %d\t \r\n",motor_speed_left, motor_speed_right, odom.vel.left,odom.vel.right);
+		sprintf(MSG,"data is : %d\t %d\t %8.5f\t %8.5f\t \r\n",motor_speed_left, motor_speed_right, odom.dist.right,odom.dist.left);
 		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
 
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);

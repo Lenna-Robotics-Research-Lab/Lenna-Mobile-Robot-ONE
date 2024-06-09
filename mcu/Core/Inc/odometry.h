@@ -15,6 +15,8 @@
 #include "tim.h"
 #include "stm32f4xx_hal.h"
 #include "stm32f4xx_hal_tim.h"
+#include "motion.h"
+
 
 // #################################################################
 // ####################  MAGNETOMETER HMC5883L  ####################
@@ -142,7 +144,13 @@ typedef struct
 {
 	int16_t	right;
 	int16_t	left;
-} motor_velocity;
+} wheel_velocity;
+
+typedef struct
+{
+	float right;
+	float left;
+} wheel_position;
 
 typedef struct
 {
@@ -171,13 +179,17 @@ typedef struct
 	imu_cfgType 		imu;
 	encoder_cfgType		enc_right;
 	encoder_cfgType		enc_left;
+	diffDrive_cfgType	diff_robot;
+
 
 	linear_position 	pose;
 	angular_position 	angle;
 	accelerometer 		accel;
 	gyroscope 			gyro;
 	magnetometer 		mag;
-	motor_velocity 		vel;
+
+	wheel_velocity 		vel;
+	wheel_position 		dist;
 } odom_cfgType;
 
 // ##############################################################

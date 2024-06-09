@@ -2,7 +2,10 @@
  * packet_handler.h
  *
  *  Created on: Jun 5, 2024
- *      Author: arian
+ *      Author: Lenna Robotics Research Laboratory
+ *      		Autonomous Systems Research Branch
+ *				Iran University of Science and Technology
+ *		GitHub:	github.com/Lenna-Robotics-Research-Lab
  */
 
 #ifndef INC_PACKET_HANDLER_H_
@@ -27,7 +30,6 @@ typedef struct
 	uint8_t 			buffer[144];
 	uint8_t				ack;
 	packet_data			data;
-
 } packet_cfgType;
 
 

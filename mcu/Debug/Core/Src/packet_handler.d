@@ -35,7 +35,8 @@ Core/Src/packet_handler.o: ../Core/Src/packet_handler.c \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/tim.h ../Core/Inc/packet_handler.h ../Core/Inc/usart.h
+ ../Core/Inc/tim.h ../Core/Inc/motion.h ../Core/Inc/packet_handler.h \
+ ../Core/Inc/usart.h
 ../Core/Inc/odometry.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/main.h:
@@ -75,5 +76,6 @@ Core/Src/packet_handler.o: ../Core/Src/packet_handler.c \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/tim.h:
+../Core/Inc/motion.h:
 ../Core/Inc/packet_handler.h:
 ../Core/Inc/usart.h:

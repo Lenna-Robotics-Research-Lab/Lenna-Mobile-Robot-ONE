@@ -61,8 +61,8 @@ all:
 main-build: Lenna-Bardia-MCU-Board.elf secondary-outputs
 
 # Tool invocations
-Lenna-Bardia-MCU-Board.elf Lenna-Bardia-MCU-Board.map: $(OBJS) $(USER_OBJS) D:\Repositories\Lenna-Mobile-Robot-ONE\mcu\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Lenna-Bardia-MCU-Board.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Repositories\Lenna-Mobile-Robot-ONE\mcu\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lenna-Bardia-MCU-Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
+Lenna-Bardia-MCU-Board.elf Lenna-Bardia-MCU-Board.map: $(OBJS) $(USER_OBJS) E:\Github_Files\Lenna-Mobile-Robot-ONE\mcu\STM32F407VGTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Lenna-Bardia-MCU-Board.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"E:\Github_Files\Lenna-Mobile-Robot-ONE\mcu\STM32F407VGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Lenna-Bardia-MCU-Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -u _scanf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

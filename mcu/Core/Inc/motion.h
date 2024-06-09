@@ -31,8 +31,8 @@ typedef struct
 {
 	motor_cfgType 	MOTOR_RIGHT;	// Right Motor Config Parameters
 	motor_cfgType 	MOTOR_LEFT;		// Left Motor Config Parameters
-	uint16_t		WHEEL_RADIUS;	// R Radius of Differential Robot's Wheels
-	uint16_t		WHEEL_DISTANC;	// L Distance Between the Center of the Wheels
+	float			WHEEL_RADIUS;	// R Radius of Differential Robot's Wheels
+	float			WHEEL_DISTANC;	// L Distance Between the Center of the Wheels
 }diffDrive_cfgType;
 
 void LRL_Motion_Init(motor_cfgType, motor_cfgType);
