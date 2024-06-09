@@ -2,6 +2,7 @@
 
 import rospy
 from geometry_msgs.msg import Twist
+from std_msgs.msg import Bool
 
 import numpy as np
 
@@ -18,36 +19,55 @@ serial.openPort()
 packet = PacketHandler(serial)
 lenna = LennaMobileRobot(packet)
 
-# Topic callback function.
+# Global variable to store handshake status
+handshake_established = False
+
+# Topic callback function for Twist messages.
 def twistSubscriberCallback(data):
-    rospy.loginfo('linear x: %f, angular z: %f', data.linear.x, data.angular.z)
-    vel_right = (data.linear.x) + (data.angular.z * lenna.wheel_distance / 4)
-    vel_left = (data.linear.x) - (data.angular.z * lenna.wheel_distance / 4)
+    global handshake_established
+    if handshake_established:
+        rospy.loginfo('linear x: %f, angular z: %f', data.linear.x, data.angular.z)
+        vel_right = (data.linear.x) + (data.angular.z * lenna.wheel_distance / 4)
+        vel_left = (data.linear.x) - (data.angular.z * lenna.wheel_distance / 4)
 
-    vel_left = int(vel_left * 60 / (2*np.pi*lenna.wheel_radius))
-    vel_right = int(vel_right * 60 / (2*np.pi*lenna.wheel_radius))
+        vel_left = int(vel_left * 60 / (2*np.pi*lenna.wheel_radius))
+        vel_right = int(vel_right * 60 / (2*np.pi*lenna.wheel_radius))
 
-    if (abs(vel_left) >= lenna.max_motor_speed):
-        vel_left = (vel_left/abs(vel_left)) * lenna.max_motor_speed
-    
-    if (abs(vel_right) >= lenna.max_motor_speed):
-        vel_right = (vel_right/abs(vel_right)) * lenna.max_motor_speed
+        if (abs(vel_left) >= lenna.max_motor_speed):
+            vel_left = (vel_left/abs(vel_left)) * lenna.max_motor_speed
+        
+        if (abs(vel_right) >= lenna.max_motor_speed):
+            vel_right = (vel_right/abs(vel_right)) * lenna.max_motor_speed
 
-    rospy.loginfo('motor speeds L: %f, R: %f', vel_left, vel_right)
+        rospy.loginfo('motor speeds L: %f, R: %f', vel_left, vel_right)
 
-    lenna.setMotorSpeed(vel_left, vel_right)
+        lenna.setMotorSpeed(vel_left, vel_right)
+    else:
+        rospy.loginfo('Handshake not established, ignoring Twist message.')
 
-def twistSubscriber():
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'stringListener' node so that multiple listeners can
-    # run simultaneously.
+# Topic callback function for Handshake messages.
+def handshakeSubscriberCallback(data):
+    global handshake_established
+    if data.data:
+        packet.handshake = 1
+        handshake_established = True
+        # rospy.loginfo('Handshake Established!')
+    else:
+        packet.handshake = 0
+        handshake_established = False
+        rospy.loginfo('Waiting for Serial Handshake!')
+
+def main():
     rospy.init_node('node_serial', anonymous=False)
+
+    # Subscribe to Twist messages
     rospy.Subscriber('/cmd_vel', Twist, twistSubscriberCallback)
 
-    # spin() simply keeps python from exiting until this node is stopped
+    # Subscribe to Handshake messages
+    rospy.Subscriber('/handshake', Bool, handshakeSubscriberCallback)
+
+    rospy.loginfo("Node initialized and waiting for messages.")
     rospy.spin()
 
 if __name__ == '__main__':
-    twistSubscriber()
+    main()
