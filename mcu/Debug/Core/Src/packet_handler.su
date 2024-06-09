@@ -1,5 +1,5 @@
 ../Core/Src/packet_handler.c:14:6:LRL_UpdateCRC	32	static
-../Core/Src/packet_handler.c:65:6:LRL_txPacket	168	static
-../Core/Src/packet_handler.c:104:6:LRL_Packet_Init	16	static
-../Core/Src/packet_handler.c:109:6:LRL_rxPacket	24	static
-../Core/Src/packet_handler.c:148:6:LRL_handShake	24	static
+../Core/Src/packet_handler.c:65:6:LRL_txPacket	48	static
+../Core/Src/packet_handler.c:117:6:LRL_Packet_Init	16	static
+../Core/Src/packet_handler.c:122:6:LRL_rxPacket	24	static
+../Core/Src/packet_handler.c:161:6:LRL_handShake	24	static

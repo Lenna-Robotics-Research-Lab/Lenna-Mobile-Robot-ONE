@@ -78,7 +78,7 @@ uint8_t remain_pkt_length = 0;
 unsigned short temp_crc = 0;
 
 
-char MSG[128];
+char MSG[64];
 
 
 uint8_t input_speed ;// step given by MATLAB code
@@ -312,7 +312,7 @@ int main(void)
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
 //  HAL_Delay(1000);
-//  LRL_handShake(&rx_packet);
+  LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
   LRL_Packet_Init(&rx_packet);
@@ -346,20 +346,23 @@ int main(void)
 //	  }
 	  if(pid_tim_flag == 1)
 	  {
-//		LRL_MPU6050_ReadAll(&odom);
-//		LRL_MPU6050_ComplementaryFilter(&odom);
+		LRL_MPU6050_ReadAll(&odom);
+		LRL_HMC5883L_ReadHeading(&odom);
+		LRL_Encoder_ReadAngularSpeed(&odom);
+//		LRL_MPU6050_ComplementaryFilter(&odom,0.01);
 //		LRL_Encoder_ReadAngularSpeed(&odom);
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
 		LRL_Encoder_ReadAngularSpeed(&odom);
 
-		sprintf(MSG,"data is : %d\t %d\t %8.5f\t %8.5f\t \r\n",motor_speed_left, motor_speed_right, odom.dist.right,odom.dist.left);
-		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
+//		sprintf(MSG,"data is :%4.1f\t %4.1f\t %4.1f\r\n",odom.angle.x,odom.angle.y,odom.angle.z);
+//		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
+
+		LRL_txPacket(&rx_packet, &odom);
 
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
-
 		pid_tim_flag = 0;
 	  }
     /* USER CODE END WHILE */

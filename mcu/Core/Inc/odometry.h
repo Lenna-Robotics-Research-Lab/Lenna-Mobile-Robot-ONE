@@ -138,6 +138,8 @@ typedef struct
 	float	y;
 	float	z;
 	uint16_t	heading;
+
+	uint16_t heading_offset;
 } magnetometer;
 
 typedef struct
@@ -148,8 +150,8 @@ typedef struct
 
 typedef struct
 {
-	float right;
-	float left;
+	int16_t right;
+	int16_t left;
 } wheel_position;
 
 typedef struct
@@ -166,9 +168,19 @@ typedef struct
 typedef struct
 {
 	I2C_HandleTypeDef * hi2c;	// I2C Sensors e.g.  IMU, Magnetometer, etc.
+
+	int16_t offset_gyro_x;
+	int16_t offset_gyro_y;
+	int16_t offset_gyro_z;
+
+	int16_t offset_accel_x;
+	int16_t offset_accel_y;
+	int16_t offset_accel_z;
+
 	float 	offset_calibration_x;
 	float 	offset_calibration_y;
 	float 	offset_calibration_z;
+
 	float 	roll_temp;
 	float 	pitch_temp;
 	float	yaw_temp;
@@ -205,7 +217,7 @@ void LRL_MPU6050_ReadAccel(odom_cfgType * odom);
 void _LRL_MPU6050_EnableBypass(odom_cfgType * odom, uint8_t enable);
 void LRL_MPU6050_ReadGyro(odom_cfgType *odom);
 void LRL_MPU6050_ReadAll(odom_cfgType *odom);
-void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom);
+void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom, float dt);
 
 void LRL_Encoder_Init(odom_cfgType * odom);
 void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom);

@@ -64,14 +64,14 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 
 void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 {
-	uint8_t  _buffer[144];
+	uint8_t  _buffer[26];
 	unsigned short _tmp_crc;
 
 	_buffer[0] = 0xFF;
 	_buffer[1] = 0xFF;
 
 	_buffer[2] = 0x01;
-	_buffer[3] = 0x0C; //this is the size of the bytes
+	_buffer[3] = 0x1A; //this is the size of the bytes
 
 	_buffer[4] = (uint8_t)(odom->mag.heading >> 8);
 	_buffer[5] = (uint8_t)(odom->mag.heading & 0x00FF);
@@ -91,12 +91,25 @@ void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 	_buffer[14] = (uint8_t)(odom->gyro.x >> 8);
 	_buffer[15] = (uint8_t)(odom->gyro.x & 0x00FF);
 
-	updateCRC(0, &_buffer, 16,_tmp_crc);
+	_buffer[16] = (uint8_t)(odom->gyro.y >> 8);
+	_buffer[17] = (uint8_t)(odom->gyro.y & 0x00FF);
 
-	_buffer[14] = (uint8_t)(_tmp_crc >> 8);
-	_buffer[15] = (uint8_t)(_tmp_crc & 0x00FF);
+	_buffer[18] = (uint8_t)(odom->gyro.z >> 8);
+	_buffer[19] = (uint8_t)(odom->gyro.z & 0x00FF);
 
+	_buffer[20] = (uint8_t)(odom->dist.left >> 8);
+	_buffer[21] = (uint8_t)(odom->dist.left & 0x00FF);
 
+	_buffer[22] = (uint8_t)(odom->dist.right >> 8);
+	_buffer[23] = (uint8_t)(odom->dist.right & 0x00FF);
+
+	LRL_UpdateCRC(0, &_buffer, 24,_tmp_crc);
+
+	_buffer[20] = (uint8_t)(_tmp_crc >> 8);
+	_buffer[21] = (uint8_t)(_tmp_crc & 0x00FF);
+
+	HAL_UART_Transmit(packet->huart, _buffer, 26,10);
+//	HAL_UART_Transmit(&huart1, _buffer, 26,10);
 
 }
 
