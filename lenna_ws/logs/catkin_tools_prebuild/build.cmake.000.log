@@ -14,8 +14,8 @@ Not searching for unused variables given on the command line.
 [36m--[0m Detecting CXX compile features
 [36m--[0m Detecting CXX compile features - done
 [36m--[0m Using CATKIN_DEVEL_PREFIX: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/catkin_tools_prebuild
-[36m--[0m Using CMAKE_PREFIX_PATH: /opt/ros/melodic
-[36m--[0m This workspace overlays: /opt/ros/melodic
+[36m--[0m Using CMAKE_PREFIX_PATH: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel;/opt/ros/melodic
+[36m--[0m This workspace overlays: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel;/opt/ros/melodic
 [36m--[0m Found PythonInterp: /usr/bin/python2 (found suitable version "2.7.17", minimum required is "2")
 [36m--[0m Using PYTHON_EXECUTABLE: /usr/bin/python2
 [36m--[0m Using Debian Python package layout
