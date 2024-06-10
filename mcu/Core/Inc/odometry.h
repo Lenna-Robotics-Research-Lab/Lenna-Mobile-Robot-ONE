@@ -113,9 +113,9 @@ typedef struct
 
 typedef struct
 {
-	float	x;
-	float	y;
-	float	z;
+	int16_t	x; // roll
+	int16_t	y; // pitch
+	int16_t	z; // yaw
 } angular_position;
 
 typedef struct
@@ -123,6 +123,10 @@ typedef struct
 	int16_t	x;
 	int16_t	y;
 	int16_t	z;
+
+	int16_t	x_calibrated;
+	int16_t	y_calibrated;
+	int16_t	z_calibrated;
 } accelerometer;
 
 typedef struct
@@ -130,6 +134,10 @@ typedef struct
 	int16_t	x;
 	int16_t	y;
 	int16_t	z;
+
+	int16_t	x_calibrated;
+	int16_t	y_calibrated;
+	int16_t	z_calibrated;
 } gyroscope;
 
 typedef struct

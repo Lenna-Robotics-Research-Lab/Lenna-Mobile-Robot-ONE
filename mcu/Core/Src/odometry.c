@@ -169,7 +169,7 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
     odom->imu.offset_gyro_y = (_tmp_cal_gy_y/500);
     odom->imu.offset_gyro_z = (_tmp_cal_gy_z/500);
 
-/* run this if you want to calibrate complementary filter
+///* run this if you want to calibrate complementary filter
 	odom->imu.offset_calibration_x = 0;
     odom->imu.offset_calibration_y = 0;
     odom->imu.offset_calibration_z = 0;
@@ -190,7 +190,6 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
     odom->imu.offset_calibration_y = (_tmp_cal_cf_y/500);
     odom->imu.offset_calibration_z = (_tmp_cal_cf_z/500);
 
-*/
     prev_acc_x = 0;
     prev_acc_y = 0;
     prev_acc_z = 0;
@@ -201,7 +200,6 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
 
 void LRL_MPU6050_ReadAccel(odom_cfgType * odom)
 {
-
 	_LRL_MPU6050_EnableBypass(odom, 0);
     // Read 6 BYTES of data starting from ACCEL_XOUT_H register
     HAL_I2C_Mem_Read(odom->imu.hi2c, MPU_ADDR, ACCEL_XOUT_H, 1, (uint8_t *)&_imu_buffer, 6, DELAY_TIMEOUT);
@@ -221,14 +219,13 @@ void LRL_MPU6050_ReadAccel(odom_cfgType * odom)
     odom->accel.y /= (ACCEL_Y_CORRECTOR / FLOAT_SCALING);
     odom->accel.z /= (ACCEL_Z_CORRECTOR / FLOAT_SCALING);
 
-    odom->accel.x -= odom->imu.offset_accel_x;
-    odom->accel.y -= odom->imu.offset_accel_y;
-    odom->accel.z -= odom->imu.offset_accel_z;
+    odom->accel.x_calibrated = odom->accel.x - odom->imu.offset_accel_x;
+    odom->accel.y_calibrated = odom->accel.y - odom->imu.offset_accel_y;
+    odom->accel.z_calibrated = odom->accel.z - odom->imu.offset_accel_z;
 }
 
 void LRL_MPU6050_ReadGyro(odom_cfgType *odom)
 {
-	int16_t _tmp_x;
 	_LRL_MPU6050_EnableBypass(odom, 0);
 	HAL_I2C_Mem_Read(odom->imu.hi2c, MPU_ADDR, GYRO_XOUT_H, 1, (uint8_t *)_imu_buffer, 6, DELAY_TIMEOUT);
 
@@ -240,11 +237,9 @@ void LRL_MPU6050_ReadGyro(odom_cfgType *odom)
 	odom->gyro.y /= (GYRO_CORRECTOR / FLOAT_SCALING);
 	odom->gyro.z /= (GYRO_CORRECTOR / FLOAT_SCALING);
 
-	_tmp_x = odom->gyro.x;
-
-	odom->gyro.x -= odom->imu.offset_gyro_x;
-	odom->gyro.y -= odom->imu.offset_gyro_y;
-	odom->gyro.z -= odom->imu.offset_gyro_z;
+	odom->gyro.x_calibrated = odom->gyro.x - odom->imu.offset_gyro_x;
+	odom->gyro.y_calibrated = odom->gyro.y - odom->imu.offset_gyro_y;
+	odom->gyro.z_calibrated = odom->gyro.z - odom->imu.offset_gyro_z;
 }
 
 void LRL_MPU6050_ReadAll(odom_cfgType *odom)
@@ -307,6 +302,7 @@ void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom, float dt)
     prev_acc_x = _tmp_accx;
     prev_acc_y = _tmp_accy;
     prev_acc_z = _tmp_accz;
+
     prev_gyr_x = gyr_x_filtered;
     prev_gyr_y = gyr_y_filtered;
     prev_gyr_z = gyr_z_filtered;

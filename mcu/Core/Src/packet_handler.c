@@ -72,42 +72,51 @@ void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 	packet->buffer[2] = 0x01;
 	packet->buffer[3] = 0x1A; //this is the size of the bytes
 
-	packet->buffer[4] = (uint8_t)(odom->mag.heading >> 8);
-	packet->buffer[5] = (uint8_t)(odom->mag.heading & 0x00FF);
+	packet->buffer[4] = (uint8_t)(odom->vel.left >> 8);
+	packet->buffer[5] = (uint8_t)(odom->vel.left & 0x00FF);
 
-	packet->buffer[6] = (uint8_t)(odom->vel.left >> 8);
-	packet->buffer[7] = (uint8_t)(odom->vel.left & 0x00FF);
+	packet->buffer[6] = (uint8_t)(odom->vel.right >> 8);
+	packet->buffer[7] = (uint8_t)(odom->vel.right & 0x00FF);
 
-	packet->buffer[8] = (uint8_t)(odom->vel.right >> 8);
-	packet->buffer[9] = (uint8_t)(odom->vel.right & 0x00FF);
+	packet->buffer[8] = (uint8_t)(odom->dist.left >> 8);
+	packet->buffer[9] = (uint8_t)(odom->dist.left & 0x00FF);
 
-	packet->buffer[10] = (uint8_t)(odom->accel.x >> 8);
-	packet->buffer[11] = (uint8_t)(odom->accel.x & 0x00FF);
+	packet->buffer[10] = (uint8_t)(odom->dist.right >> 8);
+	packet->buffer[11] = (uint8_t)(odom->dist.right & 0x00FF);
 
-	packet->buffer[12] = (uint8_t)(odom->accel.y>> 8);
-	packet->buffer[13] = (uint8_t)(odom->accel.y & 0x00FF);
+	packet->buffer[12] = (uint8_t)(odom->accel.x_calibrated >> 8);
+	packet->buffer[13] = (uint8_t)(odom->accel.x_calibrated & 0x00FF);
 
-	packet->buffer[14] = (uint8_t)(odom->gyro.x >> 8);
-	packet->buffer[15] = (uint8_t)(odom->gyro.x & 0x00FF);
+	packet->buffer[14] = (uint8_t)(odom->accel.y_calibrated >> 8);
+	packet->buffer[15] = (uint8_t)(odom->accel.y_calibrated & 0x00FF);
 
-	packet->buffer[16] = (uint8_t)(odom->gyro.y >> 8);
-	packet->buffer[17] = (uint8_t)(odom->gyro.y & 0x00FF);
+	packet->buffer[16] = (uint8_t)(odom->accel.z_calibrated >> 8);
+	packet->buffer[17] = (uint8_t)(odom->accel.z_calibrated & 0x00FF);
 
-	packet->buffer[18] = (uint8_t)(odom->gyro.z >> 8);
-	packet->buffer[19] = (uint8_t)(odom->gyro.z & 0x00FF);
+	packet->buffer[18] = (uint8_t)(odom->gyro.x_calibrated >> 8);
+	packet->buffer[19] = (uint8_t)(odom->gyro.x_calibrated & 0x00FF);
 
-	packet->buffer[20] = (uint8_t)(odom->dist.left >> 8);
-	packet->buffer[21] = (uint8_t)(odom->dist.left & 0x00FF);
+	packet->buffer[20] = (uint8_t)(odom->gyro.y_calibrated >> 8);
+	packet->buffer[21] = (uint8_t)(odom->gyro.y_calibrated & 0x00FF);
 
-	packet->buffer[22] = (uint8_t)(odom->dist.right >> 8);
-	packet->buffer[23] = (uint8_t)(odom->dist.right & 0x00FF);
+	packet->buffer[22] = (uint8_t)(odom->gyro.z_calibrated >> 8);
+	packet->buffer[23] = (uint8_t)(odom->gyro.z_calibrated & 0x00FF);
 
-	LRL_UpdateCRC(0, &packet->buffer, 24,_tmp_crc);
+	packet->buffer[24] = (uint8_t)(odom->angle.x >> 8);
+	packet->buffer[25] = (uint8_t)(odom->angle.x & 0x00FF);
 
-	packet->buffer[24] = (uint8_t)(_tmp_crc >> 8);
-	packet->buffer[25] = (uint8_t)(_tmp_crc & 0x00FF);
+	packet->buffer[26] = (uint8_t)(odom->angle.y >> 8);
+	packet->buffer[27] = (uint8_t)(odom->angle.y & 0x00FF);
 
-	HAL_UART_Transmit_IT(packet->huart, packet->buffer,26);
+	packet->buffer[28] = (uint8_t)(odom->mag.heading >> 8);
+	packet->buffer[29] = (uint8_t)(odom->mag.heading & 0x00FF);
+
+	LRL_UpdateCRC(0, &packet->buffer, 30,_tmp_crc);
+
+	packet->buffer[30] = (uint8_t)(_tmp_crc >> 8);
+	packet->buffer[31] = (uint8_t)(_tmp_crc & 0x00FF);
+
+	HAL_UART_Transmit_IT(packet->huart, packet->buffer, 32);
 //	HAL_UART_Transmit(&huart1, _buffer, 26,10);
 
 }

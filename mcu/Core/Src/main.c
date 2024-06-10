@@ -355,14 +355,14 @@ int main(void)
 		LRL_MPU6050_ReadAll(&odom);
 		LRL_HMC5883L_ReadHeading(&odom);
 		LRL_Encoder_ReadAngularSpeed(&odom);
-//		LRL_MPU6050_ComplementaryFilter(&odom,0.01);
+		LRL_MPU6050_ComplementaryFilter(&odom,0.01);
 //		LRL_Encoder_ReadAngularSpeed(&odom);
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
 //		LRL_Encoder_ReadAngularSpeed(&odom);
 
-		sprintf(MSG,"data is :%d \t%d \t %d\r\n",odom.vel.right, odom.mag.heading,odom.mag.offset_heading);
-		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
+//		sprintf(MSG,"data is :%d \t%d \r\n", odom.angle.x, odom.angle.y);
+//		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
 
 		LRL_txPacket(&tx_packet, &odom);
 
