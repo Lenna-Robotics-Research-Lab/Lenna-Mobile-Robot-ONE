@@ -5,7 +5,7 @@ import time
 import serial
 
 class SerialHandler():
-    def __init__(self, port_name, baudrate):
+    def __init__(self, port_name='/dev/ttyTHS1', baudrate=115200):
         self.is_open = False
         self.is_using = False
 
