@@ -16,5 +16,5 @@ packet = PacketHandler(serial)
 lenna = LennaMobileRobot(packet)
 
 while True:
-    odom, _, _ = lenna.getOdometry(20)
+    odom, _, _ = lenna.getOdometry(100)
     print(getSigned(odom))
