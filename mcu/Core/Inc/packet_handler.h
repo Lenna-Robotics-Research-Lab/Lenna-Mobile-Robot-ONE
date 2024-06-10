@@ -37,6 +37,7 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 void LRL_Packet_Init(packet_cfgType *packet);
 void LRL_rxPacket(packet_cfgType *packet);
 void LRL_handShake(packet_cfgType *packet);
+void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom);
 
 
 

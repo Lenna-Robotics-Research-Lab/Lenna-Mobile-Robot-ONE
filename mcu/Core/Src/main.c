@@ -138,14 +138,14 @@ const encoder_cfgType enc_right =
 {
 	&htim3,
 	48960,
-	0.1225		// 6000/48960
+	0.1225f		// 6000/48960
 };
 
 const encoder_cfgType enc_left =
 {
 	&htim2,
 	48960,
-	0.1225		// 6000/48960
+	0.1225f		// 6000/48960
 };
 
 odom_cfgType odom =
@@ -215,6 +215,12 @@ packet_cfgType rx_packet=
 	144,
 };
 
+packet_cfgType tx_packet=
+{
+	&huart2,
+	3,
+	144,
+};
 
 int16_t val_x;
 int16_t val_y;
@@ -353,12 +359,12 @@ int main(void)
 //		LRL_Encoder_ReadAngularSpeed(&odom);
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
-		LRL_Encoder_ReadAngularSpeed(&odom);
+//		LRL_Encoder_ReadAngularSpeed(&odom);
 
-//		sprintf(MSG,"data is :%4.1f\t %4.1f\t %4.1f\r\n",odom.angle.x,odom.angle.y,odom.angle.z);
-//		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
+		sprintf(MSG,"data is :%d \t%d \t %d\r\n",odom.vel.right, odom.mag.heading,odom.mag.offset_heading);
+		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
 
-		LRL_txPacket(&rx_packet, &odom);
+		LRL_txPacket(&tx_packet, &odom);
 
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
