@@ -137,9 +137,9 @@ typedef struct
 	float	x;
 	float	y;
 	float	z;
-	uint16_t	heading;
+	int16_t	heading;
 
-	uint16_t heading_offset;
+	int16_t offset_heading;
 } magnetometer;
 
 typedef struct

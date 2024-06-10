@@ -51,15 +51,16 @@ void LRL_HMC5883L_Init(odom_cfgType * odom)
 
 	HAL_Delay(10);
 
-	odom->mag.heading_offset = 0;
+	odom->mag.offset_heading = 0;
 
-	for(int i = 0; i<500;i++)
+	for(int i = 0; i<100; i++)
 	{
 		LRL_HMC5883L_ReadHeading(odom);
 		_tmp_cal_mag += odom->mag.heading;
+		HAL_Delay(10);
 	}
 
-	odom->mag.heading_offset = (_tmp_cal_mag / 500);
+	odom->mag.offset_heading = (_tmp_cal_mag / 100);
 }
 
 float LRL_HMC5883L_SetDeclination(int16_t declination_degs , int16_t declination_mins, char declination_dir)
@@ -91,18 +92,21 @@ void LRL_HMC5883L_ReadHeading(odom_cfgType * odom)
 	// Evaluate Heading and Correcting Declination (IRAN Coordinates)
 	_mag_heading_temp = atan2(odom->mag.x, odom->mag.y) + MAGNETIC_DECLINATION;
 
-	// Correct for when signs are reversed.
-    if(_mag_heading_temp < 0)
-    	_mag_heading_temp += 2*M_PI;
-
-    // Check for wrap due to addition of declination.
-    if(_mag_heading_temp > 2*M_PI)
-    	_mag_heading_temp -= 2*M_PI;
-
     // Convert radians to degrees for readability.
     odom->mag.heading = _mag_heading_temp * 180/M_PI;
 
-    odom->mag.heading -= odom->mag.heading_offset;
+	// Correct for when signs are reversed.
+    if(odom->mag.heading < 0)
+    	odom->mag.heading += 360;
+
+    // Check for wrap due to addition of declination.
+    if(odom->mag.heading > 360)
+    	odom->mag.heading -= 360;
+
+    // Evaluate the effect of calibration offset
+    odom->mag.heading -= odom->mag.offset_heading;
+    if(odom->mag.heading < 0)
+    	odom->mag.heading += 360;
 }
 
 // #######################################################
@@ -162,8 +166,8 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
     odom->imu.offset_accel_z = (_tmp_cal_ac_z/500);
 
     odom->imu.offset_gyro_x = (_tmp_cal_gy_x/500);
-    odom->imu.offset_gyro_y = (_tmp_cal_gy_x/500);
-    odom->imu.offset_gyro_z = (_tmp_cal_gy_x/500);
+    odom->imu.offset_gyro_y = (_tmp_cal_gy_y/500);
+    odom->imu.offset_gyro_z = (_tmp_cal_gy_z/500);
 
 /* run this if you want to calibrate complementary filter
 	odom->imu.offset_calibration_x = 0;
@@ -326,6 +330,7 @@ void LRL_Encoder_Init(odom_cfgType * odom)
 
 void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 {
+
 	odom->enc_right.tick = __HAL_TIM_GET_COUNTER(odom->enc_right.htim);
 	odom->enc_left.tick = __HAL_TIM_GET_COUNTER(odom->enc_left.htim);
 
@@ -382,7 +387,7 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  _dir_l = -1;
 	}
 
-	odom->dist.right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_left.MAX_ARR ;
+	odom->dist.right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_right.MAX_ARR ;
 	odom->dist.left  += _dir_l * odom->vel.left*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_left.MAX_ARR ;
 
 	odom->vel.right = _dir_r * odom->vel.right * odom->enc_right.TICK2RPM;
