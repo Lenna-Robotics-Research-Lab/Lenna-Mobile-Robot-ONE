@@ -28,28 +28,28 @@ The CXX compiler identification is GNU, found in "/home/lenna/repositories/Lenna
 Determining if the C compiler works passed with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_09555/fast"
-/usr/bin/make -f CMakeFiles/cmTC_09555.dir/build.make CMakeFiles/cmTC_09555.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_e609c/fast"
+/usr/bin/make -f CMakeFiles/cmTC_e609c.dir/build.make CMakeFiles/cmTC_e609c.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_09555.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_09555.dir/testCCompiler.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_09555
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_09555.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_09555.dir/testCCompiler.c.o  -o cmTC_09555 
+Building C object CMakeFiles/cmTC_e609c.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_e609c.dir/testCCompiler.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_e609c
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_e609c.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_e609c.dir/testCCompiler.c.o  -o cmTC_e609c 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_916ad/fast"
-/usr/bin/make -f CMakeFiles/cmTC_916ad.dir/build.make CMakeFiles/cmTC_916ad.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_df8ab/fast"
+/usr/bin/make -f CMakeFiles/cmTC_df8ab.dir/build.make CMakeFiles/cmTC_df8ab.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_916ad
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_916ad.dir/link.txt --verbose=1
-/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o  -o cmTC_916ad 
+Building C object CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_df8ab
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df8ab.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o  -o cmTC_df8ab 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper
@@ -59,9 +59,9 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_916ad' '-mlittle-endian' '-mabi=lp64'
- /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccmFCyxb.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_916ad /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_916ad' '-mlittle-endian' '-mabi=lp64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_df8ab' '-mlittle-endian' '-mabi=lp64'
+ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccNo1q8Z.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_df8ab /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_df8ab' '-mlittle-endian' '-mabi=lp64'
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -69,14 +69,14 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_916ad/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_916ad.dir/build.make CMakeFiles/cmTC_916ad.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_df8ab/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_df8ab.dir/build.make CMakeFiles/cmTC_df8ab.dir/build]
   ignore line: [make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_916ad]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_916ad.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o  -o cmTC_916ad ]
+  ignore line: [Building C object CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.10/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_df8ab]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_df8ab.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o  -o cmTC_df8ab ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper]
@@ -86,13 +86,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_916ad' '-mlittle-endian' '-mabi=lp64']
-  link line: [ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccmFCyxb.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_916ad /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_df8ab' '-mlittle-endian' '-mabi=lp64']
+  link line: [ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccNo1q8Z.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_df8ab /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccmFCyxb.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccNo1q8Z.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -113,7 +113,7 @@ Parsed C implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_916ad] ==> ignore
+    arg [cmTC_df8ab] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -125,7 +125,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/aarch64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_916ad.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_df8ab.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -157,14 +157,14 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_4b58e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_4b58e.dir/build.make CMakeFiles/cmTC_4b58e.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8f441/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8f441.dir/build.make CMakeFiles/cmTC_8f441.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_4b58e.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_4b58e.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
-Linking C executable cmTC_4b58e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4b58e.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_4b58e.dir/feature_tests.c.o  -o cmTC_4b58e 
+Building C object CMakeFiles/cmTC_8f441.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_8f441.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
+Linking C executable cmTC_8f441
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8f441.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_8f441.dir/feature_tests.c.o  -o cmTC_8f441 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -177,14 +177,14 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ae4cf/fast"
-/usr/bin/make -f CMakeFiles/cmTC_ae4cf.dir/build.make CMakeFiles/cmTC_ae4cf.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_06daa/fast"
+/usr/bin/make -f CMakeFiles/cmTC_06daa.dir/build.make CMakeFiles/cmTC_06daa.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_ae4cf.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_ae4cf.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
-Linking C executable cmTC_ae4cf
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ae4cf.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_ae4cf.dir/feature_tests.c.o  -o cmTC_ae4cf 
+Building C object CMakeFiles/cmTC_06daa.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_06daa.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
+Linking C executable cmTC_06daa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_06daa.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_06daa.dir/feature_tests.c.o  -o cmTC_06daa 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -197,14 +197,14 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_0136e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_0136e.dir/build.make CMakeFiles/cmTC_0136e.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_3a910/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3a910.dir/build.make CMakeFiles/cmTC_3a910.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_0136e.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_0136e.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
-Linking C executable cmTC_0136e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0136e.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_0136e.dir/feature_tests.c.o  -o cmTC_0136e 
+Building C object CMakeFiles/cmTC_3a910.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_3a910.dir/feature_tests.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.c
+Linking C executable cmTC_3a910
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3a910.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_3a910.dir/feature_tests.c.o  -o cmTC_3a910 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -215,28 +215,28 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_b71ce/fast"
-/usr/bin/make -f CMakeFiles/cmTC_b71ce.dir/build.make CMakeFiles/cmTC_b71ce.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8fbfc/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8fbfc.dir/build.make CMakeFiles/cmTC_8fbfc.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_b71ce.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTC_b71ce.dir/testCXXCompiler.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_b71ce
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_b71ce.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_b71ce.dir/testCXXCompiler.cxx.o  -o cmTC_b71ce 
+Building CXX object CMakeFiles/cmTC_8fbfc.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_8fbfc.dir/testCXXCompiler.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_8fbfc
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8fbfc.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_8fbfc.dir/testCXXCompiler.cxx.o  -o cmTC_8fbfc 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ed660/fast"
-/usr/bin/make -f CMakeFiles/cmTC_ed660.dir/build.make CMakeFiles/cmTC_ed660.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_33cc8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_33cc8.dir/build.make CMakeFiles/cmTC_33cc8.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++     -o CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_ed660
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed660.dir/link.txt --verbose=1
-/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_ed660 
+Building CXX object CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_33cc8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_33cc8.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_33cc8 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper
@@ -246,9 +246,9 @@ Thread model: posix
 gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) 
 COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/
 LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../:/lib/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ed660' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
- /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccuFdSgx.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_ed660 /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ed660' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_33cc8' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
+ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCfw18d.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_33cc8 /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_33cc8' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64'
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -256,14 +256,14 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_ed660/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_ed660.dir/build.make CMakeFiles/cmTC_ed660.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_33cc8/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_33cc8.dir/build.make CMakeFiles/cmTC_33cc8.dir/build]
   ignore line: [make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_ed660]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ed660.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_ed660 ]
+  ignore line: [Building CXX object CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.10/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_33cc8]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_33cc8.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_33cc8 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper]
@@ -273,13 +273,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 7.5.0 (Ubuntu/Linaro 7.5.0-3ubuntu1~18.04) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/aarch64-linux-gnu/7/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib/:/lib/aarch64-linux-gnu/:/lib/../lib/:/usr/lib/aarch64-linux-gnu/:/usr/lib/../lib/:/usr/lib/gcc/aarch64-linux-gnu/7/../../../:/lib/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ed660' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
-  link line: [ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccuFdSgx.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_ed660 /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_33cc8' '-shared-libgcc' '-mlittle-endian' '-mabi=lp64']
+  link line: [ /usr/lib/gcc/aarch64-linux-gnu/7/collect2 -plugin /usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so -plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper -plugin-opt=-fresolution=/tmp/ccCfw18d.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu --as-needed -export-dynamic -dynamic-linker /lib/ld-linux-aarch64.so.1 -X -EL -maarch64linux --fix-cortex-a53-843419 -pie -z now -z relro -o cmTC_33cc8 /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o /usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o -L/usr/lib/gcc/aarch64-linux-gnu/7 -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu -L/usr/lib/gcc/aarch64-linux-gnu/7/../../../../lib -L/lib/aarch64-linux-gnu -L/lib/../lib -L/usr/lib/aarch64-linux-gnu -L/usr/lib/../lib -L/usr/lib/gcc/aarch64-linux-gnu/7/../../.. CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/aarch64-linux-gnu/7/crtendS.o /usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crtn.o]
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/aarch64-linux-gnu/7/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccuFdSgx.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccCfw18d.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -300,7 +300,7 @@ Parsed CXX implicit link information from above output:
     arg [-znow] ==> ignore
     arg [-zrelro] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_ed660] ==> ignore
+    arg [cmTC_33cc8] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/../../../aarch64-linux-gnu/crti.o] ==> ignore
     arg [/usr/lib/gcc/aarch64-linux-gnu/7/crtbeginS.o] ==> ignore
@@ -312,7 +312,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/aarch64-linux-gnu] ==> dir [/usr/lib/aarch64-linux-gnu]
     arg [-L/usr/lib/../lib] ==> dir [/usr/lib/../lib]
     arg [-L/usr/lib/gcc/aarch64-linux-gnu/7/../../..] ==> dir [/usr/lib/gcc/aarch64-linux-gnu/7/../../..]
-    arg [CMakeFiles/cmTC_ed660.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_33cc8.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -340,14 +340,14 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_d6974/fast"
-/usr/bin/make -f CMakeFiles/cmTC_d6974.dir/build.make CMakeFiles/cmTC_d6974.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_5f75b/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5f75b.dir/build.make CMakeFiles/cmTC_5f75b.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_d6974.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_d6974.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_d6974
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d6974.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_d6974.dir/feature_tests.cxx.o  -o cmTC_d6974 
+Building CXX object CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++1z -o CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_5f75b
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5f75b.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5f75b.dir/feature_tests.cxx.o  -o cmTC_5f75b 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -413,14 +413,14 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a105e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a105e.dir/build.make CMakeFiles/cmTC_a105e.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_5b549/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5b549.dir/build.make CMakeFiles/cmTC_5b549.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_a105e.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_a105e.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_a105e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a105e.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_a105e.dir/feature_tests.cxx.o  -o cmTC_a105e 
+Building CXX object CMakeFiles/cmTC_5b549.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_5b549.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_5b549
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5b549.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5b549.dir/feature_tests.cxx.o  -o cmTC_5b549 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -486,14 +486,14 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_5ab9c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_5ab9c.dir/build.make CMakeFiles/cmTC_5ab9c.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_50b10/fast"
+/usr/bin/make -f CMakeFiles/cmTC_50b10.dir/build.make CMakeFiles/cmTC_50b10.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_5ab9c.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_5ab9c.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_5ab9c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5ab9c.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5ab9c.dir/feature_tests.cxx.o  -o cmTC_5ab9c 
+Building CXX object CMakeFiles/cmTC_50b10.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_50b10.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_50b10
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_50b10.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_50b10.dir/feature_tests.cxx.o  -o cmTC_50b10 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -559,14 +559,14 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c62c6/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c62c6.dir/build.make CMakeFiles/cmTC_c62c6.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_5019f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5019f.dir/build.make CMakeFiles/cmTC_5019f.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_c62c6.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_c62c6.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_c62c6
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c62c6.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_c62c6.dir/feature_tests.cxx.o  -o cmTC_c62c6 
+Building CXX object CMakeFiles/cmTC_5019f.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_5019f.dir/feature_tests.cxx.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_5019f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5019f.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_5019f.dir/feature_tests.cxx.o  -o cmTC_5019f 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
@@ -630,28 +630,28 @@ make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenn
 Determining if the include file pthread.h exists passed with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_1dbda/fast"
-/usr/bin/make -f CMakeFiles/cmTC_1dbda.dir/build.make CMakeFiles/cmTC_1dbda.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_a4129/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a4129.dir/build.make CMakeFiles/cmTC_a4129.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_1dbda.dir/CheckIncludeFile.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_1dbda.dir/CheckIncludeFile.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-Linking C executable cmTC_1dbda
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1dbda.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_1dbda.dir/CheckIncludeFile.c.o  -o cmTC_1dbda 
+Building C object CMakeFiles/cmTC_a4129.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_a4129.dir/CheckIncludeFile.c.o   -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_a4129
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a4129.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_a4129.dir/CheckIncludeFile.c.o  -o cmTC_a4129 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
 Determining if the function pthread_create exists in the pthread passed with the following output:
 Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_043a1/fast"
-/usr/bin/make -f CMakeFiles/cmTC_043a1.dir/build.make CMakeFiles/cmTC_043a1.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_de960/fast"
+/usr/bin/make -f CMakeFiles/cmTC_de960.dir/build.make CMakeFiles/cmTC_de960.dir/build
 make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_043a1.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_043a1.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
-Linking C executable cmTC_043a1
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_043a1.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_043a1.dir/CheckFunctionExists.c.o  -o cmTC_043a1 -lpthread 
+Building C object CMakeFiles/cmTC_de960.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_de960.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.10/Modules/CheckFunctionExists.c
+Linking C executable cmTC_de960
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_de960.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_de960.dir/CheckFunctionExists.c.o  -o cmTC_de960 -lpthread 
 make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeTmp'
 
 
