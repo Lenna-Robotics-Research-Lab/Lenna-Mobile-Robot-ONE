@@ -1,0 +1,8 @@
+prefix=/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/install
+
+Name: lenna_msgs
+Description: Description of lenna_msgs
+Version: 0.0.0
+Cflags: -I${prefix}/include
+Libs: -L${prefix}/lib 
+Requires: geometry_msgs nav_msgs sensor_msgs rospy std_msgs

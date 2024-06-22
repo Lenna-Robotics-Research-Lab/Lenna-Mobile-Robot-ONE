@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python2
 # -*- coding: utf-8 -*-
 
 # Software License Agreement (BSD License)
@@ -62,7 +62,7 @@ ENV_VAR_SUBFOLDERS = {
     'LD_LIBRARY_PATH' if not IS_DARWIN else 'DYLD_LIBRARY_PATH': ['lib', os.path.join('lib', 'aarch64-linux-gnu')],
     'PATH': PATH_TO_ADD_SUFFIX,
     'PKG_CONFIG_PATH': [os.path.join('lib', 'pkgconfig'), os.path.join('lib', 'aarch64-linux-gnu', 'pkgconfig')],
-    'PYTHONPATH': 'lib/python3/dist-packages',
+    'PYTHONPATH': 'lib/python2.7/dist-packages',
 }
 
 
