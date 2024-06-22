@@ -5,6 +5,8 @@ from field_ops import *
 from packet_handler import *
 from field_ops import *
 
+import numpy as np
+
 class LennaMobileRobot():
     def __init__(self, protocol):
         self.protocol = protocol
@@ -13,6 +15,25 @@ class LennaMobileRobot():
         self.max_motor_speed = 250 # rpm
         self.wheel_radius = 0.0375 # meter
         self.wheel_distance = 0.18 # meter
+ 
+    def rpy2quat(self, roll, pitch, yaw):
+        """
+        Convert an Euler angle to a quaternion.
+        
+        Input
+            :param roll: The roll (rotation around x-axis) angle in radians.
+            :param pitch: The pitch (rotation around y-axis) angle in radians.
+            :param yaw: The yaw (rotation around z-axis) angle in radians.
+        
+        Output
+            :return qx, qy, qz, qw: The orientation in quaternion [x,y,z,w] format
+        """
+        qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+        qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
+        qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
+        qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
+        
+        return [qx, qy, qz, qw]
 
     def setMotorSpeed(self, motor_speed_left, motor_speed_right):
         return self.protocol.txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])
