@@ -90,6 +90,8 @@ uint16_t tst;
 
 uint8_t flag_tx = 0, pid_tim_flag = 0, dir_flag = 0;
 
+uint8_t serial_flag = 0;
+
 
 
 
@@ -226,6 +228,8 @@ int16_t val_x;
 int16_t val_y;
 int16_t val_z;
 float val_heading;
+
+uint8_t testBuffer[10];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -306,6 +310,7 @@ int main(void)
 
 // #################### Initializations   ####################
 
+//  /* main code initialization
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
 
@@ -318,12 +323,19 @@ int main(void)
   HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
 //  HAL_Delay(1000);
+  for(int c = 0; c< 3 ; c++)
+  {
+	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
+	  HAL_Delay(300);
+	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
+	  HAL_Delay(300);
+  }
   LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
-  LRL_Packet_Init(&rx_packet);
+//  LRL_Packet_Init(&rx_packet);
 
-//  HAL_UART_Receive_IT(&huart2, rxBuffer, min_len_packet);
+  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
 
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
@@ -331,10 +343,13 @@ int main(void)
   odom.dist.right = 0;
   odom.dist.left = 0;
 
+//  LRL_Motor_Test(diff_robot);
+
 
   // ####################   memory allocation    ####################
 
   int16_t motor_speed_left, motor_speed_right;
+
 
   /* USER CODE END 2 */
 
@@ -342,16 +357,12 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  LRL_rxPacket(&rx_packet);
-//	  if(rx_packet.rx_dataValid)
-//	  {
-
+	  /*  main code
 	  motor_speed_left = rx_packet.data.left_velocity;
 	  motor_speed_right = rx_packet.data.right_velocity;
-
-//	  }
 	  if(pid_tim_flag == 1)
 	  {
+		LRL_rxPacket(&rx_packet);
 		LRL_MPU6050_ReadAll(&odom);
 		LRL_HMC5883L_ReadHeading(&odom);
 		LRL_Encoder_ReadAngularSpeed(&odom);
@@ -371,7 +382,30 @@ int main(void)
 		LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
 		pid_tim_flag = 0;
 	  }
+	*/
+	  /* this part is for the problem handling and debugging  */
+	  if(serial_flag == 1)
+	  {
+		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
+	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
+		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
+		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
+
+	  	  serial_flag = 0;
+//	  	  HAL_Delay(10);
+	  }
+	  if(pid_tim_flag == 1)
+	  {
+		  LRL_Encoder_ReadAngularSpeed(&odom);
+		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
+		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
+		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+		  pid_tim_flag = 0;
+	  }
+
     /* USER CODE END WHILE */
+
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -437,10 +471,13 @@ void SystemClock_Config(void)
 // ####################   UART Receive Callback   ####################
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-//	if (huart == &huart2)
-//	{
+
+	USART_TypeDef *inst = huart->Instance;
+	if(inst == USART2){
 		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, GPIO_PIN_SET);
 		rx_packet.rx_byteReady = 1;
+		serial_flag = 1;
+	}
 //	}
 //	else
 //	{

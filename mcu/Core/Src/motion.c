@@ -11,6 +11,7 @@
 #include "motion.h"
 #include "stdbool.h"
 #include "stdlib.h"
+#include "main.h"
 
 //void LRL_Motion_Init(motor_cfgType motor_left, motor_cfgType motor_right)
 //{
@@ -50,4 +51,21 @@ void LRL_Motion_Control(diffDrive_cfgType diffRobot, int8_t duty_cycle_left, int
 {
 	LRL_Motor_Speed(diffRobot.MOTOR_LEFT, duty_cycle_left);
 	LRL_Motor_Speed(diffRobot.MOTOR_RIGHT, duty_cycle_right);
+}
+
+void LRL_Motor_Test(diffDrive_cfgType diffRobot)
+{
+	LRL_Motion_Control(diffRobot, 60, 60);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, 60, 0);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, 0, 60);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, -60, -60);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, -60, 0);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, 0, -60);
+	HAL_Delay(3000);
+	LRL_Motion_Control(diffRobot, 0, 0);
 }

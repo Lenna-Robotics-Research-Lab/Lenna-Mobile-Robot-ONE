@@ -38,5 +38,6 @@ typedef struct
 void LRL_Motion_Init(motor_cfgType, motor_cfgType);
 void LRL_Motor_Speed(motor_cfgType, int8_t);
 void LRL_Motion_Control(diffDrive_cfgType, int8_t, int8_t);
+void LRL_Motor_Test(diffDrive_cfgType diffRobot);
 
 #endif /* INC_MOTION_H_ */
