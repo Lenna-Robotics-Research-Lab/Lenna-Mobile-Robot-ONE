@@ -311,6 +311,7 @@ int main(void)
 // #################### Initializations   ####################
 
 //  /* main code initialization
+
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
 
@@ -320,7 +321,8 @@ int main(void)
 
   LRL_HMC5883L_Init(&odom);
 
-  HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
+  int16_t motor_speed_left = 0, motor_speed_right = 0;
+//  HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
 //  HAL_Delay(1000);
   for(int c = 0; c< 3 ; c++)
@@ -330,6 +332,7 @@ int main(void)
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
 	  HAL_Delay(300);
   }
+
   LRL_handShake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
@@ -348,7 +351,8 @@ int main(void)
 
   // ####################   memory allocation    ####################
 
-  int16_t motor_speed_left, motor_speed_right;
+
+
 
 
   /* USER CODE END 2 */
@@ -396,10 +400,14 @@ int main(void)
 	  }
 	  if(pid_tim_flag == 1)
 	  {
+		  LRL_MPU6050_ReadAll(&odom);
+		  LRL_HMC5883L_ReadHeading(&odom);
 		  LRL_Encoder_ReadAngularSpeed(&odom);
 		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+
+		  LRL_txPacket(&tx_packet, &odom);
 		  pid_tim_flag = 0;
 	  }
 

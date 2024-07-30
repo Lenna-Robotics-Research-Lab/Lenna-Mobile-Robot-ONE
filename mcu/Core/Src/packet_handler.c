@@ -71,7 +71,7 @@ void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 	packet->buffer[1] = 0xFF;
 
 	packet->buffer[2] = 0x01;
-	packet->buffer[3] = 0x1A; //this is the size of the bytes
+	packet->buffer[3] = 0x20; //this is the size of the bytes
 
 	packet->buffer[4] = (uint8_t)(odom->vel.left >> 8);
 	packet->buffer[5] = (uint8_t)(odom->vel.left & 0x00FF);
