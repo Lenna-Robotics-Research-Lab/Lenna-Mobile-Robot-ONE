@@ -126,7 +126,7 @@ const diffDrive_cfgType diff_robot =
 {
 	motor_right,
 	motor_left,
-	37.5,
+	32.5,
 	200
 };
 

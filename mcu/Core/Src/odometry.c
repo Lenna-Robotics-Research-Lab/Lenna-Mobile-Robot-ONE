@@ -11,6 +11,7 @@
 #include "odometry.h"
 #include "math.h"
 #include "mcu_config.h"
+#include "stdio.h"
 
 uint8_t _i2c_reg_data;
 uint8_t _mag_buffer[6];
@@ -28,6 +29,8 @@ float _tmp_cal_gy_x=0, _tmp_cal_gy_y=0, _tmp_cal_gy_z=0; // gyro calibration
 float _tmp_cal_ac_x=0, _tmp_cal_ac_y=0, _tmp_cal_ac_z=0; // accel calibration
 
 uint16_t _tmp_cal_mag = 0;
+
+float _temp_dist_right = 0, _temp_dist_left = 0; // this is for the problem with motor position
 // ############################################################
 // ####################  HMC MAGNETOMETER  ####################
 // ############################################################
@@ -383,8 +386,10 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  _dir_l = -1;
 	}
 
-	odom->dist.right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_right.MAX_ARR ;
-	odom->dist.left  += _dir_l * odom->vel.left*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_left.MAX_ARR ;
+	_temp_dist_right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_right.MAX_ARR;
+	_temp_dist_left += _dir_l * odom->vel.left*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_left.MAX_ARR ;
+	odom->dist.right = (int16_t)_temp_dist_right;
+	odom->dist.left  = (int16_t)_temp_dist_left;
 
 	odom->vel.right = _dir_r * odom->vel.right * odom->enc_right.TICK2RPM;
 	odom->vel.left = _dir_l * odom->vel.left * odom->enc_left.TICK2RPM;
