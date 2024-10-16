@@ -32,23 +32,32 @@ odom_old = Odometry()
 
 
 def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
-    left_dist /= 100
-    right_dist /= 100
 
-    old_l /= 100
-    old_r /= 100
+    # mm to meter
+    left_dist /= 1000
+    right_dist /= 1000
 
-    left_vel = (left_vel / 60) * (2*np.pi*lenna.wheel_radius)
-    right_vel = (right_vel / 60) * (2*np.pi*lenna.wheel_radius)
+    old_l /= 1000
+    old_r /= 1000
+
+    left_vel = (left_vel / 60) * (2*np.pi*lenna.wheel_radius)   # m/s
+    right_vel = (right_vel / 60) * (2*np.pi*lenna.wheel_radius) # m/s
 
     avg_dist = (left_dist + right_dist)/2
     avg_angle = 2 * math.atan((right_dist - left_dist))/lenna.wheel_distance
+
+    # mapping 0~2pi to -pi~pi
+    if (avg_angle > np.pi) :
+        avg_angle -= 2*np.pi
+
+    elif (avg_angle < -np.pi) :
+        avg_angle += 2*np.pi
 
     d_l = left_dist - old_l
     d_r = right_dist - old_r
     
     d_avg_dist = (d_l + d_r)/2
-    d_th = 2 * math.atan((d_l - d_r))/lenna.wheel_distance
+    d_th = 2 * math.atan((d_r - d_l))/lenna.wheel_distance
 
     if (d_th > np.pi) :
         d_th -= 2*np.pi
@@ -56,42 +65,47 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     elif (d_th < -np.pi) :
         d_th += 2*np.pi
 
-    if (avg_angle > np.pi) :
-        avg_angle -= 2*np.pi
+    # this is changing rpy to quatrenion how? go find it yourself
+    quatrenion = Quaternion()
 
-    elif (avg_angle < -np.pi) :
-        avg_angle += 2*np.pi
+    quatrenion.x = 0
+    quatrenion.y = 0
+    quatrenion.z = np.sin(avg_angle/2)
+    quatrenion.w = np.cos(avg_angle/2)
 
     odom.pose.pose.position.x = odom_old.pose.pose.position.x + np.cos(d_th) * d_avg_dist
     odom.pose.pose.position.y = odom_old.pose.pose.position.y + np.sin(d_th) * d_avg_dist
-    odom.pose.pose.orientation.z = avg_angle
+    odom.pose.pose.orientation = quatrenion
+
+    # odom.pose.pose.orientation.z = avg_angle
+
     
     #   Prevent lockup from a single bad cycle
     if (np.isnan(odom.pose.pose.position.x) or np.isnan(odom.pose.pose.position.y)
         or np.isnan(odom.pose.pose.position.z)):
         odom.pose.pose.position.x = odom_old.pose.pose.position.x
         odom.pose.pose.position.y = odom_old.pose.pose.position.y
-        odom.pose.pose.orientation.z = odom_old.pose.pose.orientation.z
+        odom.pose.pose.orientation = odom_old.pose.pose.orientation
  
     #    Make sure theta stays in the correct range
-    if (odom.pose.pose.orientation.z > np.pi):
-        odom.pose.pose.orientation.z -= 2 * np.pi
-    elif (odom.pose.pose.orientation.z < -np.pi): 
-        odom.pose.pose.orientation.z += 2 * np.pi
+    # if (odom.pose.pose.orientation.z > np.pi):
+    #     odom.pose.pose.orientation.z -= 2 * np.pi
+    # elif (odom.pose.pose.orientation.z < -np.pi): 
+    #     odom.pose.pose.orientation.z += 2 * np.pi
 
     
-    #   // Compute the velocity
+    #  Compute the velocity
     odom.header.stamp = rospy.Time.now()
     odom.twist.twist.linear.x = (right_vel + left_vel) / 2
     odom.twist.twist.angular.z = 2 * (right_vel - left_vel) / lenna.wheel_distance
  
-    #   // Save th e pose data for the next cycle
+    # Save th e pose data for the next cycle
     odom_old.pose.pose.position.x = odom.pose.pose.position.x
     odom_old.pose.pose.position.y = odom.pose.pose.position.y
-    odom_old.pose.pose.orientation.z = odom.pose.pose.orientation.z
+    odom_old.pose.pose.orientation = odom.pose.pose.orientation
     odom_old.header.stamp = odom.header.stamp
  
-    #   // Publish the odometry message
+    #   Publish the odometry message
     #   odom_data_pub.publish(odomNew);
 
 
@@ -114,8 +128,10 @@ if __name__ == "__main__":
 
         odom.header.frame_id = 'odom'
         odom.child_frame_id = "base_link"
-        update_odom(enc[0], enc[1], enc[2] , enc[3],old_l,old_r)
+        update_odom(enc[0], enc[1], enc[2], enc[3], old_l, old_r)
         old_l,old_r = enc[2] ,enc[3]
+
+        odom.header.stamp = rospy.Time.now()
         
         my_nav.publish(odom)
         rate.sleep()
