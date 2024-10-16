@@ -44,7 +44,7 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     right_vel = (right_vel / 60) * (2*np.pi*lenna.wheel_radius) # m/s
 
     avg_dist = (left_dist + right_dist)/2
-    avg_angle = 2 * math.atan((right_dist - left_dist))/lenna.wheel_distance
+    avg_angle = math.atan((right_dist - left_dist)/lenna.wheel_distance)
 
     # mapping 0~2pi to -pi~pi
     if (avg_angle > np.pi) :
@@ -65,6 +65,8 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     elif (d_th < -np.pi) :
         d_th += 2*np.pi
 
+    # print(d_th)
+
     # this is changing rpy to quatrenion how? go find it yourself
     quatrenion = Quaternion()
 
@@ -73,19 +75,19 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     quatrenion.z = np.sin(avg_angle/2)
     quatrenion.w = np.cos(avg_angle/2)
 
-    odom.pose.pose.position.x = odom_old.pose.pose.position.x + np.cos(d_th) * d_avg_dist
-    odom.pose.pose.position.y = odom_old.pose.pose.position.y + np.sin(d_th) * d_avg_dist
+    odom.pose.pose.position.x = odom.pose.pose.position.x + np.cos(avg_angle) * d_avg_dist
+    odom.pose.pose.position.y = odom.pose.pose.position.y + np.sin(avg_angle) * d_avg_dist
     odom.pose.pose.orientation = quatrenion
 
     # odom.pose.pose.orientation.z = avg_angle
 
     
     #   Prevent lockup from a single bad cycle
-    if (np.isnan(odom.pose.pose.position.x) or np.isnan(odom.pose.pose.position.y)
-        or np.isnan(odom.pose.pose.position.z)):
-        odom.pose.pose.position.x = odom_old.pose.pose.position.x
-        odom.pose.pose.position.y = odom_old.pose.pose.position.y
-        odom.pose.pose.orientation = odom_old.pose.pose.orientation
+    # if (np.isnan(odom.pose.pose.position.x) or np.isnan(odom.pose.pose.position.y)
+    #     or np.isnan(odom.pose.pose.position.z)):
+    #     odom.pose.pose.position.x = odom_old.pose.pose.position.x
+    #     odom.pose.pose.position.y = odom_old.pose.pose.position.y
+    #     odom.pose.pose.orientation = odom_old.pose.pose.orientation
  
     #    Make sure theta stays in the correct range
     # if (odom.pose.pose.orientation.z > np.pi):
@@ -130,8 +132,6 @@ if __name__ == "__main__":
         odom.child_frame_id = "base_link"
         update_odom(enc[0], enc[1], enc[2], enc[3], old_l, old_r)
         old_l,old_r = enc[2] ,enc[3]
-
-        odom.header.stamp = rospy.Time.now()
         
         my_nav.publish(odom)
         rate.sleep()
