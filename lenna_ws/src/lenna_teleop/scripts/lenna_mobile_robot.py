@@ -13,7 +13,7 @@ class LennaMobileRobot():
         self.odometry_length = 32
         self.min_motor_speed = 0
         self.max_motor_speed = 250 # rpm
-        self.wheel_radius = 0.0375 # meter
+        self.wheel_radius = 0.0325 # meter
         self.wheel_distance = 0.18 # meter
  
     def rpy2quat(self, roll, pitch, yaw):
@@ -40,7 +40,7 @@ class LennaMobileRobot():
 
     def getOdometry(self, timeout=100):
         data, length, result = self.protocol.rxPacket(timeout)
-
+        
         right_wheel_speed = 0
         left_wheel_speed = 0
 
