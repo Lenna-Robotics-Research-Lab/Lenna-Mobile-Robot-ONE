@@ -75,8 +75,6 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     elif (theta_old < -np.pi) :
         theta_old += 2*np.pi
 
-    print(x_old, y_old, theta_old, d_avg_dist, d_theta)
-
     theta_new = theta_old + d_theta
     x_new = x_old + np.cos(theta_new) * d_avg_dist
     y_new = y_old + np.sin(theta_new) * d_avg_dist
