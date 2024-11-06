@@ -12,4 +12,5 @@ export LD_LIBRARY_PATH='/opt/ros/melodic/lib'
 export PKG_CONFIG_PATH='/opt/ros/melodic/lib/pkgconfig'
 export PWD='/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild'
 export ROSLISP_PACKAGE_DIRECTORIES="/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/catkin_tools_prebuild/share/common-lisp:$ROSLISP_PACKAGE_DIRECTORIES"
-export ROS_PACKAGE_PATH="/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild:$ROS_PACKAGE_PATH"
+export ROS_PACKAGE_PATH='/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild:/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/src/ldlidar_stl_ros:/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/src/lenna_description:/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/src/lenna_msgs:/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/src/lenna_teleop:/opt/ros/melodic/share'
+export ROS_PYTHON_VERSION='2'
