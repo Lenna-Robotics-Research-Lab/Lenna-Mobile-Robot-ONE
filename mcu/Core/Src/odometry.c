@@ -346,6 +346,7 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  {
 		  odom->vel.right = (odom->enc_right.MAX_ARR - odom->enc_right.tick_prev) + odom->enc_right.tick;
 	  }
+	  odom->enc_right.tick_prev = odom->enc_right.tick;
 	  _dir_r = 1;
 	}
 	else
@@ -359,7 +360,10 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 		  odom->vel.right = (odom->enc_right.MAX_ARR - odom->enc_right.tick) + odom->enc_right.tick_prev;
 	  }
 	  _dir_r = -1;
+	  odom->enc_right.tick_prev = odom->enc_right.tick;
 	}
+
+
 
 	if(__HAL_TIM_IS_TIM_COUNTING_DOWN(odom->enc_left.htim) == 0)
 	{
@@ -371,6 +375,7 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  {
 		  odom->vel.left = (odom->enc_left.MAX_ARR - odom->enc_left.tick_prev) + odom->enc_left.tick;
 	  }
+	  odom->enc_left.tick_prev = odom->enc_left.tick;
 	  _dir_l = 1;
 	}
 	else
@@ -383,7 +388,9 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  {
 		  odom->vel.left = (odom->enc_left.MAX_ARR - odom->enc_left.tick) + odom->enc_left.tick_prev;
 	  }
+	  odom->enc_left.tick_prev = odom->enc_left.tick;
 	  _dir_l = -1;
+
 	}
 
 	_temp_dist_right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_right.MAX_ARR;
