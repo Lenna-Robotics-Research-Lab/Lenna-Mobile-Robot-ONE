@@ -11,7 +11,6 @@ broadcaster = tf2_ros.transform_broadcaster.TransformBroadcaster()
 odom_trans = TransformStamped()
 
 def transformationSubscriberCallback(data):
-
     odom_trans.header.stamp = data.header.stamp
     odom_trans.header.frame_id = "odom"
     odom_trans.child_frame_id = "base_link"
