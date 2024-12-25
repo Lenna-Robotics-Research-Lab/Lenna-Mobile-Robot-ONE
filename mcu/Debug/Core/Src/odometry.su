@@ -8,4 +8,4 @@
 ../Core/Src/odometry.c:255:6:_LRL_MPU6050_EnableBypass	32	static
 ../Core/Src/odometry.c:265:6:LRL_MPU6050_ComplementaryFilter	48	static
 ../Core/Src/odometry.c:319:6:LRL_Encoder_Init	16	static
-../Core/Src/odometry.c:330:6:LRL_Encoder_ReadAngularSpeed	40	static
+../Core/Src/odometry.c:330:6:LRL_Encoder_ReadAngularSpeed	48	static

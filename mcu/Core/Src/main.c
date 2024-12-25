@@ -127,7 +127,7 @@ const diffDrive_cfgType diff_robot =
 	motor_right,
 	motor_left,
 	32.5,
-	200
+	180
 };
 
 // ####################   ODOMETRY  ###################
@@ -324,13 +324,13 @@ int main(void)
   int16_t motor_speed_left = 0, motor_speed_right = 0;
 //  HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
-//  HAL_Delay(1000);
+//  HAL_Delay(5000);
   for(int c = 0; c< 3 ; c++)
   {
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-	  HAL_Delay(300);
+	  HAL_Delay(250);
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
-	  HAL_Delay(300);
+	  HAL_Delay(250);
   }
 
   LRL_handShake(&rx_packet);
@@ -350,9 +350,6 @@ int main(void)
 
 
   // ####################   memory allocation    ####################
-
-
-
 
 
   /* USER CODE END 2 */

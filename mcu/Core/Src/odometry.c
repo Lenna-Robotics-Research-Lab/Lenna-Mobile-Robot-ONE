@@ -335,8 +335,13 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 
 	int _dir_r,_dir_l;
 
+	uint8_t _dir_count_r, _dir_count_l;	// if 0 -> up; else down
 
-	if(__HAL_TIM_IS_TIM_COUNTING_DOWN(odom->enc_right.htim) == 0)
+	_dir_count_r = __HAL_TIM_IS_TIM_COUNTING_DOWN(odom->enc_right.htim);
+	_dir_count_l = __HAL_TIM_IS_TIM_COUNTING_DOWN(odom->enc_left.htim);
+
+
+	if(_dir_count_r == 0)
 	{
 	  if(odom->enc_right.tick - odom->enc_right.tick_prev >= 0)
 	  {
@@ -361,7 +366,7 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  _dir_r = -1;
 	}
 
-	if(__HAL_TIM_IS_TIM_COUNTING_DOWN(odom->enc_left.htim) == 0)
+	if(_dir_count_l == 0)
 	{
 	  if(odom->enc_left.tick - odom->enc_left.tick_prev >= 0)
 	  {
@@ -371,7 +376,7 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  {
 		  odom->vel.left = (odom->enc_left.MAX_ARR - odom->enc_left.tick_prev) + odom->enc_left.tick;
 	  }
-	  _dir_l = 1;
+	  _dir_l = -1;
 	}
 	else
 	{
@@ -383,13 +388,24 @@ void LRL_Encoder_ReadAngularSpeed(odom_cfgType * odom)
 	  {
 		  odom->vel.left = (odom->enc_left.MAX_ARR - odom->enc_left.tick) + odom->enc_left.tick_prev;
 	  }
-	  _dir_l = -1;
+	  _dir_l = 1;
 	}
+
+	if(odom->vel.right < 9)
+	{
+		odom->vel.right = 0;
+	}
+	if(odom->vel.left < 9)
+	{
+		odom->vel.left = 0;
+	}
+
 
 	_temp_dist_right += _dir_r * odom->vel.right*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_right.MAX_ARR;
 	_temp_dist_left += _dir_l * odom->vel.left*(2*M_PI*odom->diff_robot.WHEEL_RADIUS) / odom->enc_left.MAX_ARR ;
 	odom->dist.right = (int16_t)_temp_dist_right;
 	odom->dist.left  = (int16_t)_temp_dist_left;
+
 
 	odom->vel.right = _dir_r * odom->vel.right * odom->enc_right.TICK2RPM;
 	odom->vel.left = _dir_l * odom->vel.left * odom->enc_left.TICK2RPM;
