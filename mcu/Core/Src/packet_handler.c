@@ -174,7 +174,7 @@ void LRL_rxPacket(packet_cfgType *packet)
 
 void LRL_handShake(packet_cfgType *packet)
 {
-	int _out;
+	int _out = 0;
 	while(_out != 1)
 	{
 		HAL_UART_Transmit(packet->huart,&_ack_data,5,10);
@@ -185,7 +185,8 @@ void LRL_handShake(packet_cfgType *packet)
 		}
 //		HAL_Delay(500);
 	}
-	HAL_UART_Transmit(&huart1,"Surprise motherfuckers",sizeof("Surprise motherfuckers"),10);
+	// this is for connection establishment alert
+	HAL_UART_Transmit(&huart1,"The transmission has been established",sizeof("The transmission has been established"),10);
 
 }
 
