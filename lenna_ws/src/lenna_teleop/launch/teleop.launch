@@ -1,0 +1,9 @@
+<launch>
+ <node name="odom_publisher" pkg="lenna_teleop" type="nav_publisher.py" output="screen"/>
+ <node name="odom_tf" pkg="lenna_teleop" type="odom_tf.py" output="screen"/>
+ <node name="cmd_vel_sub" pkg="lenna_teleop" type="cmd_vel_subscriber.py" output="screen"/>
+ <node name="teleop_twist" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen"/>
+
+ <arg name="rvizconfig" default="$(find lenna_teleop)/rviz/teleop.rviz" />
+ <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
+</launch>
