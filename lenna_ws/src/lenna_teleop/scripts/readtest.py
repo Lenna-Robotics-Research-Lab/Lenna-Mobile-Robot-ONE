@@ -6,6 +6,8 @@ from packet_handler import *
 from field_ops import *
 from lenna_mobile_robot import *
 
+import time
+
 DEVICENAME = '/dev/ttyTHS1'
 BAUDRATE = 115200
 
