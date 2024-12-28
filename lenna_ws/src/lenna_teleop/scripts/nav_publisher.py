@@ -38,42 +38,54 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     old_l /= 1000
     old_r /= 1000
 
+    # if left_vel >= 300:
+    #     left_vel = 300
+    # elif left_vel <= -300:
+    #     left_vel = -300
+
+    # if right_vel >= 300:
+    #     right_vel = 300
+    # elif right_vel <= -300:
+    #     right_vel = -300
+
+    vel_r_raw = right_vel
+    vel_l_raw = left_vel
+
     left_vel = (left_vel / 60) * (2*np.pi*lenna.wheel_radius)   # m/s
     right_vel = (right_vel / 60) * (2*np.pi*lenna.wheel_radius) # m/s
 
-    # avg_dist = (left_dist + right_dist)/2
-    # avg_angle = math.atan((right_dist - left_dist)/lenna.wheel_distance)
-
-    # avg_angle = (right_dist - left_dist) / (lenna.wheel_distance / 2)
-
-    # mapping 0~2pi to -pi~pi
-    # if (avg_angle > np.pi) :
-    #     avg_angle -= 2*np.pi
-
-    # elif (avg_angle < -np.pi) :
-    #     avg_angle += 2*np.pi
-
     d_l = left_dist - old_l
     d_r = right_dist - old_r
-    
+
+    # if d_l >= 0.02:
+    #     d_l = 0.02
+    # elif d_l <= -0.02:
+    #     d_l = -0.02
+
+    # if d_r >= 0.02:
+    #     d_r = 0.02
+    # elif d_r <= -0.02:
+    #     d_r = -0.02 
+
     d_avg_dist = (d_l + d_r)/2
     d_theta = (d_r - d_l) / (lenna.wheel_distance / 2)
 
-    if (d_theta > np.pi) :
-        d_theta -= 2*np.pi
+    # if (d_theta > np.pi) :
+    #     d_theta -= 2*np.pi
 
-    elif (d_theta < -np.pi) :
-        d_theta += 2*np.pi
+    # elif (d_theta < -np.pi) :
+    #     d_theta += 2*np.pi
+
 
     x_old = odom.pose.pose.position.x
     y_old = odom.pose.pose.position.y
     theta_old = (old_r - old_l) / (lenna.wheel_distance / 2)
 
-    if (theta_old > np.pi) :
-        theta_old -= 2*np.pi
+    # if (theta_old > np.pi) :
+    #     theta_old -= 2*np.pi
 
-    elif (theta_old < -np.pi) :
-        theta_old += 2*np.pi
+    # elif (theta_old < -np.pi) :
+    #     theta_old += 2*np.pi
 
     theta_new = theta_old + d_theta
     x_new = x_old + np.cos(theta_new) * d_avg_dist
@@ -96,7 +108,7 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
 
 if __name__ == "__main__":
     rospy.init_node('node_odom', anonymous=False)
-    my_nav = rospy.Publisher('/odom', Odometry, queue_size=10)
+    my_nav = rospy.Publisher('/odom', Odometry, queue_size=50)
 
     rate = rospy.Rate(100)
     
