@@ -22,9 +22,12 @@ lenna = LennaMobileRobot(packet)
 # Global variable to store handshake status
 handshake_established = False
 
+# handshake_flag = False
+
 # Topic callback function for Twist messages.
 def twistSubscriberCallback(data):
     global handshake_established
+    # global handshake_flag
     if handshake_established:
         rospy.loginfo('linear x: %f, angular z: %f', data.linear.x, data.angular.z)
         vel_right = (data.linear.x) + (data.angular.z * lenna.wheel_distance / 4)
@@ -42,8 +45,7 @@ def twistSubscriberCallback(data):
         rospy.loginfo('motor speeds L: %f, R: %f', vel_left, vel_right)
 
         lenna.setMotorSpeed(vel_left, vel_right)
-    else:
-        rospy.loginfo('Handshake not established, ignoring Twist message.')
+        # handshake_flag = True      
 
 # Topic callback function for Handshake messages.
 def handshakeSubscriberCallback(data):
@@ -58,7 +60,7 @@ def handshakeSubscriberCallback(data):
         rospy.loginfo('Waiting for Serial Handshake!')
 
 def main():
-    rospy.init_node('node_serial', anonymous=False)
+    rospy.init_node('node_serial_vel', anonymous=False)
 
     # Subscribe to Twist messages
     rospy.Subscriber('/cmd_vel', Twist, twistSubscriberCallback)
@@ -66,8 +68,21 @@ def main():
     # Subscribe to Handshake messages
     rospy.Subscriber('/handshake', Bool, handshakeSubscriberCallback)
 
+    # hs_feedback = rospy.Publisher('/handshake_feedback', Bool, queue_size=10)
+
     rospy.loginfo("Node initialized and waiting for messages.")
+    # while not rospy.is_shutdown():    
+    #     if handshake_established:
+    #         hs_feedback.publish(1)
+    #     elif not handshake_established and handshake_flag:
+    #         rospy.loginfo("Connection to the Board Terminated")
+    #         hs_feedback.publish(0)
+    #     elif not handshake_established and (not handshake_flag):
+    #         rospy.loginfo("Handshake Data is Not Received Ignoring Twist Data")
+    #         hs_feedback.publish(0)
     rospy.spin()
 
 if __name__ == '__main__':
     main()
+
+
