@@ -1,9 +1,23 @@
 <launch>
  
   <!-- Transformation Configuration ... Setting Up the Relationships Between Coordinate Frames -->
-  <node pkg="tf" type="static_transform_publisher" name="imu_broadcaster" args="0 0 0 0 0 0 base_link imu 100" />
-  <node pkg="tf" type="static_transform_publisher" name="odom_broadcaster" args="0 0 0 0 0 0 base_link odom 100" />
+  <node pkg="tf" type="static_transform_publisher" name="imu_broadcaster" args="0 0 0 0 0 0 base_link imu 30" />
+  <node pkg="tf" type="static_transform_publisher" name="odom_broadcaster" args="0 0 0 0 0 0 base_link odom 30" />
+  <node pkg="tf" type="static_transform_publisher" name="base_link_broadcaster" args="0 0 0.0 0 0 0 base_footprint base_link 30" />
+
   <!-- odom to base_footprint transform will be provided by the robot_pose_ekf node -->
+
+  <node name="serial_odom" pkg="lenna_teleop" type="serial_sensor_read.py"
+    output="screen"/>
+
+  <!-- <node name="serial_handshake" pkg="lenna_teleop" type="serial_handshake.py"
+    output="screen"/> -->
+
+  <node name="imu_remap" pkg="lenna_teleop" type="imu_remap.py"
+    output="screen"/>
+
+  <node name="enc_remap" pkg="lenna_teleop" type="encoder_remap.py"
+    output="screen"/>
 
   <!-- Extended Kalman Filter from robot_pose_ekf Node-->
   <!-- Subscribe: /odom, /imu_data, /vo -->
@@ -13,10 +27,10 @@
   <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
     <param name="output_frame" value="odom"/>
     <param name="base_footprint_frame" value="base_footprint"/>
-    <param name="freq" value="50.0"/>
+    <param name="freq" value="30.0"/>
     <param name="sensor_timeout" value="3.0"/>
     <param name="odom_used" value="true"/>
-    <param name="imu_used" value="true"/>
+    <param name="imu_used" value="false"/>
     <param name="vo_used" value="false"/>
     <param name="gps_used" value="false"/>
     <param name="debug" value="false"/>
@@ -27,5 +41,5 @@
   <!-- Publish: /initialpose, /move_base_simple/goal -->
   <node pkg="rviz" type="rviz" name="rviz">
   </node>   
- 
+
 </launch>
