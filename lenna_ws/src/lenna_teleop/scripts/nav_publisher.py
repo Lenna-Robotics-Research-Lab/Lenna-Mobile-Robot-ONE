@@ -45,11 +45,11 @@ def update_odom(left_vel, right_vel, left_dist, right_dist, old_l, old_r):
     d_r = right_dist - old_r
 
     d_avg_dist = (d_l + d_r)/2
-    d_theta = (d_r - d_l) / (lenna.wheel_distance) # removed /2
+    d_theta = (d_r - d_l) / (lenna.wheel_distance)
 
     x_old = odom.pose.pose.position.x
     y_old = odom.pose.pose.position.y
-    theta_old = (old_r - old_l) / (lenna.wheel_distance) # removed /2
+    theta_old = (old_r - old_l) / (lenna.wheel_distance)
 
     theta_new = theta_old + d_theta
     x_new = x_old + np.cos(theta_new) * d_avg_dist
