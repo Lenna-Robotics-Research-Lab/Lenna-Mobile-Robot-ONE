@@ -25,25 +25,25 @@
   <param name="angle_crop_max" type="double" value="225.0"/>
  </node>
  <!-- ldlidar message subscriber node -->
- <!-- node name="ListenLD19" pkg="ldlidar_stl_ros" type="ldlidar_stl_ros_listen_node" output="screen">
+ <node name="ListenLD19" pkg="ldlidar_stl_ros" type="ldlidar_stl_ros_listen_node" output="screen">
   <param name="topic_name" value="scan"/>
- </node -->
+ </node>
  <!-- publisher tf transform, parents frame is base_link, child frame is base_laser -->
  <!-- args="x y z yaw pitch roll parents_frame_id child_frame_id period_in_ms"-->
 
- <!-- <node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
+ <node pkg="slam_toolbox" type="async_slam_toolbox_node" name="slam_toolbox" output="screen">
   <rosparam command="load" file="$(find lenna_teleop)/config/mapper_params_online_async.yaml" />
- </node> -->
+ </node>
 
  <!-- <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen">
   <param name="scan" value="scan" />
  </node> -->
- <node pkg="hector_mapping" type="hector_mapping" name="slam_hector" output="screen">
+ <!-- <node pkg="hector_mapping" type="hector_mapping" name="slam_hector" output="screen">
     <param name="pub_map_odom_transform" value="true"/>
     <param name="map_frame" value="map" />
     <param name="base_link" value="base_link" />
     <param name="odom_frame" value="base_link" />
- </node>
+ </node> -->
 
  <arg name="rvizconfig" default="$(find lenna_teleop)/rviz/lenna.rviz" />
  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" />
