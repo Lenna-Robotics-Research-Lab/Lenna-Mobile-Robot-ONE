@@ -29,8 +29,8 @@
 [35m[1mScanning dependencies of target std_msgs_generate_messages_nodejs[0m
 [  0%] Built target std_msgs_generate_messages_nodejs
 [35m[1mScanning dependencies of target nav_msgs_generate_messages_nodejs[0m
-[35m[1mScanning dependencies of target geometry_msgs_generate_messages_nodejs[0m
 [  0%] Built target nav_msgs_generate_messages_nodejs
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_nodejs[0m
 [  0%] Built target geometry_msgs_generate_messages_nodejs
 [35m[1mScanning dependencies of target sensor_msgs_generate_messages_eus[0m
 [  0%] Built target sensor_msgs_generate_messages_eus
@@ -46,10 +46,10 @@
 [35m[1mScanning dependencies of target lenna_msgs_generate_messages_py[0m
 [ 28%] [34m[1mGenerating Python from MSG lenna_msgs/OdomInformation[0m
 [ 42%] [34m[1mGenerating Python msg __init__.py for lenna_msgs[0m
+[ 42%] Built target lenna_msgs_generate_messages_py
 [35m[1mScanning dependencies of target lenna_msgs_generate_messages_lisp[0m
 [ 57%] [34m[1mGenerating Lisp code from lenna_msgs/OdomInformation.msg[0m
 [ 57%] Built target lenna_msgs_generate_messages_lisp
-[ 57%] Built target lenna_msgs_generate_messages_py
 [35m[1mScanning dependencies of target lenna_msgs_generate_messages_nodejs[0m
 [ 71%] [34m[1mGenerating Javascript code from lenna_msgs/OdomInformation.msg[0m
 [ 71%] Built target lenna_msgs_generate_messages_nodejs
