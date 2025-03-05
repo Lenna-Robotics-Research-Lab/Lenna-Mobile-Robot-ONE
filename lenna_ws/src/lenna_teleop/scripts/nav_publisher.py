@@ -89,19 +89,19 @@ if __name__ == "__main__":
 
         if any(enc):
             [x_new, y_new, theta_new] = update_odom(enc[0], enc[1], enc[2], enc[3], old_l, old_r)
-            old_l, old_r = enc[2] ,enc[3]
-        
+            old_l, old_r = enc[2] ,enc[3]    
 
-        odom.header.stamp = rospy.Time.now()
+            odom.header.stamp = rospy.Time.now()
 
-        odom.pose.pose.position.x = x_new 
-        odom.pose.pose.position.y = y_new
-        odom.pose.pose.position.z = 0
+            odom.pose.pose.position.x = x_new 
+            odom.pose.pose.position.y = y_new
+            odom.pose.pose.position.z = 0
 
-        odom.pose.pose.orientation.x = 0
-        odom.pose.pose.orientation.y = 0
-        odom.pose.pose.orientation.z = np.sin(theta_new/2)
-        odom.pose.pose.orientation.w = np.cos(theta_new/2)
+            odom.pose.pose.orientation.x = 0
+            odom.pose.pose.orientation.y = 0
+            odom.pose.pose.orientation.z = np.sin(theta_new/2)
+            odom.pose.pose.orientation.w = np.cos(theta_new/2)
 
         my_nav.publish(odom)
+
         rate.sleep()
