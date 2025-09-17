@@ -1,31 +1,45 @@
 #!/usr/bin/python2.7
 
-import rospy 
-import tf 
-import tf2_ros.transform_broadcaster
+import rospy
+import tf2_ros
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import TransformStamped
 
-broadcaster = tf2_ros.transform_broadcaster.TransformBroadcaster()
+class OdomTransformer:
+    def __init__(self):
+        # Initialize the ROS node and the broadcaster
+        rospy.init_node('node_odom_transformer', anonymous=True)
+        
+        self.broadcaster = tf2_ros.TransformBroadcaster()
+        self.odom_trans = TransformStamped()
 
-odom_trans = TransformStamped()
+        self.parent_frame = rospy.get_param("~odom_tf_parent_frame", "odom")
+        self.child_frame = rospy.get_param("~odom_tf_child_frame", "base_link")
 
-def transformationSubscriberCallback(data):
-    odom_trans.header.stamp = data.header.stamp
-    odom_trans.header.frame_id = "odom"
-    odom_trans.child_frame_id = "base_link"
-    odom_trans.transform.translation.x = data.pose.pose.position.x
-    odom_trans.transform.translation.y = data.pose.pose.position.y
-    odom_trans.transform.translation.z = 0
-    odom_trans.transform.rotation = data.pose.pose.orientation
+        # Setup subscriber for Odometry data
+        self.odom_subscriber = rospy.Subscriber('/odom', Odometry, self.transformation_subscriber_callback)
 
-    broadcaster.sendTransform([odom_trans])
+    def transformation_subscriber_callback(self, data):
+        """Callback function to process the incoming Odometry data and broadcast the transform."""
+        self.odom_trans.header.stamp = data.header.stamp
+        self.odom_trans.header.frame_id = self.parent_frame
+        self.odom_trans.child_frame_id = self.child_frame
+        self.odom_trans.transform.translation.x = data.pose.pose.position.x
+        self.odom_trans.transform.translation.y = data.pose.pose.position.y
+        self.odom_trans.transform.translation.z = 0
+        self.odom_trans.transform.rotation = data.pose.pose.orientation
 
-def transformationSubscriber():
-    rospy.init_node('odom_transformer', anonymous=True) 
-    rospy.Subscriber('/odom', Odometry, transformationSubscriberCallback)
+        # Send the transform
+        self.broadcaster.sendTransform(self.odom_trans)
 
-    rospy.spin()
+    def spin(self):
+        """Keep the node running and processing callbacks."""
+        rospy.spin()
+
+def main():
+    # Create an instance of the OdomTransformer class and start the process
+    transformer = OdomTransformer()
+    transformer.spin()
 
 if __name__ == '__main__':
-    transformationSubscriber()
+    main()
