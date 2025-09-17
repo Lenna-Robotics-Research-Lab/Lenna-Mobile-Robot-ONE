@@ -3,86 +3,89 @@
 import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool
-
 import numpy as np
 
-from serial_handler import *
-from packet_handler import *
-from lenna_mobile_robot import *
+from serial_handler import SerialHandler
+from packet_handler import PacketHandler
+from lenna_mobile_robot import LennaMobileRobot
 
-DEVICENAME = '/dev/ttyTHS1'
-BAUDRATE = 115200
 
-serial = SerialHandler(DEVICENAME, BAUDRATE)
-serial.openPort()
+class SerialCmdVelNode:
+    def __init__(self):
+        # ROS parameters for serial port
+        self.DEVICENAME = rospy.get_param("~port", "/dev/ttyTHS1")
+        self.BAUDRATE = rospy.get_param("~baudrate", 115200)
 
-packet = PacketHandler(serial)
-lenna = LennaMobileRobot(packet)
+        # Initialize serial communication and robot interfaces
+        self.serial = SerialHandler(self.DEVICENAME, self.BAUDRATE)
+        self.packet = PacketHandler(self.serial)
+        self.lenna = LennaMobileRobot(self.packet)
 
-# Global variable to store handshake status
-handshake_established = False
+        # Open serial port
+        self.serial.openPort()
 
-# handshake_flag = False
+        # Handshake flag
+        self.handshake_established = False
 
-# Topic callback function for Twist messages.
-def twistSubscriberCallback(data):
-    global handshake_established
-    # global handshake_flag
-    if handshake_established:
-        rospy.loginfo('linear x: %f, angular z: %f', data.linear.x, data.angular.z)
-        vel_right = (data.linear.x) + (data.angular.z * lenna.wheel_distance / 4)
-        vel_left = (data.linear.x) - (data.angular.z * lenna.wheel_distance / 4)
+        # Robot velocities history
+        self.linear = 0.0
+        self.angular = 0.0
 
-        vel_left = int(vel_left * 60 / (2*np.pi*lenna.wheel_radius))
-        vel_right = int(vel_right * 60 / (2*np.pi*lenna.wheel_radius))
-
-        if (abs(vel_left) >= lenna.max_motor_speed):
-            vel_left = (vel_left/abs(vel_left)) * lenna.max_motor_speed
+        # Initialize ROS node components
+        rospy.init_node('node_serial_cmd_vel', anonymous=False)
         
-        if (abs(vel_right) >= lenna.max_motor_speed):
-            vel_right = (vel_right/abs(vel_right)) * lenna.max_motor_speed
+        # Subscribers
+        self.cmd_vel_sub = rospy.Subscriber('/cmd_vel', Twist, self.twist_callback)
+        self.handshake_sub = rospy.Subscriber('/handshake', Bool, self.handshake_callback)
 
-        rospy.loginfo('motor speeds L: %f, R: %f', vel_left, vel_right)
+        rospy.loginfo("SerialCmdVelNode initialized! Waiting for serial handshake and velocity commands...")
 
-        lenna.setMotorSpeed(vel_left, vel_right)
-        # handshake_flag = True      
+    def twist_callback(self, msg: Twist):
+        """Callback for velocity commands, sends motor speeds if handshake established."""
+        if not self.handshake_established:
+            rospy.logwarn_throttle(10, "Handshake not established. Ignoring velocity commands.")
+            return
 
-# Topic callback function for Handshake messages.
-def handshakeSubscriberCallback(data):
-    global handshake_established
-    if data.data:
-        packet.handshake = 1
-        handshake_established = True
-        # rospy.loginfo('Handshake Established!')
-    else:
-        packet.handshake = 0
-        handshake_established = False
-        rospy.loginfo('Waiting for Serial Handshake!')
+        # Calculate individual motor speeds
+        vel_right = (msg.linear.x) + (msg.angular.z * self.lenna.wheel_distance / 4)
+        vel_left = (msg.linear.x) - (msg.angular.z * self.lenna.wheel_distance / 4)
 
-def main():
-    rospy.init_node('node_serial_vel', anonymous=False)
+        # Convert from m/s to RPM
+        vel_right = int(vel_right * 60 / (2 * np.pi * self.lenna.wheel_radius))
+        vel_left = int(vel_left * 60 / (2 * np.pi * self.lenna.wheel_radius))
 
-    # Subscribe to Twist messages
-    rospy.Subscriber('/cmd_vel', Twist, twistSubscriberCallback)
+        # Clamp motor speeds
+        vel_left = max(min(vel_left, self.lenna.max_motor_speed), -self.lenna.max_motor_speed)
+        vel_right = max(min(vel_right, self.lenna.max_motor_speed), -self.lenna.max_motor_speed)
 
-    # Subscribe to Handshake messages
-    rospy.Subscriber('/handshake', Bool, handshakeSubscriberCallback)
+        # Store changes in velocity commands
+        if (self.linear != msg.linear.x) or (self.angular != msg.angular.z):
+            self.linear, self.angular = msg.linear.x, msg.angular.z
+            
+            # Log robot kinematic and individual motor velocities
+            rospy.loginfo(  f'Diff. Robot Velocities:\t linear: {round(msg.linear.x, 2)},\t angular: {round(msg.angular.z, 2)} \n'
+                        f'\t\t\t\t  Motor Velocities:\t left: {vel_left},\t right: {vel_right}')
 
-    # hs_feedback = rospy.Publisher('/handshake_feedback', Bool, queue_size=10)
 
-    rospy.loginfo("Node initialized and waiting for messages.")
-    # while not rospy.is_shutdown():    
-    #     if handshake_established:
-    #         hs_feedback.publish(1)
-    #     elif not handshake_established and handshake_flag:
-    #         rospy.loginfo("Connection to the Board Terminated")
-    #         hs_feedback.publish(0)
-    #     elif not handshake_established and (not handshake_flag):
-    #         rospy.loginfo("Handshake Data is Not Received Ignoring Twist Data")
-    #         hs_feedback.publish(0)
-    rospy.spin()
+        # Send motor velocity commands over serial
+        self.lenna.setMotorSpeed(vel_left, vel_right)
+
+    def handshake_callback(self, msg: Bool):
+        """Callback for handshake status updates."""
+        if msg.data:
+            if not self.handshake_established:
+                rospy.loginfo("Handshake Established!")
+            self.handshake_established = True
+        else:
+            if self.handshake_established:
+                rospy.logwarn("Handshake Lost! Waiting for Serial Handshake...")
+            self.handshake_established = False
+
+    def spin(self):
+        """Keep the node running."""
+        rospy.spin()
+
 
 if __name__ == '__main__':
-    main()
-
-
+    node = SerialCmdVelNode()
+    node.spin()
