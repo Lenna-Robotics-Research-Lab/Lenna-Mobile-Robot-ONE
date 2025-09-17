@@ -1,94 +1,68 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import rospy 
+import rospy
 import serial
 import time
-
-from serial_handler import *
-from packet_handler import *
-from lenna_mobile_robot import *
-
 from std_msgs.msg import Bool
 
+from serial_handler import SerialHandler
+from packet_handler import PacketHandler
 
-DEVICENAME = '/dev/ttyTHS1'
-BAUDRATE = 115200
+class HandshakeNode:
+    def __init__(self):
+        # ROS parameters
+        self.DEVICENAME = rospy.get_param("~port", "/dev/ttyTHS1")
+        self.BAUDRATE = rospy.get_param("~baudrate", 115200)
 
-serial = SerialHandler(DEVICENAME, BAUDRATE)
-serial.openPort()
+        # Initialize serial and packet handler
+        self.serial = SerialHandler(self.DEVICENAME, self.BAUDRATE)
+        self.packet = PacketHandler(self.serial)
 
-packet = PacketHandler(serial)
+        # Open serial port
+        self.serial.openPort()
 
-# hs_feedback_flag = False
-# isfirt_flag = True
+        # Initialize ROS publisher
+        self.hs_pub = rospy.Publisher('/handshake', Bool, queue_size=10)
 
-# def feedbackSubscriberCallback(data):
-#     global hs_feedback_flag
-#     global isfirt_flag
-#     if data:
-#         hs_feedback_flag = True
-#         isfirt_flag = False
-#     elif not data:
-#         hs_feedback_flag = False
-#     else :
-#         hs_feedback_flag = True
+        # Flag to check if handshake is done
+        self.flag = False
+
+    def handle_handshake(self):
+        """Main handshake logic."""
+        # Loop rate: 10 Hz
+        rate = rospy.Rate(10)
+
+        while not rospy.is_shutdown():
+            # If handshake not yet done, try to read incoming data (timeout 5s)
+            if not self.flag:
+                data = self.serial.readPort(5)
+
+            # Check if data was received
+            if data and not self.flag:
+                self.hs_pub.publish(False)  # Handshake not done yet
+                rospy.loginfo("Handshake data received!")
+
+                # Expecting the low-level embedded board to send "LENNA" as handshake keyword
+                if data == b'LENNA':
+                    rospy.loginfo("Handshake data is correct!")
+                    self.serial.writePort([0x45])  # Send confirmation byte
+                    self.flag = True
+                else:
+                    rospy.logwarn(f"Incorrect handshake data: {data}")
+            elif self.flag:
+                # Publish "connected" state
+                self.hs_pub.publish(True)
+            
+            rate.sleep()
+
+    def run(self):
+        """Run the ROS node and handle handshake."""
+        rospy.init_node('node_handshake', anonymous=False)
+        self.handle_handshake()
+
 
 if __name__ == "__main__":
-    rospy.init_node('node_handshake', anonymous=False)
-    hs_pub = rospy.Publisher('/handshake', Bool, queue_size=10)
-
-    # rospy.Subscriber('/handshake_feedback', Bool, feedbackSubscriberCallback)
-
-    rate = rospy.Rate(10)
-
-    flag = 0
-    
-    while not rospy.is_shutdown():
-        if not flag:
-            data = serial.readPort(5)
-
-        if (data) and (not flag):
-            hs_pub.publish(0)
-            rospy.loginfo("handshake data received!")
-            if data == b'LENNA':
-                rospy.loginfo("handshake data is correct!") 
-                serial.writePort([0x45])
-                flag = 1
-                # break
-                # why 45? shinedown song or a holy decimal number???
-            else:
-                rospy.loginfo(f"incorrect handshake data : {data}")
-
-        elif flag:
-            hs_pub.publish(1)
-
-        rate.sleep()
-
-    # while not rospy.is_shutdown():
-    #     if not hs_feedback_flag and (not isfirt_flag): 
-    #         data = serial.readPort(10)
-    #         hs_pub.publish(0)
-    #         if data:
-    #             rospy.loginfo("handshake data received!")
-    #             if data == b'LENNA':
-    #                 rospy.loginfo("handshake data is correct!") 
-    #                 serial.writePort([0x45])
-    #                 flag = 1
-    #                 # why 45? shinedown song or a holy decimal number???
-    #             else:
-    #                 rospy.loginfo(f"incorrect handshake data : {data}")
-    #         else:
-    #             if flag == 1:
-    #                 rospy.loginfo("connection to the host board is lost")
-    #                 flag = 0
-    #             else: 
-    #                 rospy.loginfo("no data is available")
-    #                 flag = 0
-    #     else:
-    #         flag = 1
-    #         hs_pub.publish(bool(flag))    
-        
-       
-    
-        
+    # Instantiate and run the HandshakeNode
+    node = HandshakeNode()
+    node.run()
