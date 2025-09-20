@@ -11,7 +11,7 @@ from packet_handler import PacketHandler
 
 class HandshakeNode:
     def __init__(self):
-        # ROS parameters
+        # ROS parameters for serial port
         self.DEVICENAME = rospy.get_param("~port", "/dev/ttyTHS1")
         self.BAUDRATE = rospy.get_param("~baudrate", 115200)
 
