@@ -1,0 +1,51 @@
+TebLocalPlannerROS:
+
+  # General Settings
+  odom_topic: odom
+  map_frame: map
+
+  # Trajectory Parameters
+  teb_autosize: true
+  dt_ref: 0.3
+  dt_hysteresis: 0.1
+  global_plan_overwrite_orientation: true
+  allow_init_with_backwards_motion: false
+  max_global_plan_lookahead_dist: 3.0
+  feasibility_check_no_poses: 5
+
+  # Robot Configuration
+  max_vel_x: 0.4
+  max_vel_x_backwards: 0.2
+  max_vel_theta: 1.2
+  acc_lim_x: 1.0
+  acc_lim_theta: 1.5
+
+  # Goal Tolerance
+  xy_goal_tolerance: 0.1
+  yaw_goal_tolerance: 0.1
+  free_goal_vel: false
+
+  # Obstacles
+  min_obstacle_dist: 0.2
+  inflation_dist: 0.3
+  include_costmap_obstacles: true
+  costmap_obstacles_behind_robot_dist: 1.0
+
+  # Optimization
+  no_inner_iterations: 5
+  no_outer_iterations: 4
+  optimization_activate: true
+  optimization_verbose: false
+  penalty_epsilon: 0.1
+  weight_max_vel_x: 2
+  weight_max_vel_theta: 1
+  weight_acc_lim_x: 1
+  weight_acc_lim_theta: 1
+  weight_kinematics_nh: 1000
+  weight_kinematics_forward_drive: 1000
+  weight_kinematics_turning_radius: 1
+  weight_optimaltime: 1
+  weight_shortest_path: 0.0
+  weight_obstacle: 50
+  weight_dynamic_obstacle: 10
+  weight_dynamic_obstacle_inflation: 0.2
