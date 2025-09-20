@@ -1,0 +1,1 @@
+/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/ldlidar_stl_ros/lib/pkgconfig/ldlidar_stl_ros.pc

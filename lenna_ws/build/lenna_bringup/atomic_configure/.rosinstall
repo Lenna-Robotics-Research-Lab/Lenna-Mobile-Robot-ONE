@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_bringup/setup.sh
