@@ -1,6 +1,0 @@
-devel_space: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel
-install: false
-install_space: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/install
-profile: default
-source_space: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/src
-workspace: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws

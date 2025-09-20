@@ -1,5 +1,0 @@
-lenna_description
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_description/cmake.lock /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/./cmake.lock
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_description/lib/pkgconfig/lenna_description.pc /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/lib/pkgconfig/lenna_description.pc
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_description/share/lenna_description/cmake/lenna_descriptionConfig.cmake /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/share/lenna_description/cmake/lenna_descriptionConfig.cmake
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_description/share/lenna_description/cmake/lenna_descriptionConfig-version.cmake /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/share/lenna_description/cmake/lenna_descriptionConfig-version.cmake
