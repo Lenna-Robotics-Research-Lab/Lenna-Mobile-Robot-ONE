@@ -14,7 +14,7 @@ class LennaMobileRobot():
         self.min_motor_speed = 0
         self.max_motor_speed = 250 # rpm
         self.wheel_radius = 0.0325 # meter
-        self.wheel_distance = 0.18 # meter
+        self.wheel_distance = 0.19 # meter
 
     def rpy2quat(self, roll, pitch, yaw):
         """
