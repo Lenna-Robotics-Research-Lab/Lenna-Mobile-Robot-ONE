@@ -1,0 +1,17 @@
+<launch>
+ <include file="$(find lenna_bringup)/launch/lenna_bringup.launch" />
+
+ <!-- Run the map server --> 
+ <node name="map_server" pkg="map_server" type="map_server" args="$(find lenna_bringup)/map/map_cropped.pgm 0.05"/>
+
+ <!--- Run AMCL --> 
+ <include file="$(find amcl)/examples/amcl_diff_custom.launch" />
+
+ <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+  <rosparam file="$(find lenna_bringup)/config/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
+  <rosparam file="$(find lenna_bringup)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+  <rosparam file="$(find lenna_bringup)/config/local_costmap_params.yaml" command="load" />
+  <rosparam file="$(find lenna_bringup)/config/global_costmap_params.yaml" command="load" /> 
+  <rosparam file="$(find lenna_bringup)/config/base_local_planner_params.yaml" command="load" />
+ </node>
+</launch> 
