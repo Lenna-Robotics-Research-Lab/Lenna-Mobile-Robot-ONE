@@ -1,0 +1,34 @@
+[  0%] Built target _lenna_msgs_generate_messages_check_deps_OdomInformation
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target nav_msgs_generate_messages_py
+[  0%] Built target sensor_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target nav_msgs_generate_messages_cpp
+[  0%] Built target sensor_msgs_generate_messages_cpp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target nav_msgs_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target nav_msgs_generate_messages_lisp
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target nav_msgs_generate_messages_nodejs
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[ 14%] [34m[1mGenerating Python from MSG lenna_msgs/OdomInformation[0m
+[ 28%] [34m[1mGenerating C++ code from lenna_msgs/OdomInformation.msg[0m
+[ 28%] Built target lenna_msgs_generate_messages_cpp
+[ 42%] [34m[1mGenerating Python msg __init__.py for lenna_msgs[0m
+[ 42%] Built target lenna_msgs_generate_messages_py
+[ 57%] [34m[1mGenerating EusLisp code from lenna_msgs/OdomInformation.msg[0m
+[ 71%] [34m[1mGenerating EusLisp manifest code for lenna_msgs[0m
+[ 85%] [34m[1mGenerating Lisp code from lenna_msgs/OdomInformation.msg[0m
+[ 85%] Built target lenna_msgs_generate_messages_eus
+[100%] [34m[1mGenerating Javascript code from lenna_msgs/OdomInformation.msg[0m
+[100%] Built target lenna_msgs_generate_messages_lisp
+[100%] Built target lenna_msgs_generate_messages_nodejs
+[100%] Built target lenna_msgs_generate_messages

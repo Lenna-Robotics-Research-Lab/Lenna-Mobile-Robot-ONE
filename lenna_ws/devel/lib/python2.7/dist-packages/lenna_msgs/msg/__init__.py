@@ -1,0 +1,1 @@
+/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_msgs/lib/python2.7/dist-packages/lenna_msgs/msg/__init__.py

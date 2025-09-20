@@ -1,0 +1,66 @@
+Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
+Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-kJfWkb
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_5953d/fast && /usr/bin/make  -f CMakeFiles/cmTC_5953d.dir/build.make CMakeFiles/cmTC_5953d.dir/build
+make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-kJfWkb'
+Building C object CMakeFiles/cmTC_5953d.dir/src.c.o
+/usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_5953d.dir/src.c.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-kJfWkb/src.c
+Linking C executable cmTC_5953d
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5953d.dir/link.txt --verbose=1
+/usr/bin/cc -rdynamic CMakeFiles/cmTC_5953d.dir/src.c.o -o cmTC_5953d 
+CMakeFiles/cmTC_5953d.dir/src.c.o: In function `main':
+src.c:(.text+0x48): undefined reference to `pthread_create'
+src.c:(.text+0x50): undefined reference to `pthread_detach'
+src.c:(.text+0x58): undefined reference to `pthread_cancel'
+src.c:(.text+0x64): undefined reference to `pthread_join'
+src.c:(.text+0x74): undefined reference to `pthread_atfork'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_5953d.dir/build.make:98: recipe for target 'cmTC_5953d' failed
+make[1]: *** [cmTC_5953d] Error 1
+make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-kJfWkb'
+Makefile:127: recipe for target 'cmTC_5953d/fast' failed
+make: *** [cmTC_5953d/fast] Error 2
+
+
+Source file was:
+#include <pthread.h>
+
+static void* test_func(void* data)
+{
+  return data;
+}
+
+int main(void)
+{
+  pthread_t thread;
+  pthread_create(&thread, NULL, test_func, NULL);
+  pthread_detach(thread);
+  pthread_cancel(thread);
+  pthread_join(thread, NULL);
+  pthread_atfork(NULL, NULL, NULL);
+  pthread_exit(NULL);
+
+  return 0;
+}
+
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-as6ksP
+
+Run Build Command(s):/usr/bin/make -f Makefile cmTC_7bb5a/fast && /usr/bin/make  -f CMakeFiles/cmTC_7bb5a.dir/build.make CMakeFiles/cmTC_7bb5a.dir/build
+make[1]: Entering directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-as6ksP'
+Building C object CMakeFiles/cmTC_7bb5a.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create -o CMakeFiles/cmTC_7bb5a.dir/CheckFunctionExists.c.o -c /home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-as6ksP/CheckFunctionExists.c
+Linking C executable cmTC_7bb5a
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7bb5a.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create -rdynamic CMakeFiles/cmTC_7bb5a.dir/CheckFunctionExists.c.o -o cmTC_7bb5a  -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_7bb5a.dir/build.make:98: recipe for target 'cmTC_7bb5a' failed
+make[1]: *** [cmTC_7bb5a] Error 1
+make[1]: Leaving directory '/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/build/catkin_tools_prebuild/CMakeFiles/CMakeScratch/TryCompile-as6ksP'
+Makefile:127: recipe for target 'cmTC_7bb5a/fast' failed
+make: *** [cmTC_7bb5a/fast] Error 2
+
+
+

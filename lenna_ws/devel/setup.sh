@@ -1,0 +1,1 @@
+/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/catkin_tools_prebuild/setup.sh
