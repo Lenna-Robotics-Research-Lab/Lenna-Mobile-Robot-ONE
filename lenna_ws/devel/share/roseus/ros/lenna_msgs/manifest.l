@@ -1,1 +1,0 @@
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_msgs/share/roseus/ros/lenna_msgs/manifest.l
