@@ -2,7 +2,7 @@
  <node name="serial_handshake_node" pkg="lenna_bringup" type="serial_handshake_node.py" output="screen"/>
  <node name="serial_odom_publisher" pkg="lenna_bringup" type="serial_odom_node.py" output="screen"/>
  <node name="odom_tf_broadcaster" pkg="lenna_bringup" type="odom_tf_broadcast.py" output="screen"/>
- <node name="cmd_vel_sub" pkg="lenna_bringup" type="serial_cmd_node.py" output="screen" launch-prefix="xterm -hold -e"/>
+ <node name="serial_cmd_subscriver" pkg="lenna_bringup" type="serial_cmd_node.py" output="screen"/>
 
  <node name="LD19" pkg="ldlidar_stl_ros" type="ldlidar_stl_ros_node" output="screen" >
   <param name="product_name" value="LDLiDAR_LD19"/>
