@@ -1,0 +1,4 @@
+<launch>
+ <include file="$(find lenna_bringup)/launch/lenna_bringup.launch" />
+ <node name="teleop_twist_keyboard" pkg="teleop_twist_keyboard" type="teleop_twist_keyboard.py" output="screen" launch-prefix="xterm -hold -e"/>
+</launch>
