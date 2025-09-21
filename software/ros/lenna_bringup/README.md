@@ -1,14 +1,111 @@
 <div align="justify">
 
 # lenna_bringup
+The `lenna_bringup` package is responsible for handling all hardware-specific drivers for the **Lenna Mobile Robot**. It opens a serial port to establish communication with Lenna’s low-level controller boards.
+
+This package isolates hardware interaction nodes from the high-level control nodes that are responsible for robot control algorithms (e.g., SLAM, navigation, path planning, etc.). It must be launched before any other program, since it initializes all the low-level nodes required for reliable communication with the robot hardware.
+
+### Key Components
+**Serial Communication Drivers:** Handle data exchange between the onboard computer and the robot’s microcontrollers.
+
+**Packet and Frame Management Libraries:** Ensure structured communication, data integrity, and synchronization.
+
+**ROS Nodes:** 
+- Publish odometry data from the robot.
+- Subscribe to velocity commands and transmit them to the robot’s actuators.
+- Broadcast `odom` → `base_link` ROS Transform
+
+
+By running this package first, all higher-level functionalities such as mapping, navigation, and path planning can operate seamlessly on top of the established hardware communication layer.
 
 ## Package Structure
 
+    lenna_bringup/  
+    ├── scripts/  
+    │   ├── serial_handshake_node.py  
+    │   ├── serial_odom_node.py 
+    │   ├── serial_cmd_node.py 
+    │   ├── field_ops.py 
+    │   ├── serial_handler.py
+    │   ├── packet_handler.py
+    │   └── lenna_mobile_robot.py
+    │
+    ├── launch/  
+    │   ├── lenna_bringup.launch
+    │   ├── lenna_teleop_keyboard.launch
+    │   ├── lenna_slam_toolbox.launch
+    │   ├── lenna_slam_hector.launch  
+    │   └── lenna_navigation_stack.launch  
+    │
+    ├── config/ 
+    │   ├── costmap_common_params.yaml  
+    │   └── ... 
+    │
+    ├── rviz/  
+    ├── maps/  
+    ├── CMakeLists.txt  
+    └── package.xml 
+
+
+## Dependancies
+This package depends on the following ROS packages and tools:
+
+### Core Build and Runtime Dependencies
+- [catkin](http://wiki.ros.org/catkin) (build tool)
+- [rospy](http://wiki.ros.org/rospy)
+- [std_msgs](http://wiki.ros.org/std_msgs)
+- [geometry_msgs](http://wiki.ros.org/geometry_msgs)
+- [nav_msgs](http://wiki.ros.org/nav_msgs)
+- [sensor_msgs](http://wiki.ros.org/sensor_msgs)
+
+### Additional ROS Packages
+- [teleop_twist_keyboard](http://wiki.ros.org/teleop_twist_keyboard)
+- [slam_toolbox](http://wiki.ros.org/slam_toolbox)
+- [hector_slam](http://wiki.ros.org/hector_slam)
+- [navigation](http://wiki.ros.org/navigation) (Navigation Stack)
+
+
+### Installation
+
+Make sure your ROS environment is properly sourced, e.g.:
+
+```bash
+source /opt/ros/<distro>/setup.bash
+```
+
+Replace `distro` with your ROS distribution (e.g. `melodic`, `noetic`, etc.). For the presented Lenna Mobile Robot, the used ROS distribuition is melodic.
+
+Run the following commands on terminal to install all dependencies:
+
+```bash
+$ sudo apt update
+$ sudo apt install -y \
+  ros-<distro>-rospy \
+  ros-<distro>-std-msgs \
+  ros-<distro>-geometry-msgs \
+  ros-<distro>-nav-msgs \
+  ros-<distro>-sensor-msgs \
+  ros-<distro>-teleop-twist-keyboard \
+  ros-<distro>-slam-toolbox \
+  ros-<distro>-hector-slam \
+  ros-<distro>-navigation
+```
+
+
 ## List of Programs
+- ROS Nodes
+  - [serial_handshake_node.py](#serial_handshake_nodepy)
+  - [serial_odom_node.py](#serial_odom_nodepy)
+  - [serial_cmd_node.py](#serial_cmd_nodepy)
+  - [odom_tf_broadcast.py](#odom_tf_broadcastpy)
+- Custom Modules 
+  - [field_ops.py](#field_opspy)
+  - [serial_handler.py](#serial_handlerpy)
+  - [packet_handler.py](#packet_handlerpy)
+  - [lenna_mobile_robot.py](#lenna_mobile_robotpy)
+
 
 ---
----
-
 # `field_ops.py`
 Provides **utility functions and constants** for low-level communication and data handling in the Lenna mobile robot system. It defines protocol constants (communication results, instruction codes) and helper functions for working with **bytes, words, and signed integers**. This module is used by `PacketHandler`, `LennaMobileRobot`, and other communication-related components.
 
@@ -65,7 +162,6 @@ It is a **pure utility module** used by:
 - `LennaMobileRobot` (for interpreting odometry and sensor data).  
 
 
----
 ---
 # `serial_handler.py`
 A Python class that manages **low-level serial communication** for the Lenna mobile robot. It provides methods to configure the serial port, open/close it, read/write data, and handle communication timeouts. This module acts as a hardware abstraction layer, enabling higher-level classes (e.g., `PacketHandler`, `LennaMobileRobot`) to interact with the robot’s microcontroller over UART.
@@ -160,7 +256,6 @@ It is a **low-level utility module** used by:
 
 
 ---
----
 # `packet_handler.py`
 َ Python class that implements a **custom serial communication protocol (v0.0.1)** for the Lenna mobile robot.  It handles low-level packet creation, transmission, reception, and validation using CRC16. This module is a core component for communicating with the robot’s onboard microcontroller and is used by higher-level classes (e.g., `LennaMobileRobot`).
 
@@ -237,8 +332,6 @@ It is a **backend communication utility**, typically used by:
 - Higher-level ROS nodes (`SerialOdomNode`, `SerialCmdVelNode`).  
 
 
-
----
 ---
 # `lenna_mobile_robot.py`
 A Python helper class that provides a high-level interface to the **Lenna mobile robot**. It wraps low-level serial communication protocols to control motor speeds, retrieve odometry, and perform orientation conversions. This class is used by higher-level ROS nodes (e.g., `SerialCmdVelNode`, `SerialOdomNode`) to interact with the robot.
@@ -292,7 +385,6 @@ It serves as a backend utility and is used by other ROS nodes such as:
 - `SerialCmdVelNode` (for motor control).  
 
 
----
 ---
 # `serial_handshake_node.py`
 A ROS node responsible for establishing communication over a serial connection. It listens for a predefined handshake keyword from the robot, sends back a confirmation byte if successful, and publishes the handshake status as a `std_msgs/Bool` message on the `/handshake` topic. Other nodes (e.g., odometry publishers and cmd_vel subscribers) rely on this handshake to ensure the robot is ready before operation.
@@ -354,7 +446,7 @@ This code depends on the following libraries and modules:
 - `~port` (`string`, default `/dev/ttyTHS1`) – serial port of the robot.  
 - `~baudrate` (`int`, default `115200`) – baud rate for serial communication.  
 
----
+
 ---
 # `serial_odom_node.py`
 A ROS node that reads wheel encoder data via a serial connection and publishes the robot’s odometry as a `nav_msgs/Odometry` message. It performs **dead reckoning** to estimate the robot’s pose (`x`, `y`, `theta`) and velocity (`v`, `w`), and broadcasts this information to other ROS components. A handshake mechanism is used to ensure proper initialization before odometry data is published.
@@ -424,7 +516,7 @@ This code depends on the following libraries and modules:
 - `~odom_tf_parent_frame` (`string`, default `odom`) – frame ID for odometry reference.  
 - `~odom_tf_child_frame` (`string`, default `base_link`) – frame ID for robot base.  
 
----
+
 ---
 # `serial_cmd_node.py`
 A ROS node that listens to velocity commands (`geometry_msgs/Twist`) on the `/cmd_vel` topic and converts them into **motor commands** for the Lenna mobile robot. Using the robot’s kinematic model, it calculates left and right wheel speeds, converts them into RPM, clamps them to allowed motor limits, and sends the values over a serial connection. The node requires a successful handshake (from `/handshake`) before executing commands.
@@ -495,11 +587,8 @@ This code depends on the following libraries and modules:
 - `~baudrate` (`int`, default `115200`) – baud rate for serial communication.  
 
 ---
----
 # `odom_tf_broadcast.py`
 A ROS node that listens to odometry data (`/odom`) and broadcasts the corresponding **TF transform** between two coordinate frames (default: `odom` → `base_link`). This allows other ROS nodes (e.g., navigation or visualization tools like RViz) to use the robot’s odometry as a transform tree in the ROS TF system.
-
----
 
 ## Internal Structure
 
@@ -522,7 +611,6 @@ Creates an instance of `OdomTransformer` and runs the node.
 #### Main Variables:
 - `odom_trans` – stores the transform derived from odometry data.  
 
----
 
 ## Dependencies
 This code depends on the following libraries and modules:  
@@ -539,7 +627,6 @@ This code depends on the following libraries and modules:
 - **Custom modules**  
   - *(None)*  
 
----
 
 ## ROS Interfaces
 
