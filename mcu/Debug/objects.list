@@ -2,6 +2,7 @@
 "./Core/Src/eth.o"
 "./Core/Src/gpio.o"
 "./Core/Src/i2c.o"
+"./Core/Src/imu.o"
 "./Core/Src/main.o"
 "./Core/Src/motion.o"
 "./Core/Src/odometry.o"

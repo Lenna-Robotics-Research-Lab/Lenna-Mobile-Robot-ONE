@@ -1,0 +1,9 @@
+../Core/Src/imu.c:25:6:LRL_IMU_MagInit	40	static
+../Core/Src/imu.c:58:7:LRL_IMU_MagSetDeclination	24	static
+../Core/Src/imu.c:74:6:LRL_IMU_MagReadHeading	56	static
+../Core/Src/imu.c:111:6:LRL_IMU_MPUInit	80	static
+../Core/Src/imu.c:203:6:LRL_IMU_ReadAccel	32	static
+../Core/Src/imu.c:229:6:LRL_IMU_ReadGyro	32	static
+../Core/Src/imu.c:247:6:LRL_IMU_MPUReadAll	16	static
+../Core/Src/imu.c:254:6:_LRL_IMU_MPUBypassEn	32	static
+../Core/Src/imu.c:264:6:LRL_IMU_ComplementaryFilter	48	static

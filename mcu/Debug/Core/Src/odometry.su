@@ -1,11 +1,2 @@
-../Core/Src/odometry.c:38:6:LRL_HMC5883L_Init	40	static
-../Core/Src/odometry.c:69:7:LRL_HMC5883L_SetDeclination	24	static
-../Core/Src/odometry.c:85:6:LRL_HMC5883L_ReadHeading	40	static
-../Core/Src/odometry.c:119:6:LRL_MPU6050_Init	40	static
-../Core/Src/odometry.c:204:6:LRL_MPU6050_ReadAccel	32	static
-../Core/Src/odometry.c:230:6:LRL_MPU6050_ReadGyro	32	static
-../Core/Src/odometry.c:248:6:LRL_MPU6050_ReadAll	16	static
-../Core/Src/odometry.c:255:6:_LRL_MPU6050_EnableBypass	32	static
-../Core/Src/odometry.c:265:6:LRL_MPU6050_ComplementaryFilter	48	static
-../Core/Src/odometry.c:319:6:LRL_Encoder_Init	16	static
-../Core/Src/odometry.c:330:6:LRL_Encoder_ReadAngularSpeed	48	static
+../Core/Src/odometry.c:21:6:LRL_Odometry_Init	16	static
+../Core/Src/odometry.c:32:6:LRL_Odometry_ReadAngularSpeed	56	static
