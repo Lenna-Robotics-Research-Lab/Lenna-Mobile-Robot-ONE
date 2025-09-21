@@ -12,7 +12,32 @@
 
 
 
-void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final )
+void LRL_Packet_Init(packet_cfgType *packet)
+{
+	HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
+}
+
+void LRL_Packet_Handshake(packet_cfgType *packet)
+{
+	uint8_t _ack_data[5] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
+	int _out = 0;
+	while(_out != 1)
+	{
+		HAL_UART_Transmit(packet->huart,_ack_data,5,10);
+		HAL_UART_Receive(packet->huart, &packet->ack, 1,10);
+		if(packet->ack == 0x45)
+		{
+			_out = 1;
+		}
+//		HAL_Delay(500);
+	}
+	// this is for connection establishment alert
+	uint8_t _msg[] = "The transmission has been established";
+	HAL_UART_Transmit(&huart1,_msg,sizeof(_msg)-1,10);
+
+}
+
+void LRL_Packet_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final )
 {
   uint16_t i, j;
   static const uint16_t crc_table[256] = { 0x0000,
@@ -63,7 +88,7 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 }
 
 
-void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
+void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom)
 {
 	unsigned short _tmp_crc = 0;
 
@@ -112,7 +137,7 @@ void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 	packet->buffer[28] = (uint8_t)(odom->mag.heading >> 8);
 	packet->buffer[29] = (uint8_t)(odom->mag.heading & 0x00FF);
 
-	LRL_UpdateCRC(0, packet->buffer, 30,_tmp_crc);
+	LRL_Packet_UpdateCRC(0, packet->buffer, 30,_tmp_crc);
 
 	packet->buffer[30] = (uint8_t)(_tmp_crc >> 8);
 	packet->buffer[31] = (uint8_t)(_tmp_crc & 0x00FF);
@@ -123,12 +148,7 @@ void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 }
 
 
-void LRL_Packet_Init(packet_cfgType *packet)
-{
-	HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
-}
-
-void LRL_rxPacket(packet_cfgType *packet)
+void LRL_Packet_RX(packet_cfgType *packet)
 {
 	if(packet->rx_byteReady)
 	{
@@ -150,7 +170,7 @@ void LRL_rxPacket(packet_cfgType *packet)
 
 		_crc_packet_len = _total_pkt_len - 2;
 
-		LRL_UpdateCRC(0, packet->buffer, _crc_packet_len ,_temp_crc);
+		LRL_Packet_UpdateCRC(0, packet->buffer, _crc_packet_len ,_temp_crc);
 
 		if(_temp_crc == ((packet->buffer[_total_pkt_len - 2]<<8)|(packet->buffer[_total_pkt_len - 1])))
 		{
@@ -171,25 +191,5 @@ void LRL_rxPacket(packet_cfgType *packet)
 		memset(packet->buffer, 0, packet->max_pkt_lenght*sizeof(packet->buffer[0]));
 		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 	}
-}
-
-void LRL_handShake(packet_cfgType *packet)
-{
-	uint8_t _ack_data[5] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
-	int _out = 0;
-	while(_out != 1)
-	{
-		HAL_UART_Transmit(packet->huart,_ack_data,5,10);
-		HAL_UART_Receive(packet->huart, &packet->ack, 1,10);
-		if(packet->ack == 0x45)
-		{
-			_out = 1;
-		}
-//		HAL_Delay(500);
-	}
-	// this is for connection establishment alert
-	uint8_t _msg[] = "The transmission has been established";
-	HAL_UART_Transmit(&huart1,_msg,sizeof(_msg)-1,10);
-
 }
 

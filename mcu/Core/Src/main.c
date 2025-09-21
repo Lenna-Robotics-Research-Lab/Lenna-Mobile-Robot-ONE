@@ -333,7 +333,7 @@ int main(void)
 	  HAL_Delay(250);
   }
 
-  LRL_handShake(&rx_packet);
+  LRL_Packet_Handshake(&rx_packet);
 
 //  LRL_RX_Init(&rx_packet);
 //  LRL_Packet_Init(&rx_packet);
@@ -363,7 +363,7 @@ int main(void)
 	  motor_speed_right = rx_packet.data.right_velocity;
 	  if(pid_tim_flag == 1)
 	  {
-		LRL_rxPacket(&rx_packet);
+		LRL_Packet_RX(&rx_packet);
 		LRL_MPU6050_ReadAll(&odom);
 		LRL_HMC5883L_ReadHeading(&odom);
 		LRL_Encoder_ReadAngularSpeed(&odom);
@@ -376,7 +376,7 @@ int main(void)
 //		sprintf(MSG,"data is :%d \t%d \r\n", odom.angle.x, odom.angle.y);
 //		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
 
-		LRL_txPacket(&tx_packet, &odom);
+		LRL_Packet_TX(&tx_packet, &odom);
 
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
@@ -404,7 +404,7 @@ int main(void)
 		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
 
-		  LRL_txPacket(&tx_packet, &odom);
+		  LRL_Packet_TX(&tx_packet, &odom);
 		  pid_tim_flag = 0;
 	  }
 

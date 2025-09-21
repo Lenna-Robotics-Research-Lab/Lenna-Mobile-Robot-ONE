@@ -32,12 +32,11 @@ typedef struct
 	packet_data			data;
 } packet_cfgType;
 
-
-void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
 void LRL_Packet_Init(packet_cfgType *packet);
-void LRL_rxPacket(packet_cfgType *packet);
-void LRL_handShake(packet_cfgType *packet);
-void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom);
+void LRL_Packet_Handshake(packet_cfgType *packet);
+void LRL_Packet_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
+void LRL_Packet_RX(packet_cfgType *packet);
+void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom);
 
 
 
