@@ -1,0 +1,57 @@
+<launch>
+  <!-- DEFINE PARAMETERS -->
+  <param 
+    name="robot_description" 
+    command="cat $(find lenna_description)/urdf/lenna_description.urdf" />
+
+  <!-- LOAD AN EMPTY WORLD -->
+  <include
+    file="$(find gazebo_ros)/launch/empty_world.launch" />
+
+  <!-- MAKE A STATIC TRANSFORMS -->
+  <node
+    name="tf_footprint_base"
+    pkg="tf"
+    type="static_transform_publisher"
+    args="0 0 0 0 0 0 base_link base_footprint 100" />
+
+  <node
+  name="tf_right_wheel"
+  pkg="tf"
+  type="static_transform_publisher"
+  args="6.9033E-05 -0.08975 0.015 0.0 1.5708 1.5708 base_link right_wheel_link 100" />
+
+  <node
+  name="tf_left_wheel"
+  pkg="tf"
+  type="static_transform_publisher"
+  args="6.9033E-05 0.08975 0.015 0.0 -1.5708 -1.5708 base_link left_wheel_link 100" />
+
+  <!-- LOAD THE URDF SPAWNER -->
+  <node 
+    name="urdf_spawner" 
+    pkg="gazebo_ros" 
+    type="spawn_model" 
+    respawn="false" 
+    output="screen" 
+    args="-file $(find lenna_description)/urdf/lenna_description.urdf -urdf -model LENNA_URDF" />
+
+  <!-- LOAD THE CONFIG YAML FILES -->
+  <rosparam 
+    file="$(find lenna_description)/config/control.yaml" 
+    command="load" />
+  <rosparam 
+    file="$(find lenna_description)/config/joints.yaml" 
+    command="load" />
+
+  <!-- LOAD THE CONTROLLERS -->
+  <node name="joint_state_controller_spawner" pkg ="controller_manager" type="spawner" ns="/LENNA" 
+        args="joint_state_controller 
+              --shutdown-timeout 3"/>
+
+  <!-- CONVERT JOINT STATES TO TF TRANSFORMS AND REMAP TO ARBITRARY TOPIC -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <remap from="joint_state" to="/LENNA/joint_states" />
+  </node>
+</launch>
