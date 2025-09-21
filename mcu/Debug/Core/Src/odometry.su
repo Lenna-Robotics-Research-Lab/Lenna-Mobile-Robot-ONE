@@ -1,2 +1,2 @@
-../Core/Src/odometry.c:21:6:LRL_Odometry_Init	16	static
-../Core/Src/odometry.c:32:6:LRL_Odometry_ReadAngularSpeed	56	static
+../Core/Src/odometry.c:28:6:LRL_Odometry_Init	16	static
+../Core/Src/odometry.c:54:6:LRL_Odometry_ReadAngularSpeed	56	static

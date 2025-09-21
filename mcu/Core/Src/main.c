@@ -362,29 +362,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  /*  main code
-	   *  for testing the motors use the following
-	  LRL_Motion_MotorTest(diff_robot)
 
-	   *  Other debugging
-	  motor_speed_left = rx_packet.data.left_velocity;
-	  motor_speed_right = rx_packet.data.right_velocity;
-	  if(pid_tim_flag == 1)
-	  {
-		LRL_Packet_RX(&rx_packet);
-		LRL_IMU_MPUReadAll(&odom);
-		LRL_IMU_MagReadHeading(&odom);
-		LRL_Odometry_ReadAngularSpeed(&odom);
-		LRL_IMU_ComplementaryFilter(&odom,0.01);
-		LRL_Packet_TX(&tx_packet, &odom);
-
-		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
-		LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-		LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
-		pid_tim_flag = 0;
-	  }
-	*/
-	  /* this part is for the problem handling and debugging  */
 	  if(serial_flag == 1)
 	  {
 		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
@@ -393,7 +371,6 @@ int main(void)
 		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
 
 	  	  serial_flag = 0;
-//	  	  HAL_Delay(10);
 	  }
 	  if(pid_tim_flag == 1)
 	  {
@@ -485,13 +462,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 		rx_packet.rx_byteReady = 1;
 		serial_flag = 1;
 	}
-	/* fot other usages of UART
-	else
-	{
-		HAL_UART_Receive_IT(&huart1,&input_speed, 1);
-		flag_tx = 1;
-	}
-	 */
 }
 
 // ####################   Timer To Creat 0.01 Delay Callback   ####################
@@ -505,13 +475,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 }
 
 // ####################   Timer Callback   ####################
-
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
-{
-	// TIMER Overflow Callback
-	LRL_US_TMR_OVF_ISR(htim, us_front);
-}
 
 /* USER CODE END 4 */
 

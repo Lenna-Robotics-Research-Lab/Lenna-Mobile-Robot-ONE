@@ -40,7 +40,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/tim.h ../Core/Inc/motion.h ../Core/Inc/pid.h \
  ../Core/Inc/odometry.h ../Core/Inc/i2c.h ../Core/Inc/motion.h \
  ../Core/Inc/mcu_config.h ../Core/Inc/packet_handler.h ../Core/Inc/imu.h \
- ../Core/Inc/imu.h
+ ../Core/Inc/usart.h ../Core/Inc/imu.h
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -96,4 +96,5 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 ../Core/Inc/mcu_config.h:
 ../Core/Inc/packet_handler.h:
 ../Core/Inc/imu.h:
+../Core/Inc/usart.h:
 ../Core/Inc/imu.h:
