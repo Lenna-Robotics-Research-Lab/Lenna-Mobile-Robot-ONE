@@ -24,7 +24,7 @@
 //	HAL_TIM_Encoder_Start(motor_right.TIM_ENC_Handle, TIM_CHANNEL_ALL);
 //}
 
-void LRL_Motor_Speed(motor_cfgType motor, int8_t duty_cycle)
+void LRL_Motion_MotorSpeed(motor_cfgType motor, int8_t duty_cycle)
 {
 	bool dir;
 	uint32_t motor_pwm;
@@ -49,11 +49,11 @@ void LRL_Motor_Speed(motor_cfgType motor, int8_t duty_cycle)
 
 void LRL_Motion_Control(diffDrive_cfgType diffRobot, int8_t duty_cycle_left, int8_t duty_cycle_right)
 {
-	LRL_Motor_Speed(diffRobot.MOTOR_LEFT, duty_cycle_left);
-	LRL_Motor_Speed(diffRobot.MOTOR_RIGHT, duty_cycle_right);
+	LRL_Motion_MotorSpeed(diffRobot.MOTOR_LEFT, duty_cycle_left);
+	LRL_Motion_MotorSpeed(diffRobot.MOTOR_RIGHT, duty_cycle_right);
 }
 
-void LRL_Motor_Test(diffDrive_cfgType diffRobot)
+void LRL_Motion_MotorTest(diffDrive_cfgType diffRobot)
 {
 	LRL_Motion_Control(diffRobot, 60, 60);
 	HAL_Delay(3000);
