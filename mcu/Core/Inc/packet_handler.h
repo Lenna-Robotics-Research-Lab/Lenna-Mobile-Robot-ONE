@@ -14,6 +14,8 @@
 #define MIN_PACKET_LENGTH	3
 #define MAX_PACKET_LENGTH	144
 
+#include "imu.h"
+
 typedef struct
 {
 	int16_t right_velocity;
@@ -36,7 +38,7 @@ void LRL_Packet_Init(packet_cfgType *packet);
 void LRL_Packet_Handshake(packet_cfgType *packet);
 void LRL_Packet_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
 void LRL_Packet_RX(packet_cfgType *packet);
-void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom);
+void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom, imu_statetype *imu);
 
 
 

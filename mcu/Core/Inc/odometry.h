@@ -51,17 +51,17 @@ typedef struct
 
 typedef struct
 {
-	imu_cfgType 		imu;
+//	imu_cfgType 		imu;
 	encoder_cfgType		enc_right;
 	encoder_cfgType		enc_left;
 	diffDrive_cfgType	diff_robot;
 
 
-	linear_position 	pose;
-	angular_position 	angle;
-	accelerometer 		accel;
-	gyroscope 			gyro;
-	magnetometer 		mag;
+//	linear_position 	pose;
+//	angular_position 	angle;
+//	accelerometer 		accel;
+//	gyroscope 			gyro;
+//	magnetometer 		mag;
 
 	wheel_velocity 		vel;
 	wheel_position 		dist;

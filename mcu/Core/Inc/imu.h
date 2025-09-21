@@ -14,6 +14,56 @@
 #include "stm32f4xx_hal_tim.h"
 #include "motion.h"
 
+// #######################################################
+// ######################  Structs 	######################
+// #######################################################
+typedef struct
+{
+	float	x;
+	float	y;
+	float	z;
+} linear_position;
+
+typedef struct
+{
+	int16_t	x; // roll
+	int16_t	y; // pitch
+	int16_t	z; // yaw
+} angular_position;
+
+typedef struct
+{
+	int16_t	x;
+	int16_t	y;
+	int16_t	z;
+
+	int16_t	x_calibrated;
+	int16_t	y_calibrated;
+	int16_t	z_calibrated;
+} accelerometer;
+
+typedef struct
+{
+	int16_t	x;
+	int16_t	y;
+	int16_t	z;
+
+	int16_t	x_calibrated;
+	int16_t	y_calibrated;
+	int16_t	z_calibrated;
+} gyroscope;
+
+typedef struct
+{
+	float	x;
+	float	y;
+	float	z;
+	int16_t	heading;
+
+	int16_t offset_heading;
+} magnetometer;
+
+
 typedef struct
 {
 	I2C_HandleTypeDef * hi2c;	// I2C Sensors e.g.  IMU, Magnetometer, etc.
@@ -38,8 +88,6 @@ typedef struct
 typedef struct
 {
 	imu_cfgType 		imu;
-	encoder_cfgType		enc_right;
-	encoder_cfgType		enc_left;
 	diffDrive_cfgType	diff_robot;
 
 	linear_position 	pose;
@@ -48,7 +96,7 @@ typedef struct
 	gyroscope 			gyro;
 	magnetometer 		mag;
 
-} imu_cfgtype;
+} imu_statetype;
 
 // #################################################################
 // ####################  MAGNETOMETER HMC5883L  ####################
@@ -134,68 +182,20 @@ typedef struct
 #define DELAY_TIMEOUT	10
 #define FLOAT_SCALING	1000
 
-// #######################################################
-// ######################  Structs 	######################
-// #######################################################
-typedef struct
-{
-	float	x;
-	float	y;
-	float	z;
-} linear_position;
-
-typedef struct
-{
-	int16_t	x; // roll
-	int16_t	y; // pitch
-	int16_t	z; // yaw
-} angular_position;
-
-typedef struct
-{
-	int16_t	x;
-	int16_t	y;
-	int16_t	z;
-
-	int16_t	x_calibrated;
-	int16_t	y_calibrated;
-	int16_t	z_calibrated;
-} accelerometer;
-
-typedef struct
-{
-	int16_t	x;
-	int16_t	y;
-	int16_t	z;
-
-	int16_t	x_calibrated;
-	int16_t	y_calibrated;
-	int16_t	z_calibrated;
-} gyroscope;
-
-typedef struct
-{
-	float	x;
-	float	y;
-	float	z;
-	int16_t	heading;
-
-	int16_t offset_heading;
-} magnetometer;
 
 // ##############################################################
 // ####################  FUNCTION PROTOTYPE  ####################
 // ##############################################################
 
-float LRL_HMC5883L_SetDeclination(int16_t declination_degs , int16_t declination_mins, char declination_dir);
-void LRL_HMC5883L_Init(odom_cfgType * odom);
-void LRL_HMC5883L_ReadHeading(odom_cfgType * odom);
+float LRL_IMU_MagSetDeclination(int16_t declination_degs , int16_t declination_mins, char declination_dir);
+void LRL_IMU_MagInit(imu_statetype * imu);
+void LRL_IMU_MagReadHeading(imu_statetype * imu);
 
-void LRL_MPU6050_Init(odom_cfgType * odom);
-void LRL_MPU6050_ReadAccel(odom_cfgType * odom);
-void _LRL_MPU6050_EnableBypass(odom_cfgType * odom, uint8_t enable);
-void LRL_MPU6050_ReadGyro(odom_cfgType *odom);
-void LRL_MPU6050_ReadAll(odom_cfgType *odom);
-void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom, float dt);
+void LRL_IMU_MPUInit(imu_statetype * imu);
+void LRL_IMU_ReadAccel(imu_statetype * imu);
+void _LRL_IMU_MPUBypassEn(imu_statetype * imu, uint8_t enable);
+void LRL_IMU_ReadGyro(imu_statetype *imu);
+void LRL_IMU_MPUReadAll(imu_statetype *imu);
+void LRL_IMU_ComplementaryFilter(imu_statetype *imu, float dt);
 
 #endif /* INC_IMU_H_ */

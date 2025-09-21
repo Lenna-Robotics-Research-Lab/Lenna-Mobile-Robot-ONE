@@ -9,7 +9,8 @@
 #include "usart.h"
 #include "stdlib.h"
 #include "mcu_config.h"
-
+#include "imu.h"
+#include "string.h"
 
 
 void LRL_Packet_Init(packet_cfgType *packet)
@@ -88,7 +89,7 @@ void LRL_Packet_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t da
 }
 
 
-void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom)
+void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom, imu_statetype *imu)
 {
 	unsigned short _tmp_crc = 0;
 
@@ -110,32 +111,32 @@ void LRL_Packet_TX(packet_cfgType *packet,odom_cfgType *odom)
 	packet->buffer[10] = (uint8_t)(odom->dist.right >> 8);
 	packet->buffer[11] = (uint8_t)(odom->dist.right & 0x00FF);
 
-	packet->buffer[12] = (uint8_t)(odom->accel.x_calibrated >> 8);
-	packet->buffer[13] = (uint8_t)(odom->accel.x_calibrated & 0x00FF);
+	packet->buffer[12] = (uint8_t)(imu->accel.x_calibrated >> 8);
+	packet->buffer[13] = (uint8_t)(imu->accel.x_calibrated & 0x00FF);
 
-	packet->buffer[14] = (uint8_t)(odom->accel.y_calibrated >> 8);
-	packet->buffer[15] = (uint8_t)(odom->accel.y_calibrated & 0x00FF);
+	packet->buffer[14] = (uint8_t)(imu->accel.y_calibrated >> 8);
+	packet->buffer[15] = (uint8_t)(imu->accel.y_calibrated & 0x00FF);
 
-	packet->buffer[16] = (uint8_t)(odom->accel.z_calibrated >> 8);
-	packet->buffer[17] = (uint8_t)(odom->accel.z_calibrated & 0x00FF);
+	packet->buffer[16] = (uint8_t)(imu->accel.z_calibrated >> 8);
+	packet->buffer[17] = (uint8_t)(imu->accel.z_calibrated & 0x00FF);
 
-	packet->buffer[18] = (uint8_t)(odom->gyro.x_calibrated >> 8);
-	packet->buffer[19] = (uint8_t)(odom->gyro.x_calibrated & 0x00FF);
+	packet->buffer[18] = (uint8_t)(imu->gyro.x_calibrated >> 8);
+	packet->buffer[19] = (uint8_t)(imu->gyro.x_calibrated & 0x00FF);
 
-	packet->buffer[20] = (uint8_t)(odom->gyro.y_calibrated >> 8);
-	packet->buffer[21] = (uint8_t)(odom->gyro.y_calibrated & 0x00FF);
+	packet->buffer[20] = (uint8_t)(imu->gyro.y_calibrated >> 8);
+	packet->buffer[21] = (uint8_t)(imu->gyro.y_calibrated & 0x00FF);
 
-	packet->buffer[22] = (uint8_t)(odom->gyro.z_calibrated >> 8);
-	packet->buffer[23] = (uint8_t)(odom->gyro.z_calibrated & 0x00FF);
+	packet->buffer[22] = (uint8_t)(imu->gyro.z_calibrated >> 8);
+	packet->buffer[23] = (uint8_t)(imu->gyro.z_calibrated & 0x00FF);
 
-	packet->buffer[24] = (uint8_t)(odom->angle.x >> 8);
-	packet->buffer[25] = (uint8_t)(odom->angle.x & 0x00FF);
+	packet->buffer[24] = (uint8_t)(imu->angle.x >> 8);
+	packet->buffer[25] = (uint8_t)(imu->angle.x & 0x00FF);
 
-	packet->buffer[26] = (uint8_t)(odom->angle.y >> 8);
-	packet->buffer[27] = (uint8_t)(odom->angle.y & 0x00FF);
+	packet->buffer[26] = (uint8_t)(imu->angle.y >> 8);
+	packet->buffer[27] = (uint8_t)(imu->angle.y & 0x00FF);
 
-	packet->buffer[28] = (uint8_t)(odom->mag.heading >> 8);
-	packet->buffer[29] = (uint8_t)(odom->mag.heading & 0x00FF);
+	packet->buffer[28] = (uint8_t)(imu->mag.heading >> 8);
+	packet->buffer[29] = (uint8_t)(imu->mag.heading & 0x00FF);
 
 	LRL_Packet_UpdateCRC(0, packet->buffer, 30,_tmp_crc);
 

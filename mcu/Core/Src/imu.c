@@ -18,48 +18,44 @@ static float prev_gyr_x = 0.0f, prev_gyr_y = 0.0f, prev_gyr_z = 0.0f;
 static float prev_acc_x = 0.0f, prev_acc_y = 0.0f, prev_acc_z = 0.0f;
 
 
-
-
-
-
 // ############################################################
 // ####################  HMC MAGNETOMETER  ####################
 // ############################################################
 
-void LRL_HMC5883L_Init(odom_cfgType * odom)
+void LRL_IMU_MagInit(imu_statetype * imu)
 {
 	uint16_t _tmp_cal_mag = 0;
 
-	_LRL_MPU6050_EnableBypass(odom, 1);
+	_LRL_IMU_MPUBypassEn(imu, 1);
     // write CONFIG_A register
-	HAL_I2C_Master_Transmit(odom->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
+	HAL_I2C_Master_Transmit(imu->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
 	i2c_reg_data = 0x10;
-	HAL_I2C_Mem_Write(odom->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_CONFIG_A, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_CONFIG_A, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 
 	// write CONFIG_B register
-	HAL_I2C_Master_Transmit(odom->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
+	HAL_I2C_Master_Transmit(imu->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
 	i2c_reg_data = 0xE0;
-	HAL_I2C_Mem_Write(odom->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_CONFIG_B, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_CONFIG_B, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 
 	// write MODE register
-	HAL_I2C_Master_Transmit(odom->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
-	HAL_I2C_Mem_Write(odom->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_MODE, 1, (uint8_t *)HMC5883L_MODE_SINGLE, 1, DELAY_TIMEOUT);
+	HAL_I2C_Master_Transmit(imu->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_WRITE, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_MODE, 1, (uint8_t *)HMC5883L_MODE_SINGLE, 1, DELAY_TIMEOUT);
 
 	HAL_Delay(10);
 
-	odom->mag.offset_heading = 0;
+	imu->mag.offset_heading = 0;
 
 	for(int i = 0; i<100; i++)
 	{
-		LRL_HMC5883L_ReadHeading(odom);
-		_tmp_cal_mag += odom->mag.heading;
+		LRL_IMU_MagReadHeading(imu);
+		_tmp_cal_mag += imu->mag.heading;
 		HAL_Delay(10);
 	}
 
-	odom->mag.offset_heading = (_tmp_cal_mag / 100);
+	imu->mag.offset_heading = (_tmp_cal_mag / 100);
 }
 
-float LRL_HMC5883L_SetDeclination(int16_t declination_degs , int16_t declination_mins, char declination_dir)
+float LRL_IMU_MagSetDeclination(int16_t declination_degs , int16_t declination_mins, char declination_dir)
 {
 	int8_t _dir = 0;
 
@@ -75,44 +71,44 @@ float LRL_HMC5883L_SetDeclination(int16_t declination_degs , int16_t declination
 	return ((_dir)* ( declination_degs + (1/60 * declination_mins)) * (M_PI / 180));
 }
 
-void LRL_HMC5883L_ReadHeading(odom_cfgType * odom)
+void LRL_IMU_MagReadHeading(imu_statetype * imu)
 {
 	uint8_t _mag_buffer[6];
 	float _mag_heading_temp;
 
-	_LRL_MPU6050_EnableBypass(odom, 1);
-	HAL_I2C_Master_Transmit(odom->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_READ, 1, DELAY_TIMEOUT);
-	HAL_I2C_Mem_Read(odom->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_DATAX_H, 1, (uint8_t *)&_mag_buffer, 6, DELAY_TIMEOUT);
+	_LRL_IMU_MPUBypassEn(imu, 1);
+	HAL_I2C_Master_Transmit(imu->imu.hi2c, HMC5883L_ADDRESS, (uint8_t *)HMC5883L_ADDRESS_READ, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Read(imu->imu.hi2c, HMC5883L_ADDRESS, HMC5883L_RA_DATAX_H, 1, (uint8_t *)&_mag_buffer, 6, DELAY_TIMEOUT);
 
-	odom->mag.x = (int16_t)((_mag_buffer[0] << 8) | _mag_buffer[1]);
-	odom->mag.y = (int16_t)((_mag_buffer[4] << 8) | _mag_buffer[5]);
-	odom->mag.z = (int16_t)((_mag_buffer[2] << 8) | _mag_buffer[3]);
+	imu->mag.x = (int16_t)((_mag_buffer[0] << 8) | _mag_buffer[1]);
+	imu->mag.y = (int16_t)((_mag_buffer[4] << 8) | _mag_buffer[5]);
+	imu->mag.z = (int16_t)((_mag_buffer[2] << 8) | _mag_buffer[3]);
 
 	// Evaluate Heading and Correcting Declination (IRAN Coordinates)
-	_mag_heading_temp = atan2(odom->mag.x, odom->mag.y) + MAGNETIC_DECLINATION;
+	_mag_heading_temp = atan2(imu->mag.x, imu->mag.y) + MAGNETIC_DECLINATION;
 
     // Convert radians to degrees for readability.
-    odom->mag.heading = _mag_heading_temp * 180/M_PI;
+    imu->mag.heading = _mag_heading_temp * 180/M_PI;
 
 	// Correct for when signs are reversed.
-    if(odom->mag.heading < 0)
-    	odom->mag.heading += 360;
+    if(imu->mag.heading < 0)
+    	imu->mag.heading += 360;
 
     // Check for wrap due to addition of declination.
-    if(odom->mag.heading > 360)
-    	odom->mag.heading -= 360;
+    if(imu->mag.heading > 360)
+    	imu->mag.heading -= 360;
 
     // Evaluate the effect of calibration offset
-    odom->mag.heading -= odom->mag.offset_heading;
-    if(odom->mag.heading < 0)
-    	odom->mag.heading += 360;
+    imu->mag.heading -= imu->mag.offset_heading;
+    if(imu->mag.heading < 0)
+    	imu->mag.heading += 360;
 }
 
 // #######################################################
 // ####################  IMU MPU6050  ####################
 // #######################################################
 
-void LRL_MPU6050_Init(odom_cfgType * odom)
+void LRL_IMU_MPUInit(imu_statetype * imu)
 {
 
 	float _tmp_cal_cf_x=0, _tmp_cal_cf_y=0, _tmp_cal_cf_z=0; // complementary filter calibration
@@ -121,80 +117,80 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
 
 	uint8_t _imu_addr_check;
 
-	_LRL_MPU6050_EnableBypass(odom, 0);
-    HAL_I2C_Mem_Read(odom->imu.hi2c, MPU_ADDR, WHO_AM_I, 1, &_imu_addr_check, 1, DELAY_TIMEOUT);
+	_LRL_IMU_MPUBypassEn(imu, 0);
+    HAL_I2C_Mem_Read(imu->imu.hi2c, MPU_ADDR, WHO_AM_I, 1, &_imu_addr_check, 1, DELAY_TIMEOUT);
 
     if (_imu_addr_check == 0x68) // 0x68 will be returned by the sensor if everything goes well
     {
         // power management register 0X6B we should write all 0's to wake the sensor up
         i2c_reg_data = 0x00;
-        HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, PWR_MGMT_1, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+        HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, PWR_MGMT_1, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 
         // Set DATA RATE of 1KHz by writing SMPLRT_DIV register
         i2c_reg_data = 0x07;
-        HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, SMPLRT_DIV, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+        HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, SMPLRT_DIV, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 
         // Set accelerometer configuration in ACCEL_CONFIG Register
         // XA_ST=0,YA_ST=0,ZA_ST=0, FS_SEL=0 -> � 2g
         i2c_reg_data = 0x00;
-        HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, ACCEL_CONFIG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+        HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, ACCEL_CONFIG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 
         // Set Gyroscopic configuration in GYRO_CONFIG Register
         // XG_ST=0,YG_ST=0,ZG_ST=0, FS_SEL=0 ->  250 �/s
         i2c_reg_data = 0x00;
-        HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, GYRO_CONFIG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+        HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, GYRO_CONFIG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
     }
 
-    odom->imu.offset_gyro_x = 0;
-    odom->imu.offset_gyro_y = 0;
-    odom->imu.offset_gyro_z = 0;
+    imu->imu.offset_gyro_x = 0;
+    imu->imu.offset_gyro_y = 0;
+    imu->imu.offset_gyro_z = 0;
 
-    odom->imu.offset_accel_x = 0;
-    odom->imu.offset_accel_y = 0;
-    odom->imu.offset_accel_z = 0;
+    imu->imu.offset_accel_x = 0;
+    imu->imu.offset_accel_y = 0;
+    imu->imu.offset_accel_z = 0;
 
     for(int i = 0; i<500; i++)
     {
-    	LRL_MPU6050_ReadAll(odom);
-    	_tmp_cal_gy_x += odom->gyro.x;
-    	_tmp_cal_gy_y += odom->gyro.y;
-    	_tmp_cal_gy_z += odom->gyro.z;
+    	LRL_IMU_MPUReadAll(imu);
+    	_tmp_cal_gy_x += imu->gyro.x;
+    	_tmp_cal_gy_y += imu->gyro.y;
+    	_tmp_cal_gy_z += imu->gyro.z;
 
-    	_tmp_cal_ac_x += odom->accel.x;
-    	_tmp_cal_ac_y += odom->accel.y;
-    	_tmp_cal_ac_z += odom->accel.z;
+    	_tmp_cal_ac_x += imu->accel.x;
+    	_tmp_cal_ac_y += imu->accel.y;
+    	_tmp_cal_ac_z += imu->accel.z;
 
     	HAL_Delay(5);
     }
 
-    odom->imu.offset_accel_x = (_tmp_cal_ac_x/500);
-    odom->imu.offset_accel_y = (_tmp_cal_ac_y/500);
-    odom->imu.offset_accel_z = (_tmp_cal_ac_z/500);
+    imu->imu.offset_accel_x = (_tmp_cal_ac_x/500);
+    imu->imu.offset_accel_y = (_tmp_cal_ac_y/500);
+    imu->imu.offset_accel_z = (_tmp_cal_ac_z/500);
 
-    odom->imu.offset_gyro_x = (_tmp_cal_gy_x/500);
-    odom->imu.offset_gyro_y = (_tmp_cal_gy_y/500);
-    odom->imu.offset_gyro_z = (_tmp_cal_gy_z/500);
+    imu->imu.offset_gyro_x = (_tmp_cal_gy_x/500);
+    imu->imu.offset_gyro_y = (_tmp_cal_gy_y/500);
+    imu->imu.offset_gyro_z = (_tmp_cal_gy_z/500);
 
 ///* run this if you want to calibrate complementary filter
-	odom->imu.offset_calibration_x = 0;
-    odom->imu.offset_calibration_y = 0;
-    odom->imu.offset_calibration_z = 0;
+	imu->imu.offset_calibration_x = 0;
+    imu->imu.offset_calibration_y = 0;
+    imu->imu.offset_calibration_z = 0;
 
     for(int i = 0; i<500 ; i++)
     {
-    	LRL_MPU6050_ReadAll(odom);
-    	LRL_MPU6050_ComplementaryFilter(odom,0.01);
+    	LRL_IMU_MPUReadAll(imu);
+    	LRL_IMU_ComplementaryFilter(imu,0.01);
 
-    	_tmp_cal_cf_x += odom->angle.x;
-    	_tmp_cal_cf_y += odom->angle.y;
-    	_tmp_cal_cf_z += odom->angle.z;
+    	_tmp_cal_cf_x += imu->angle.x;
+    	_tmp_cal_cf_y += imu->angle.y;
+    	_tmp_cal_cf_z += imu->angle.z;
 
     	HAL_Delay(10);
     }
 
-	odom->imu.offset_calibration_x = (_tmp_cal_cf_x/500);
-    odom->imu.offset_calibration_y = (_tmp_cal_cf_y/500);
-    odom->imu.offset_calibration_z = (_tmp_cal_cf_z/500);
+	imu->imu.offset_calibration_x = (_tmp_cal_cf_x/500);
+    imu->imu.offset_calibration_y = (_tmp_cal_cf_y/500);
+    imu->imu.offset_calibration_z = (_tmp_cal_cf_z/500);
 
     prev_acc_x = 0;
     prev_acc_y = 0;
@@ -204,15 +200,15 @@ void LRL_MPU6050_Init(odom_cfgType * odom)
     prev_gyr_z = 0;
 }
 
-void LRL_MPU6050_ReadAccel(odom_cfgType * odom)
+void LRL_IMU_ReadAccel(imu_statetype * imu)
 {
-	_LRL_MPU6050_EnableBypass(odom, 0);
+	_LRL_IMU_MPUBypassEn(imu, 0);
     // Read 6 BYTES of data starting from ACCEL_XOUT_H register
-    HAL_I2C_Mem_Read(odom->imu.hi2c, MPU_ADDR, ACCEL_XOUT_H, 1, (uint8_t *)&imu_buffer, 6, DELAY_TIMEOUT);
+    HAL_I2C_Mem_Read(imu->imu.hi2c, MPU_ADDR, ACCEL_XOUT_H, 1, (uint8_t *)&imu_buffer, 6, DELAY_TIMEOUT);
 
-    odom->accel.x = (int16_t)(imu_buffer[0] << 8 | imu_buffer[1]);
-    odom->accel.y = (int16_t)(imu_buffer[2] << 8 | imu_buffer[3]);
-    odom->accel.z = (int16_t)(imu_buffer[4] << 8 | imu_buffer[5]);
+    imu->accel.x = (int16_t)(imu_buffer[0] << 8 | imu_buffer[1]);
+    imu->accel.y = (int16_t)(imu_buffer[2] << 8 | imu_buffer[3]);
+    imu->accel.z = (int16_t)(imu_buffer[4] << 8 | imu_buffer[5]);
 
     /***
      * convert the RAW values into acceleration in 'g'
@@ -221,59 +217,59 @@ void LRL_MPU6050_ReadAccel(odom_cfgType * odom)
      * for more details check ACCEL_CONFIG Register
     ****/
 
-    odom->accel.x /= (ACCEL_X_CORRECTOR / FLOAT_SCALING);
-    odom->accel.y /= (ACCEL_Y_CORRECTOR / FLOAT_SCALING);
-    odom->accel.z /= (ACCEL_Z_CORRECTOR / FLOAT_SCALING);
+    imu->accel.x /= (ACCEL_X_CORRECTOR / FLOAT_SCALING);
+    imu->accel.y /= (ACCEL_Y_CORRECTOR / FLOAT_SCALING);
+    imu->accel.z /= (ACCEL_Z_CORRECTOR / FLOAT_SCALING);
 
-    odom->accel.x_calibrated = odom->accel.x - odom->imu.offset_accel_x;
-    odom->accel.y_calibrated = odom->accel.y - odom->imu.offset_accel_y;
-    odom->accel.z_calibrated = odom->accel.z - odom->imu.offset_accel_z;
+    imu->accel.x_calibrated = imu->accel.x - imu->imu.offset_accel_x;
+    imu->accel.y_calibrated = imu->accel.y - imu->imu.offset_accel_y;
+    imu->accel.z_calibrated = imu->accel.z - imu->imu.offset_accel_z;
 }
 
-void LRL_MPU6050_ReadGyro(odom_cfgType *odom)
+void LRL_IMU_ReadGyro(imu_statetype *imu)
 {
-	_LRL_MPU6050_EnableBypass(odom, 0);
-	HAL_I2C_Mem_Read(odom->imu.hi2c, MPU_ADDR, GYRO_XOUT_H, 1, (uint8_t *)imu_buffer, 6, DELAY_TIMEOUT);
+	_LRL_IMU_MPUBypassEn(imu, 0);
+	HAL_I2C_Mem_Read(imu->imu.hi2c, MPU_ADDR, GYRO_XOUT_H, 1, (uint8_t *)imu_buffer, 6, DELAY_TIMEOUT);
 
-	odom->gyro.x = (int16_t)(imu_buffer[0] << 8 | imu_buffer[1]);
-	odom->gyro.y = (int16_t)(imu_buffer[2] << 8 | imu_buffer[3]);
-	odom->gyro.z = (int16_t)(imu_buffer[4] << 8 | imu_buffer[5]);
+	imu->gyro.x = (int16_t)(imu_buffer[0] << 8 | imu_buffer[1]);
+	imu->gyro.y = (int16_t)(imu_buffer[2] << 8 | imu_buffer[3]);
+	imu->gyro.z = (int16_t)(imu_buffer[4] << 8 | imu_buffer[5]);
 
-	odom->gyro.x /= (GYRO_CORRECTOR / FLOAT_SCALING);
-	odom->gyro.y /= (GYRO_CORRECTOR / FLOAT_SCALING);
-	odom->gyro.z /= (GYRO_CORRECTOR / FLOAT_SCALING);
+	imu->gyro.x /= (GYRO_CORRECTOR / FLOAT_SCALING);
+	imu->gyro.y /= (GYRO_CORRECTOR / FLOAT_SCALING);
+	imu->gyro.z /= (GYRO_CORRECTOR / FLOAT_SCALING);
 
-	odom->gyro.x_calibrated = odom->gyro.x - odom->imu.offset_gyro_x;
-	odom->gyro.y_calibrated = odom->gyro.y - odom->imu.offset_gyro_y;
-	odom->gyro.z_calibrated = odom->gyro.z - odom->imu.offset_gyro_z;
+	imu->gyro.x_calibrated = imu->gyro.x - imu->imu.offset_gyro_x;
+	imu->gyro.y_calibrated = imu->gyro.y - imu->imu.offset_gyro_y;
+	imu->gyro.z_calibrated = imu->gyro.z - imu->imu.offset_gyro_z;
 }
 
-void LRL_MPU6050_ReadAll(odom_cfgType *odom)
+void LRL_IMU_MPUReadAll(imu_statetype *imu)
 {
-	_LRL_MPU6050_EnableBypass(odom, 0);
-	LRL_MPU6050_ReadAccel(odom);
-	LRL_MPU6050_ReadGyro(odom);
+	_LRL_IMU_MPUBypassEn(imu, 0);
+	LRL_IMU_ReadAccel(imu);
+	LRL_IMU_ReadGyro(imu);
 }
 
-void _LRL_MPU6050_EnableBypass(odom_cfgType * odom, uint8_t enable)
+void _LRL_IMU_MPUBypassEn(imu_statetype * imu, uint8_t enable)
 {
 	i2c_reg_data = 0x00;
-	HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, USER_CTRL, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, USER_CTRL, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 	i2c_reg_data = 0x02 * enable;
-	HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, INT_PIN_CFG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, INT_PIN_CFG, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 	i2c_reg_data = 0x00;
-	HAL_I2C_Mem_Write(odom->imu.hi2c, MPU_ADDR, PWR_MGMT_1, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
+	HAL_I2C_Mem_Write(imu->imu.hi2c, MPU_ADDR, PWR_MGMT_1, 1, &i2c_reg_data, 1, DELAY_TIMEOUT);
 }
 
-void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom, float dt)
+void LRL_IMU_ComplementaryFilter(imu_statetype *imu, float dt)
 {
 	static float _tmp_accx, _tmp_accy, _tmp_accz;
-	_LRL_MPU6050_EnableBypass(odom, 0);
+	_LRL_IMU_MPUBypassEn(imu, 0);
 
     // Low-pass filter accelerometer data
-    _tmp_accx = ALPHA * prev_acc_x + (1 - ALPHA) * odom->accel.x/FLOAT_SCALING;
-    _tmp_accy = ALPHA * prev_acc_y + (1 - ALPHA) * odom->accel.y/FLOAT_SCALING;
-    _tmp_accz = ALPHA * prev_acc_z + (1 - ALPHA) * odom->accel.z/FLOAT_SCALING;
+    _tmp_accx = ALPHA * prev_acc_x + (1 - ALPHA) * imu->accel.x/FLOAT_SCALING;
+    _tmp_accy = ALPHA * prev_acc_y + (1 - ALPHA) * imu->accel.y/FLOAT_SCALING;
+    _tmp_accz = ALPHA * prev_acc_z + (1 - ALPHA) * imu->accel.z/FLOAT_SCALING;
 
     // Normalize accelerometer data
     float acc_norm = sqrtf(_tmp_accx * _tmp_accx + _tmp_accy * _tmp_accy + _tmp_accz * _tmp_accz);
@@ -287,23 +283,23 @@ void LRL_MPU6050_ComplementaryFilter(odom_cfgType *odom, float dt)
     float acc_angle_z = atan2f(_tmp_accy, _tmp_accx) * (180.0f / M_PI);
 
     // Low-pass filter gyroscope data
-    float gyr_x_filtered = ALPHA * prev_gyr_x + (1 - ALPHA) * odom->gyro.x/FLOAT_SCALING;
-    float gyr_y_filtered = ALPHA * prev_gyr_y + (1 - ALPHA) * odom->gyro.y/FLOAT_SCALING;
-    float gyr_z_filtered = ALPHA * prev_gyr_z + (1 - ALPHA) * odom->gyro.z/FLOAT_SCALING;
+    float gyr_x_filtered = ALPHA * prev_gyr_x + (1 - ALPHA) * imu->gyro.x/FLOAT_SCALING;
+    float gyr_y_filtered = ALPHA * prev_gyr_y + (1 - ALPHA) * imu->gyro.y/FLOAT_SCALING;
+    float gyr_z_filtered = ALPHA * prev_gyr_z + (1 - ALPHA) * imu->gyro.z/FLOAT_SCALING;
 
     // Update angle using gyroscope
-    odom->imu.roll_temp += gyr_x_filtered * dt;
-    odom->imu.pitch_temp -= gyr_y_filtered * dt;
-    odom->imu.yaw_temp += gyr_z_filtered * dt;
+    imu->imu.roll_temp += gyr_x_filtered * dt;
+    imu->imu.pitch_temp -= gyr_y_filtered * dt;
+    imu->imu.yaw_temp += gyr_z_filtered * dt;
 
     // Complementary filter
-    odom->imu.roll_temp = (ALPHA * odom->imu.roll_temp + (1 - ALPHA) * acc_angle_x) ;
-    odom->imu.pitch_temp = ((ALPHA * odom->imu.pitch_temp) - (1 - ALPHA) * acc_angle_y);
-    odom->imu.yaw_temp = (ALPHA * odom->imu.yaw_temp + (1 - ALPHA) * acc_angle_z);
+    imu->imu.roll_temp = (ALPHA * imu->imu.roll_temp + (1 - ALPHA) * acc_angle_x) ;
+    imu->imu.pitch_temp = ((ALPHA * imu->imu.pitch_temp) - (1 - ALPHA) * acc_angle_y);
+    imu->imu.yaw_temp = (ALPHA * imu->imu.yaw_temp + (1 - ALPHA) * acc_angle_z);
 
-    odom->angle.x = odom->imu.roll_temp - odom->imu.offset_calibration_x;
-    odom->angle.y = odom->imu.pitch_temp - odom->imu.offset_calibration_y;
-    odom->angle.z = odom->imu.yaw_temp - odom->imu.offset_calibration_z;
+    imu->angle.x = imu->imu.roll_temp - imu->imu.offset_calibration_x;
+    imu->angle.y = imu->imu.pitch_temp - imu->imu.offset_calibration_y;
+    imu->angle.z = imu->imu.yaw_temp - imu->imu.offset_calibration_z;
 
     // Update previous values
     prev_acc_x = _tmp_accx;

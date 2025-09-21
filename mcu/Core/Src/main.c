@@ -39,6 +39,7 @@
 #include "odometry.h"
 #include "mcu_config.h"
 #include "packet_handler.h"
+#include "imu.h"
 
 
 
@@ -131,7 +132,7 @@ const diffDrive_cfgType diff_robot =
 };
 
 // ####################   ODOMETRY  ###################
-const imu_cfgType imu =
+const imu_cfgType gy87 =
 {
 	&hi2c3
 };
@@ -152,10 +153,15 @@ const encoder_cfgType enc_left =
 
 odom_cfgType odom =
 {
-	imu,
+//	imu,
 	enc_right,
 	enc_left,
 	diff_robot
+};
+
+imu_statetype imu =
+{
+	gy87
 };
 
 const ultrasonic_cfgType us_front =
@@ -317,9 +323,9 @@ int main(void)
 
   LRL_Odometry_Init(&odom);
 
-  LRL_MPU6050_Init(&odom);
+  LRL_IMU_MPUInit(&imu);
 
-  LRL_HMC5883L_Init(&odom);
+  LRL_IMU_MagInit(&imu);
 
   int16_t motor_speed_left = 0, motor_speed_right = 0;
 //  HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
@@ -397,14 +403,14 @@ int main(void)
 	  }
 	  if(pid_tim_flag == 1)
 	  {
-		  LRL_MPU6050_ReadAll(&odom);
-		  LRL_HMC5883L_ReadHeading(&odom);
+		  LRL_IMU_MPUReadAll(&imu);
+		  LRL_IMU_MagReadHeading(&imu);
 		  LRL_Odometry_ReadAngularSpeed(&odom);
 		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
 
-		  LRL_Packet_TX(&tx_packet, &odom);
+		  LRL_Packet_TX(&tx_packet, &odom, &imu);
 		  pid_tim_flag = 0;
 	  }
 
