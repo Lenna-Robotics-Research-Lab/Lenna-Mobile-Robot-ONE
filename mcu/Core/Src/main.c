@@ -4,15 +4,10 @@
   * @file           : main.c
   * @brief          : Main program body
   ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2023 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
+  * Author: Lenna Robotics Research Laboratory
+  * 	Autonomous Systems Research Branch
+  * 	Iran University of Science and Technology
+  *	GitHub:	github.com/Lenna-Robotics-Research-Lab
   ******************************************************************************
   */
 /* USER CODE END Header */
@@ -63,13 +58,16 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+
+// message buffer for Initialization on High-level board
 uint8_t msgBuffer[32] = " Lenna Robotics Research Lab. \r\n";
 
+// Protocol packet size limits
 uint8_t min_len_packet = 8;
 uint8_t max_len_packet = 32;
-uint8_t protocol_data[144] = {0};
-uint8_t txBuffer[144]; //= {0xFF, 0xFF, 0x05, 0xA0, 0xAB, 0xCD, 0xB4, 0xFC};
 
+//protocol Settings
+uint8_t protocol_data[144] = {0};
 bool flag_uart_cb = 0;
 bool flag_remain_packet = 1;
 
@@ -78,13 +76,23 @@ uint8_t remain_pkt_length = 0;
 
 unsigned short temp_crc = 0;
 
-
 char MSG[64];
 
+// LENNA for the ack
+uint8_t txBuffer[144]; //= {0xFF, 0xFF, 0x05, 0xA0, 0xAB, 0xCD, 0xB4, 0xFC};
 
-uint8_t input_speed ;// step given by MATLAB code
+
+
+// step given by MATLAB code
+uint8_t input_speed ;
+
+// temp variables for odom
 uint16_t left_enc_temp = 0, right_enc_temp = 0 , right_enc_diff = 0, left_enc_diff = 0;
+
+// direction set
 int8_t dir_right,dir_left;
+
+//odom variables
 uint16_t encoder_tick[2] = {0};
 float angular_speed_left,angular_speed_right;
 uint16_t tst;
@@ -303,16 +311,15 @@ int main(void)
   MX_TIM5_Init();
   /* USER CODE BEGIN 2 */
 
+  // HAL function Initializations
   HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_1);
   HAL_TIM_PWM_Start(&htim8, TIM_CHANNEL_2);
   HAL_TIM_Encoder_Start(&htim3, TIM_CHANNEL_ALL);
   HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL);
-//  HAL_TIM_Base_Init(&htim5);
+  HAL_TIM_Base_Init(&htim5);
   HAL_TIM_Base_Start_IT(&htim5);
   HAL_I2C_Init(&hi2c3);
 
-//  printf("Lenna Robotics Research Lab. \r\n");
-//  HAL_Delay(1000);
 
 // #################### Initializations   ####################
 
@@ -328,9 +335,7 @@ int main(void)
   LRL_IMU_MagInit(&imu);
 
   int16_t motor_speed_left = 0, motor_speed_right = 0;
-//  HAL_UART_Transmit(&huart1, msgBuffer, 32, 100);
 
-//  HAL_Delay(5000);
   for(int c = 0; c< 3 ; c++)
   {
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
@@ -339,11 +344,10 @@ int main(void)
 	  HAL_Delay(250);
   }
 
+  // Handshake
   LRL_Packet_Handshake(&rx_packet);
 
-//  LRL_RX_Init(&rx_packet);
-//  LRL_Packet_Init(&rx_packet);
-
+  // Communication start after handshake
   HAL_UART_Receive_IT(&huart2, testBuffer, 10);
 
   txBuffer[0] = 0xFF;
@@ -352,12 +356,6 @@ int main(void)
   odom.dist.right = 0;
   odom.dist.left = 0;
 
-//  LRL_Motion_MotorTest(diff_robot);
-
-
-  // ####################   memory allocation    ####################
-
-
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -365,23 +363,19 @@ int main(void)
   while (1)
   {
 	  /*  main code
+	   *  for testing the motors use the following
+	  LRL_Motion_MotorTest(diff_robot)
+
+	   *  Other debugging
 	  motor_speed_left = rx_packet.data.left_velocity;
 	  motor_speed_right = rx_packet.data.right_velocity;
 	  if(pid_tim_flag == 1)
 	  {
 		LRL_Packet_RX(&rx_packet);
-		LRL_MPU6050_ReadAll(&odom);
-		LRL_HMC5883L_ReadHeading(&odom);
+		LRL_IMU_MPUReadAll(&odom);
+		LRL_IMU_MagReadHeading(&odom);
 		LRL_Odometry_ReadAngularSpeed(&odom);
-		LRL_MPU6050_ComplementaryFilter(&odom,0.01);
-//		LRL_Odometry_ReadAngularSpeed(&odom);
-//		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
-//		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
-//		LRL_Odometry_ReadAngularSpeed(&odom);
-
-//		sprintf(MSG,"data is :%d \t%d \r\n", odom.angle.x, odom.angle.y);
-//		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
-
+		LRL_IMU_ComplementaryFilter(&odom,0.01);
 		LRL_Packet_TX(&tx_packet, &odom);
 
 		LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
@@ -473,11 +467,13 @@ void SystemClock_Config(void)
 
 // ####################   Ultra Sonic Callback   ####################
 
-//void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-//{
-//	// TIMER Input Capture Callback
-//	LRL_US_TMR_IC_ISR(htim, us_front);
-//}
+/*
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
+{
+	// TIMER Input Capture Callback
+	LRL_US_TMR_IC_ISR(htim, us_front);
+}
+*/
 
 // ####################   UART Receive Callback   ####################
 
@@ -485,17 +481,17 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 	USART_TypeDef *inst = huart->Instance;
 	if(inst == USART2){
-		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, GPIO_PIN_SET);
+//		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, GPIO_PIN_SET);
 		rx_packet.rx_byteReady = 1;
 		serial_flag = 1;
 	}
-//	}
-//	else
-//	{
-//		HAL_UART_Receive_IT(&huart1,&input_speed, 1);
-//		flag_tx = 1;
-//	}
-
+	/* fot other usages of UART
+	else
+	{
+		HAL_UART_Receive_IT(&huart1,&input_speed, 1);
+		flag_tx = 1;
+	}
+	 */
 }
 
 // ####################   Timer To Creat 0.01 Delay Callback   ####################
@@ -508,25 +504,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim){
 
 }
 
-// ####################   I2C Callback   ####################
+// ####################   Timer Callback   ####################
 
-void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c){
-if(hi2c == &hi2c3)
-	{
-////		LRL_IMU_Read(&imu);
-//		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-//	LRL_GYRO_Read(&imu);
-	}
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
+{
+	// TIMER Overflow Callback
+	LRL_US_TMR_OVF_ISR(htim, us_front);
 }
-//void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
-//	//
-//}
-
-//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim)
-//{
-//	// TIMER Overflow Callback
-//	LRL_US_TMR_OVF_ISR(htim, us_front);
-//}
 
 /* USER CODE END 4 */
 

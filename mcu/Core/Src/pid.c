@@ -1,3 +1,10 @@
+/*
+ *  Author: Lenna Robotics Research Laboratory
+ *  	Autonomous Systems Research Branch
+ *		Iran University of Science and Technology
+ *	GitHub:	github.com/Lenna-Robotics-Research-Lab
+ */
+
 #include <mcu_config.h>
 #include "pid.h"
 #include "main.h"

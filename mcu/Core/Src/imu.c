@@ -2,7 +2,10 @@
  * imu.c
  *
  *  Created on: Sep 21, 2025
- *      Author: arian
+ *  Author: Lenna Robotics Research Laboratory
+ *  	Autonomous Systems Research Branch
+ *		Iran University of Science and Technology
+ *	GitHub:	github.com/Lenna-Robotics-Research-Lab
  */
 
 #include "imu.h"

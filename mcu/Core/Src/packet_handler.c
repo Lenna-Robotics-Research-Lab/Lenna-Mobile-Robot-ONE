@@ -2,7 +2,10 @@
  * packet_handler.c
  *
  *  Created on: Jun 5, 2024
- *      Author: arian
+ *  Author: Lenna Robotics Research Laboratory
+ *  	Autonomous Systems Research Branch
+ *		Iran University of Science and Technology
+ *	GitHub:	github.com/Lenna-Robotics-Research-Lab
  */
 #include "odometry.h"
 #include "packet_handler.h"

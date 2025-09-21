@@ -2,7 +2,10 @@
  * pid.h
  *
  *  Created on: Mar 24, 2024
- *      Author: arian
+ *  Author: Lenna Robotics Research Laboratory
+ *  	Autonomous Systems Research Branch
+ *		Iran University of Science and Technology
+ *	GitHub:	github.com/Lenna-Robotics-Research-Lab
  */
 
 #ifndef INC_PID_H_
