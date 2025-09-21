@@ -315,7 +315,7 @@ int main(void)
   LRL_PID_Init(&pid_motor_left,  1);
   LRL_PID_Init(&pid_motor_right, 1);
 
-  LRL_Encoder_Init(&odom);
+  LRL_Odometry_Init(&odom);
 
   LRL_MPU6050_Init(&odom);
 
@@ -366,12 +366,12 @@ int main(void)
 		LRL_Packet_RX(&rx_packet);
 		LRL_MPU6050_ReadAll(&odom);
 		LRL_HMC5883L_ReadHeading(&odom);
-		LRL_Encoder_ReadAngularSpeed(&odom);
+		LRL_Odometry_ReadAngularSpeed(&odom);
 		LRL_MPU6050_ComplementaryFilter(&odom,0.01);
-//		LRL_Encoder_ReadAngularSpeed(&odom);
+//		LRL_Odometry_ReadAngularSpeed(&odom);
 //		sprintf(MSG,"readings are : %d\t %d\t\n\r",odom.vel.left,odom.vel.right);
 //		HAL_UART_Transmit(&huart1, &MSG, sizeof(MSG), 10);
-//		LRL_Encoder_ReadAngularSpeed(&odom);
+//		LRL_Odometry_ReadAngularSpeed(&odom);
 
 //		sprintf(MSG,"data is :%d \t%d \r\n", odom.angle.x, odom.angle.y);
 //		HAL_UART_Transmit_IT(&huart1, MSG, sizeof(MSG));
@@ -399,7 +399,7 @@ int main(void)
 	  {
 		  LRL_MPU6050_ReadAll(&odom);
 		  LRL_HMC5883L_ReadHeading(&odom);
-		  LRL_Encoder_ReadAngularSpeed(&odom);
+		  LRL_Odometry_ReadAngularSpeed(&odom);
 		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
 		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
 		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
