@@ -346,7 +346,7 @@ int main(void)
   odom.dist.right = 0;
   odom.dist.left = 0;
 
-//  LRL_Motor_Test(diff_robot);
+//  LRL_Motion_MotorTest(diff_robot);
 
 
   // ####################   memory allocation    ####################

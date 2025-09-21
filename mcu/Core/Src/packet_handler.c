@@ -10,7 +10,7 @@
 #include "stdlib.h"
 #include "mcu_config.h"
 
-uint8_t _ack_data[10] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
+
 
 void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final )
 {
@@ -65,7 +65,7 @@ void LRL_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_
 
 void LRL_txPacket(packet_cfgType *packet,odom_cfgType *odom)
 {
-	unsigned short _tmp_crc;
+	unsigned short _tmp_crc = 0;
 
 	packet->buffer[0] = 0xFF;
 	packet->buffer[1] = 0xFF;
@@ -133,24 +133,26 @@ void LRL_rxPacket(packet_cfgType *packet)
 	if(packet->rx_byteReady)
 	{
 		packet->rx_byteReady = 0;
-		uint8_t total_pkt_len,remain_pkt_length;
+		uint8_t _total_pkt_len, _remain_pkt_length, _crc_packet_len;
 
-		unsigned short temp_crc;
+		unsigned short _temp_crc = 0;
 		// length of the package is sent in the third byte
-		total_pkt_len = packet->buffer[2] + 3;
+		_total_pkt_len = packet->buffer[2] + 3;
 
 //		HAL_UART_Receive_IT(packet->huart, &packet->buffer[packet->min_pkt_lenght], packet->buffer[2]);
-		remain_pkt_length = total_pkt_len - packet->min_pkt_lenght;
+		_remain_pkt_length = _total_pkt_len - packet->min_pkt_lenght;
 
-		if(remain_pkt_length)
+		if(_remain_pkt_length)
 		{
 //			HAL_UART_Transmit(&huart1, "HELLO", sizeof("HELLO"), 10);
-			HAL_UART_Receive(packet->huart, &packet->buffer[3], remain_pkt_length,1);
+			HAL_UART_Receive(packet->huart, &packet->buffer[3], _remain_pkt_length,1);
 		}
 
-		LRL_UpdateCRC(0, packet->buffer[0], total_pkt_len - 2 ,temp_crc);
+		_crc_packet_len = _total_pkt_len - 2;
 
-		if(temp_crc == ((packet->buffer[total_pkt_len - 2]<<8)|(packet->buffer[total_pkt_len - 1])))
+		LRL_UpdateCRC(0, packet->buffer, _crc_packet_len ,_temp_crc);
+
+		if(_temp_crc == ((packet->buffer[_total_pkt_len - 2]<<8)|(packet->buffer[_total_pkt_len - 1])))
 		{
 			packet->rx_dataValid = 1;
 		}
@@ -166,18 +168,18 @@ void LRL_rxPacket(packet_cfgType *packet)
 //		}
 
 //	    HAL_UART_Transmit(&huart1, packet->buffer, 3+packet->buffer[2],10);
-		memset(packet->buffer[0], 0, packet->max_pkt_lenght*sizeof(packet->buffer[0]));
+		memset(packet->buffer, 0, packet->max_pkt_lenght*sizeof(packet->buffer[0]));
 		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
-
 	}
 }
 
 void LRL_handShake(packet_cfgType *packet)
 {
+	uint8_t _ack_data[5] = {0x4C, 0x45, 0x4E, 0x4E, 0x41};
 	int _out = 0;
 	while(_out != 1)
 	{
-		HAL_UART_Transmit(packet->huart,&_ack_data,5,10);
+		HAL_UART_Transmit(packet->huart,_ack_data,5,10);
 		HAL_UART_Receive(packet->huart, &packet->ack, 1,10);
 		if(packet->ack == 0x45)
 		{
@@ -186,7 +188,8 @@ void LRL_handShake(packet_cfgType *packet)
 //		HAL_Delay(500);
 	}
 	// this is for connection establishment alert
-	HAL_UART_Transmit(&huart1,"The transmission has been established",sizeof("The transmission has been established"),10);
+	uint8_t _msg[] = "The transmission has been established";
+	HAL_UART_Transmit(&huart1,_msg,sizeof(_msg)-1,10);
 
 }
 
