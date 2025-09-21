@@ -1,1 +1,0 @@
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_bringup/share/lenna_bringup/cmake/lenna_bringupConfig-version.cmake

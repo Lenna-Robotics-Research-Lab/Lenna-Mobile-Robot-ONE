@@ -1,1 +1,0 @@
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_description/share/lenna_description/cmake/lenna_descriptionConfig-version.cmake

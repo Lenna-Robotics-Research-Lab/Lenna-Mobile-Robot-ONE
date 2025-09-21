@@ -1,1 +1,0 @@
-/home/lenna/repositories/Lenna-Mobile-Robot-ONE/lenna_ws/devel/.private/lenna_msgs/share/common-lisp/ros/lenna_msgs/msg/lenna_msgs-msg.asd

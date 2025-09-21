@@ -1,6 +1,0 @@
-../Core/Src/main.c:258:1:__io_putchar	16	static
-../Core/Src/main.c:273:5:main	88	static
-../Core/Src/main.c:400:6:SystemClock_Config	88	static
-../Core/Src/main.c:457:6:HAL_UART_RxCpltCallback	24	static
-../Core/Src/main.c:469:6:HAL_TIM_PeriodElapsedCallback	16	static
-../Core/Src/main.c:485:6:Error_Handler	4	static,ignoring_inline_asm

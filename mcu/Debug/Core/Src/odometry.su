@@ -1,2 +1,0 @@
-../Core/Src/odometry.c:28:6:LRL_Odometry_Init	16	static
-../Core/Src/odometry.c:54:6:LRL_Odometry_ReadAngularSpeed	56	static
