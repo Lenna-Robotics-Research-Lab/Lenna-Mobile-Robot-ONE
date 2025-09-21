@@ -1,0 +1,4 @@
+../Core/Src/i2c.c:31:6:MX_I2C1_Init	8	static
+../Core/Src/i2c.c:60:6:MX_I2C3_Init	8	static
+../Core/Src/i2c.c:89:6:HAL_I2C_MspInit	56	static
+../Core/Src/i2c.c:151:6:HAL_I2C_MspDeInit	16	static
