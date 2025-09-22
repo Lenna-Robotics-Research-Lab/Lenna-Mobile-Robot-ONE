@@ -1,9 +1,4 @@
 # Lenna Mobile Robot ONE - Embedded Software
-
-## General Information
-
-### Description
-
 This embedded software is the low-level control system for the **Lenna Mobile Robot ONE**, a differential drive robot. It runs on an **STM32F407VGTX** microcontroller and is responsible for interfacing with all the onboard hardware, executing motion commands, and providing sensor feedback to a higher-level control system (e.g., a computer running ROS).
 
 The core functionalities of this software include:
@@ -13,8 +8,7 @@ The core functionalities of this software include:
 -   **Obstacle Avoidance**: Reading data from HC-SR04 ultrasonic sensors to detect obstacles in the robot's path.
 -   **Communication**: Handling a custom serial communication protocol to receive velocity commands and send sensor data packets to a host computer.
 
----
-### Dependencies
+## Dependencies
 
 This project relies on the following libraries and modules:
 
@@ -27,8 +21,7 @@ This project relies on the following libraries and modules:
     -   `math.h`: For mathematical functions like `sqrtf` and `atan2f`.
     -   `string.h`: For memory manipulation functions like `memset`.
 
----
-### Coding Convention
+## Coding Convention
 
 The code follows a structured and well-documented convention to ensure readability and maintainability.
 
@@ -44,7 +37,7 @@ The code follows a structured and well-documented convention to ensure readabili
     -   Private functions, intended for use only within their own module, are sometimes prefixed with an underscore (e.g., `_LRL_IMU_MPUBypassEn`).
 -   **Configuration**: All hardware-related pin definitions and magic numbers are centralized in `mcu_config.h` and `main.h` to make it easier to adapt the code to different hardware configurations.
 
----
+
 ## Module Deep Dive
 
 ### Motion Control (`motion.c`/`motion.h`)
