@@ -9,7 +9,7 @@ from std_msgs.msg import Bool
 from serial_handler import SerialHandler
 from packet_handler import PacketHandler
 
-class HandshakeNode:
+class SerialHandshakeNode:
     def __init__(self):
         # ROS parameters for serial port
         self.DEVICENAME = rospy.get_param("~port", "/dev/ttyTHS1")
@@ -22,11 +22,16 @@ class HandshakeNode:
         # Open serial port
         self.serial.openPort()
 
+        # Initialize ROS node
+        rospy.init_node('node_handshake', anonymous=False)
+
         # Initialize ROS publisher
         self.hs_pub = rospy.Publisher('/handshake', Bool, queue_size=10)
 
         # Flag to check if handshake is done
         self.flag = False
+
+        rospy.loginfo("SerialHandshakeNode initialized! Waiting for serial handshake keyword...")
 
     def handle_handshake(self):
         """Main handshake logic."""
@@ -56,13 +61,8 @@ class HandshakeNode:
             
             rate.sleep()
 
-    def run(self):
-        """Run the ROS node and handle handshake."""
-        rospy.init_node('node_handshake', anonymous=False)
-        self.handle_handshake()
-
 
 if __name__ == "__main__":
-    # Instantiate and run the HandshakeNode
-    node = HandshakeNode()
-    node.run()
+    # Instantiate and run the SerialHandshakeNode
+    node = SerialHandshakeNode()
+    node.handle_handshake()
