@@ -126,7 +126,6 @@ Provides **utility functions and constants** for low-level communication and dat
 - **Instruction codes**
   - `INST_MOTION_CONTROL = 0x01` – Instruction for motor motion control.  
 
----
 
 ### Functions
 - **`combine2Word(a, b)`**  
@@ -392,12 +391,12 @@ A ROS node responsible for establishing communication over a serial connection. 
 
 ## Internal Structure
 
-### Class: `HandshakeNode`
+### Class: `SerialHandshakeNode`
 Main class that encapsulates the handshake logic.
 
 #### Functions:
 - **`__init__(self)`**  
-  Initializes ROS parameters, serial handler, packet handler, and publisher.  
+  Initializes ROS parameters, serial handler, packet handler, ROS node, and publisher.  
 
 - **`handle_handshake(self)`**  
   Main loop for handshake handling:  
@@ -405,9 +404,6 @@ Main class that encapsulates the handshake logic.
   - Verifies the handshake keyword.  
   - Sends confirmation byte if valid.  
   - Publishes handshake status (`True`/`False`).  
-
-- **`run(self)`**  
-  Initializes the ROS node and executes the handshake loop.  
 
 #### Main Variables:
 - `flag` – indicates whether handshake is completed (`True`) or pending (`False`).  
