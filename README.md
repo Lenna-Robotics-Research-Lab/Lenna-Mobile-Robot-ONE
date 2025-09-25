@@ -21,7 +21,7 @@ Lenna Autonomous Mobile Robot is designed for educational and research purposes.
     │
     ├── software/
     │   ├── embedded/            # Microcontroller code (C/C++)
-    │   ├── ros/                 # ROS packages, launch files, nodes
+    │   └──  ros/                 # ROS packages, launch files, nodes
     │
     ├── docs/
     │   ├── user_manual/         # Setup, architecture, coding style
