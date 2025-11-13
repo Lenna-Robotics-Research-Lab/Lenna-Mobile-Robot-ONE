@@ -143,4 +143,21 @@ Using the `lenna_navigation_stack` launch file, you can use the ROS NavStack (`m
 roslaunch lenna_bringup lenna_navigation_stack.launch
 ```
 
+## Citation
+If you use this code or build upon this work, please cite:
+
+```bibtex
+@INPROCEEDINGS{11213761,
+  author={Riazati, Erfan and Hajizadeh, Arian and Esmaeilzadeh, Seyed Majid},
+  booktitle={2025 33rd International Conference on Electrical Engineering (ICEE)}, 
+  title={Design and Implementation of a Modular ROS-Based Mobile Robot with Hierarchical Control}, 
+  year={2025},
+  volume={},
+  number={},
+  pages={1038-1043},
+  keywords={Visualization;Simultaneous localization and mapping;Navigation;Computer architecture;Real-time systems;Hardware;Mobile robots;Synchronization;Tuning;Testing;mobile robot;hierarchical control;distributed control;navigation;SLAM;ROS},
+  doi={10.1109/ICEE67339.2025.11213761}}
+
+```
+
 </div>
