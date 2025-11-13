@@ -1,0 +1,57 @@
+<launch>
+   <!-- Frame Params -->
+   <arg name="base_frame" default="base_link"/>
+   <arg name="odom_frame" default="odom"/>
+   <arg name="map_frame" default="map"/>
+
+   <!-- Hector Params -->
+   <arg name="map_size" default="511"/>
+   <arg name="map_start_x" default="0.5"/>
+   <arg name="map_start_y" default="0.5"/>
+
+   <arg name="scan_topic" default="/scan"/>
+
+   <include file="$(find lenna_bringup)/launch/lenna_teleop_keyboard.launch" />
+ 
+   <node pkg="hector_mapping" type="hector_mapping" name="hector_mapping" output="screen">
+      <!-- Frame names -->
+      <param name="map_frame" value="$(arg map_frame)" />
+      <param name="base_frame" value="$(arg base_frame)" />
+      <param name="odom_frame" value="$(arg odom_frame)" />
+
+      <!-- Tf use -->
+      <param name="use_tf_scan_transformation" value="true"/>
+      <param name="use_tf_pose_start_estimate" value="false"/>
+      <param name="pub_map_odom_transform" value="true"/>
+
+      <!-- we can use this odom as localization -->
+      <param name="pub_odometry" value="true"/>
+
+      <!-- Map size / start point -->
+      <param name="map_resolution" value="0.05"/>
+      <param name="map_size" value="$(arg map_size)"/>
+      <param name="map_size_x" value="$(arg map_size)"/>
+      <param name="map_size_y" value="$(arg map_size)"/>
+      <!-- put map origin to grid center full range is [0, 1] X [0, 1] -->
+      <param name="map_start_x" value="$(arg map_start_x)"/>
+      <param name="map_start_y" value="$(arg map_start_y)" />
+      <param name="map_multi_res_levels" value="4" />
+
+      <!-- Map update parameters -->
+      <param name="update_factor_free" value="0.4"/>
+      <param name="update_factor_occupied" value="0.9" />
+      <param name="map_update_distance_thresh" value="0.2"/>
+      <param name="map_update_angle_thresh" value="0.9" />
+      <param name="laser_z_min_value" value = "-1.0" />
+      <param name="laser_z_max_value" value = "1.0" />
+      <param name="laser_max_dist" value = "90.0" />
+      <param name="laser_min_dist" value = "0.29" />
+      <param name="map_pub_period" value = "0.025" />
+
+      <!-- Advertising config -->
+      <param name="advertise_map_service" value="true"/>
+      <param name="scan_subscriber_queue_size" value="5"/>
+      <param name="scan_topic" value="$(arg scan_topic)"/>
+   </node>
+
+</launch>
