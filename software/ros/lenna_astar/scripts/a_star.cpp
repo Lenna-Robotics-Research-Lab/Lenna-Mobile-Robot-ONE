@@ -48,12 +48,13 @@ void AStarPlanner::setCell(int x, int y, int value) {
 //     return std::abs(x1 - x2) + std::abs(y1 - y2);
 // }
 
-// for 8 directional movement
+// for 8 directional movement Ecludian
 float AStarPlanner::heuristic(int x1, int y1, int x2, int y2) const {
-    int dx = std::abs(x1 - x2);
-    int dy = std::abs(y1 - y2);
-    return std::max(dx, dy);  // Chebyshev distance
+    float dx = static_cast<float>(x1 - x2);
+    float dy = static_cast<float>(y1 - y2);
+    return std::sqrt(dx*dx + dy*dy);
 }
+
 
 
 bool AStarPlanner::isValid(int x, int y) const {
@@ -106,7 +107,7 @@ std::vector<std::pair<int, int> > AStarPlanner::findPath(int start_x, int start_
 
         closedSet.insert(currentKey);
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             int newX = current.x + dx_[i];
             int newY = current.y + dy_[i];
 
@@ -122,7 +123,7 @@ std::vector<std::pair<int, int> > AStarPlanner::findPath(int start_x, int start_
             // for 8 directional movement
             int dx_move = std::abs(newX - current.x);
             int dy_move = std::abs(newY - current.y);
-            float moveCost = (dx_move == 1 && dy_move == 1) ? 0.9 : 1.0f;
+            float moveCost = (dx_move == 1 && dy_move == 1) ? std::sqrt(2.0f) : 1.0f; // sqrt instead of 9
 
             float tentativeG = current.g + moveCost;
 
@@ -206,4 +207,3 @@ std::vector<std::pair<int, int> > AStarPlanner::findPath(int start_x, int start_
     
 //     return smoothed;
 // }
-
