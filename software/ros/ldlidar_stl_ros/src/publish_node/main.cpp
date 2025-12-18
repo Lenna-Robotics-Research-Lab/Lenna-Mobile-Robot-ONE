@@ -187,7 +187,7 @@ void  ToLaserscanMessagePublish(ldlidar::Points2D& src, ldlidar::LiPkg* commpkg,
     }
     lidarpub.publish(output);
     end_scan_time = start_scan_time;
-    ROS_INFO("[ldrobot] pub lidar data");
+    // ROS_INFO("[ldrobot] pub lidar data");
   } 
 }
 
