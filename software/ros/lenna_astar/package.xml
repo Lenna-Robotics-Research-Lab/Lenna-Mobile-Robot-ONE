@@ -1,26 +1,27 @@
 <?xml version="1.0"?>
 <package format="2">
   <name>lenna_astar</name>
-  <version>0.0.1</version>
-  <description>A* pathfinding package for mobile robots using ROS Melodic</description>
+  <version>1.0.0</version>
+  <description>Online A* Path Planner Implementation</description>
 
   <maintainer email="your_email@example.com">Your Name</maintainer>
-  <license>MIT</license>
+  <license>TODO</license>
 
   <url type="website">http://wiki.ros.org/astar_planner</url>
 
   <author email="your_email@example.com">Your Name</author>
 
   <buildtool_depend>catkin</buildtool_depend>
+
   <build_depend>roscpp</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
   <build_depend>nav_msgs</build_depend>
   <build_depend>tf</build_depend>
   
-  <exec_depend>tf</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>tf</exec_depend>
 </package>

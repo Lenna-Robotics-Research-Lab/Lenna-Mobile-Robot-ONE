@@ -16,8 +16,8 @@ catkin_package(
 
 include_directories(include ${catkin_INCLUDE_DIRS})
 
-add_library(astar_lib scripts/a_star.cpp)  # Note: change to src/ if file is there
+add_library(astar_lib src/a_star.cpp)
 target_link_libraries(astar_lib ${catkin_LIBRARIES})
 
-add_executable(astar_node scripts/astar_node.cpp)
-target_link_libraries(astar_node astar_lib ${catkin_LIBRARIES})
+add_executable(online_astar_node src/online_astar_node.cpp)
+target_link_libraries(online_astar_node astar_lib ${catkin_LIBRARIES})

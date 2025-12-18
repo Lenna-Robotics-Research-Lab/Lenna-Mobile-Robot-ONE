@@ -1,7 +1,4 @@
 <?xml version="1.0"?>
 <launch>
-  <!-- A* Planner Node -->
-  <node pkg="lenna_astar" type="online_astar_node" name="online_astar_planner" output="screen">
-    <!-- Add any parameters here -->
-  </node>
+  <node pkg="lenna_astar" type="online_astar_node" name="online_astar_planner" output="screen"/>
 </launch>
