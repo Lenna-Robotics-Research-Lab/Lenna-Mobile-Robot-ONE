@@ -4,6 +4,7 @@ import rospy
 from geometry_msgs.msg import Twist
 from std_msgs.msg import Bool
 import numpy as np
+import time
 
 from serial_handler import SerialHandler
 from packet_handler import PacketHandler
@@ -15,6 +16,7 @@ class SerialCmdVelNode:
         # ROS parameters for serial port
         self.DEVICENAME = rospy.get_param("~port", "/dev/ttyTHS1")
         self.BAUDRATE = rospy.get_param("~baudrate", 115200)
+        self.WAIT_TIME = rospy.get_param("~ser_wait_time", 0.01)
 
         # Initialize serial communication and robot interfaces
         self.serial = SerialHandler(self.DEVICENAME, self.BAUDRATE)
@@ -68,7 +70,7 @@ class SerialCmdVelNode:
 
 
         # Send motor velocity commands over serial
-        self.lenna.setMotorSpeed(vel_left, vel_right)
+        self.lenna.setMotorSpeed(vel_left, vel_right, self.WAIT_TIME)
 
     def handshake_callback(self, msg: Bool):
         """Callback for handshake status updates."""
