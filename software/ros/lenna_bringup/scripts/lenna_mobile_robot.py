@@ -6,6 +6,7 @@ from packet_handler import *
 from field_ops import *
 
 import numpy as np
+import time
 
 class LennaMobileRobot():
     def __init__(self, protocol):
@@ -35,8 +36,10 @@ class LennaMobileRobot():
         
         return [qx, qy, qz, qw]
 
-    def setMotorSpeed(self, motor_speed_left, motor_speed_right):
-        return self.protocol.txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])
+    def setMotorSpeed(self, motor_speed_left, motor_speed_right, wait_time=0.0):
+        COMM_STATUS = self.protocol.    txPacket(INST_MOTION_CONTROL, [motor_speed_left, motor_speed_right])
+        time.sleep(wait_time)
+        return COMM_STATUS
 
     def getOdometry(self, timeout=100):
         data, length, result = self.protocol.rxPacket(timeout)
