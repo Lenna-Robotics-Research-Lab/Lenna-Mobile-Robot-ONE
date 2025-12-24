@@ -23,8 +23,6 @@ private:
     int goal_x_;
     int goal_y_;
 
-
-    int inflation_radius_cells_;
     float map_resolution_;
     int map_width_;
     int map_height_;
@@ -36,11 +34,11 @@ private:
 public:
     AStarNode() : map_received_(false), map_resolution_(0.05),
                   map_width_(100), map_height_(100),
-                  inflation_radius_cells_(2), goal_received_(false) {  
+                  goal_received_(false) {  
         // Initialize planner with default grid size
         planner_ = new AStarPlanner(map_width_, map_height_);
 
-        map_sub_ = nh_.subscribe("/map", 1, &AStarNode::mapCallback, this);
+        map_sub_ = nh_.subscribe("/inflated_map", 1, &AStarNode::mapCallback, this);
         goal_sub_ = nh_.subscribe("/move_base_simple/goal", 1, &AStarNode::goalCallback, this);
         path_pub_ = nh_.advertise<nav_msgs::Path>("/astar_path", 1);
 
@@ -88,30 +86,7 @@ public:
             }
         }
 
-        // ===== Inflate obstacles =====
-        std::vector<std::vector<int>> inflated_grid = grid;  // start from original
-
-        for (int y = 0; y < map_height_; ++y) {
-            for (int x = 0; x < map_width_; ++x) {
-                if (grid[y][x] == 1) {
-                    // Mark neighbors within inflation_radius_cells_ as obstacles
-                    for (int dy = -inflation_radius_cells_; dy <= inflation_radius_cells_; ++dy) {
-                        for (int dx = -inflation_radius_cells_; dx <= inflation_radius_cells_; ++dx) {
-                            int nx = x + dx;
-                            int ny = y + dy;
-                            if (nx < 0 || nx >= map_width_ || ny < 0 || ny >= map_height_)
-                                continue;
-                            // Optional: use circular inflation instead of square
-                            if (dx*dx + dy*dy <= inflation_radius_cells_ * inflation_radius_cells_) {
-                                inflated_grid[ny][nx] = 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        planner_->setGrid(inflated_grid);
+        planner_->setGrid(grid);
         map_received_ = true;
     }
 
@@ -185,9 +160,7 @@ public:
 
 int main(int argc, char** argv) {
     ros::init(argc, argv, "astar_planner");
-
     AStarNode astar_node;
-
     ros::spin();
 
     return 0;
