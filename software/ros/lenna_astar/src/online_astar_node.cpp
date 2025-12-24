@@ -31,18 +31,35 @@ private:
 
     tf::TransformListener tf_listener_;
 
+    std::string map_topic_;
+    std::string goal_topic_;
+    std::string path_topic_;
+    double plan_frequency_;
+    std::string localization_frame_;
+    std::string global_frame_;
+    int occupied_threshold_;
+
 public:
     AStarNode() : map_received_(false), map_resolution_(0.05),
                   map_width_(100), map_height_(100),
                   goal_received_(false) {  
+        // Load ROS parameters (defaults match existing hardcoded values)
+        nh_.param<std::string>("map_topic", map_topic_, "/inflated_map");
+        nh_.param<std::string>("goal_topic", goal_topic_, "/move_base_simple/goal");
+        nh_.param<std::string>("path_topic", path_topic_, "/astar_path");
+        nh_.param<double>("plan_frequency", plan_frequency_, 0.1);
+        nh_.param<std::string>("localization_frame", localization_frame_, "scanmatcher_frame");
+        nh_.param<std::string>("global_frame", global_frame_, "/map");
+        nh_.param<int>("occupied_threshold",     occupied_threshold_,     50);
+
         // Initialize planner with default grid size
         planner_ = new AStarPlanner(map_width_, map_height_);
 
-        map_sub_ = nh_.subscribe("/inflated_map", 1, &AStarNode::mapCallback, this);
-        goal_sub_ = nh_.subscribe("/move_base_simple/goal", 1, &AStarNode::goalCallback, this);
-        path_pub_ = nh_.advertise<nav_msgs::Path>("/astar_path", 1);
+        map_sub_ = nh_.subscribe(map_topic_, 1, &AStarNode::mapCallback, this);
+        goal_sub_ = nh_.subscribe(goal_topic_, 1, &AStarNode::goalCallback, this);
+        path_pub_ = nh_.advertise<nav_msgs::Path>(path_topic_, 1);
 
-        plan_timer_ = nh_.createTimer(ros::Duration(0.1), &AStarNode::planTimerCb, this);
+        plan_timer_ = nh_.createTimer(ros::Duration(plan_frequency_), &AStarNode::planTimerCb, this);
 
         ROS_INFO("A* Planner Node Initialized!");
     }
@@ -55,12 +72,12 @@ public:
     bool updateRobotPosition() {
         tf::StampedTransform transform;
         try {
-            tf_listener_.lookupTransform( "/map", "scanmatcher_frame", 
+            tf_listener_.lookupTransform(global_frame_, localization_frame_,
                                         ros::Time(0), transform);
-            
+           
             robot_x_ = transform.getOrigin().x();
             robot_y_ = transform.getOrigin().y();
-            
+           
             ROS_DEBUG("Robot position from TF: (%.2f, %.2f)", robot_x_, robot_y_);
             return true;
         } catch (tf::TransformException &ex) {
@@ -81,8 +98,8 @@ public:
         for (int y = 0; y < map_height_; y++) {
             for (int x = 0; x < map_width_; x++) {
                 int index = y * map_width_ + x;
-                // Treat cells with value > 50 as obstacles (1), else free (0)
-                grid[y][x] = (msg->data[index] > 50) ? 1 : 0;
+                // Treat cells with value > "occupied_threshold_" as obstacles (1), else free (0)
+                grid[y][x] = (msg->data[index] > occupied_threshold_) ? 1 : 0;
             }
         }
 
