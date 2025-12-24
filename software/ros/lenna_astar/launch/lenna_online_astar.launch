@@ -1,4 +1,21 @@
 <?xml version="1.0"?>
 <launch>
-  <node pkg="lenna_astar" type="online_astar_node" name="online_astar_planner" output="screen"/>
+  <node pkg="lenna_astar" type="map_inflator_node" name="map_inflator_node" output="screen">
+    <param name="input_map_topic" value="/map"/>
+    <param name="output_map_topic" value="/inflated_map"/>
+    <param name="inflation_radius_cells" value="1"/>
+    <param name="occupied_threshold" value="50"/>
+    <param name="preserve_unknown" value="true"/>
+    <param name="use_circular_inflation" value="true"/>
+  </node>
+
+  <node pkg="lenna_astar" type="online_astar_node" name="online_astar_planner" output="screen"> 
+    <param name="map_topic" value="/inflated_map"/>
+    <param name="goal_topic" value="/move_base_simple/goal"/>
+    <param name="path_topic" value="/astar_path"/>
+    <param name="plan_frequency" value="0.1"/>
+    <param name="localization_frame" value="scanmatcher_frame"/>
+    <param name="global_frame" value="/map"/>
+    <param name="occupied_threshold" value="50"/>
+  </node>
 </launch>
