@@ -21,3 +21,6 @@ target_link_libraries(astar_lib ${catkin_LIBRARIES})
 
 add_executable(online_astar_node src/online_astar_node.cpp)
 target_link_libraries(online_astar_node astar_lib ${catkin_LIBRARIES})
+
+add_executable(map_inflator_node src/map_inflator_node.cpp)
+target_link_libraries(map_inflator_node astar_lib ${catkin_LIBRARIES})
