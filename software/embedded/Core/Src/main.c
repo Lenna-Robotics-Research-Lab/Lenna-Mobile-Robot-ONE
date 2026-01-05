@@ -226,14 +226,14 @@ pid_cfgType pid_motor_right =
 
 packet_cfgType rx_packet=
 {
-	&huart2,
+	&huart1,
 	3,
 	144,
 };
 
 packet_cfgType tx_packet=
 {
-	&huart2,
+	&huart1,
 	3,
 	144,
 };

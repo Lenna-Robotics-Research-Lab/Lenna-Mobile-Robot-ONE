@@ -47,7 +47,8 @@ void LRL_Packet_Handshake(packet_cfgType *packet)
 	int _out = 0;
 	while(_out != 1)
 	{
-		HAL_UART_Transmit(packet->huart, _ack_data, 5, 10);
+		HAL_UART_Transmit_IT(packet->huart, _ack_data, 5);
+		HAL_Delay(500);
 		HAL_UART_Receive(packet->huart, &packet->ack, 1, 10);
 		if(packet->ack == 0x45)
 		{
