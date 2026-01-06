@@ -67,7 +67,7 @@ uint8_t min_len_packet = 8;
 uint8_t max_len_packet = 32;
 
 //protocol Settings
-uint8_t protocol_data[144] = {0};
+//uint8_t protocol_data[144] = {0};
 bool flag_uart_cb = 0;
 bool flag_remain_packet = 1;
 
@@ -102,7 +102,7 @@ uint8_t flag_tx = 0, pid_tim_flag = 0, dir_flag = 0;
 uint8_t serial_flag = 0;
 
 
-
+uint8_t test_flag = 0;
 
 
 // ####################   Motor struct Value Setting   ###################
@@ -226,9 +226,16 @@ pid_cfgType pid_motor_right =
 
 packet_cfgType rx_packet=
 {
-	&huart1,
-	3,
-	144,
+	.huart 				= &huart1,
+	.min_pkt_lenght 	= 3,
+	.max_pkt_lenght		= 144,
+};
+
+packet_cfgType protocol_rx=
+{
+	.huart 				= &huart1,
+	.min_pkt_lenght 	= 5,
+	.max_pkt_lenght		= 144,
 };
 
 packet_cfgType tx_packet=
@@ -243,7 +250,10 @@ int16_t val_y;
 int16_t val_z;
 float val_heading;
 
-uint8_t testBuffer[10];
+uint8_t testBuffer[10]; // buffer for using test uart packet
+
+//uint8_t protocol_buffer[256]; // the buffer used for the protocol
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -336,6 +346,7 @@ int main(void)
 
   int16_t motor_speed_left = 0, motor_speed_right = 0;
 
+  /* Testing purposes
   for(int c = 0; c< 3 ; c++)
   {
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
@@ -343,12 +354,15 @@ int main(void)
 	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
 	  HAL_Delay(250);
   }
+  */
 
   // Handshake
   LRL_Packet_Handshake(&rx_packet);
 
   // Communication start after handshake
-  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
+  //  HAL_UART_Receive_IT(&huart1, testBuffer, 4); //for initializing the uart interrupt for test
+
+  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
 
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
@@ -363,27 +377,39 @@ int main(void)
   while (1)
   {
 
-	  if(serial_flag == 1)
+///* Run The Following for testing motors
+	  if(test_flag == 1)
 	  {
-		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
-	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
-		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
-		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
 
-	  	  serial_flag = 0;
-	  }
-	  if(pid_tim_flag == 1)
-	  {
-		  LRL_IMU_MPUReadAll(&imu);
-		  LRL_IMU_MagReadHeading(&imu);
-		  LRL_Odometry_ReadAngularSpeed(&odom);
-		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
-		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
 
-		  LRL_Packet_TX(&tx_packet, &odom, &imu);
-		  pid_tim_flag = 0;
+
+//
+//	  	  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
+	  	  HAL_UART_Transmit(&huart1, protocol_rx.buffer, protocol_rx.buffer[2] + 3 ,1);
+	  	  memset(protocol_rx.buffer, 0, sizeof(protocol_rx.buffer));
+	  	  test_flag = 0;
+
+
+
+
+//		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
+//		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
+
+
 	  }
+// */
+//	  if(pid_tim_flag == 1)
+//	  {
+//		  LRL_IMU_MPUReadAll(&imu);
+//		  LRL_IMU_MagReadHeading(&imu);
+//		  LRL_Odometry_ReadAngularSpeed(&odom);
+//		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
+//		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
+//		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+//
+//		  LRL_Packet_TX(&tx_packet, &odom, &imu);
+//		  pid_tim_flag = 0;
+//	  }
 
     /* USER CODE END WHILE */
 
@@ -455,13 +481,48 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 // ####################   UART Receive Callback   ####################
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	if(huart == protocol_rx.huart)
+	{
+//		HAL_UART_Transmit(protocol_rx.huart, "HERE", sizeof("HERE"),10);
+		if(protocol_rx.buffer[1] == 0x00 && test_flag == 0)
+		{
+            uint8_t full_length = protocol_rx.buffer[2] + 3;
+			test_flag = 1;
+            // If we only received the header, get the rest
+            if(full_length > protocol_rx.min_pkt_lenght)
+            {
+                HAL_UART_Receive_IT(protocol_rx.huart,
+                                   &protocol_rx.buffer[protocol_rx.min_pkt_lenght],
+                                   full_length - protocol_rx.min_pkt_lenght);
+            }
+            else
+            {
+                // Full packet already received
+                test_flag = 1;
+                HAL_UART_Transmit(protocol_rx.huart, "HERE1", sizeof("HERE1"), 10);
 
+                // Re-arm for next packet header
+                HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer, protocol_rx.min_pkt_lenght);
+            }
+        }
+        else
+        {
+            // Second stage: full packet received or invalid header
+            test_flag = 1;
+            HAL_UART_Transmit(protocol_rx.huart, "HERE2", sizeof("HERE2"), 10);
+
+            // CRITICAL: Re-arm for next packet header
+            HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer, protocol_rx.min_pkt_lenght);
+		}
+	}
+/* for jetson test
 	USART_TypeDef *inst = huart->Instance;
 	if(inst == USART2){
 //		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, GPIO_PIN_SET);
 		rx_packet.rx_byteReady = 1;
 		serial_flag = 1;
 	}
+*/
 }
 
 // ####################   Timer To Creat 0.01 Delay Callback   ####################
