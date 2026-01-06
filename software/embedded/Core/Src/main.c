@@ -378,7 +378,7 @@ int main(void)
   {
 
 ///* Run The Following for testing motors
-	  if(test_flag == 1)
+	  if(protocol_rx.dataValid == 1)
 	  {
 
 
@@ -387,7 +387,7 @@ int main(void)
 //	  	  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
 	  	  HAL_UART_Transmit(&huart1, protocol_rx.buffer, protocol_rx.buffer[2] + 3 ,1);
 	  	  memset(protocol_rx.buffer, 0, sizeof(protocol_rx.buffer));
-	  	  test_flag = 0;
+	  	  protocol_rx.dataValid = 0;
 
 
 
@@ -484,10 +484,10 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart == protocol_rx.huart)
 	{
 //		HAL_UART_Transmit(protocol_rx.huart, "HERE", sizeof("HERE"),10);
-		if(protocol_rx.buffer[1] == 0x00 && test_flag == 0)
+		if(protocol_rx.buffer[1] == 0x00 && protocol_rx.dataValid == 0)
 		{
             uint8_t full_length = protocol_rx.buffer[2] + 3;
-			test_flag = 1;
+			protocol_rx.dataValid = 1;
             // If we only received the header, get the rest
             if(full_length > protocol_rx.min_pkt_lenght)
             {
@@ -498,7 +498,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
             else
             {
                 // Full packet already received
-                test_flag = 1;
+                protocol_rx.dataValid = 1;
                 HAL_UART_Transmit(protocol_rx.huart, "HERE1", sizeof("HERE1"), 10);
 
                 // Re-arm for next packet header
@@ -508,7 +508,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
         else
         {
             // Second stage: full packet received or invalid header
-            test_flag = 1;
+            protocol_rx.dataValid = 1;
             HAL_UART_Transmit(protocol_rx.huart, "HERE2", sizeof("HERE2"), 10);
 
             // CRITICAL: Re-arm for next packet header
