@@ -205,8 +205,8 @@ void LRL_Packet_RX(packet_cfgType *packet)
 		// Extract control data if the packet is valid.
 		if(packet->dataValid)
 		{
-			packet->data.left_velocity = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
-			packet->data.right_velocity = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
+			packet->vel_data.left_velocity = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
+			packet->vel_data.right_velocity = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
 		}
 
 		// Clear the buffer and re-arm the UART receive interrupt for the next packet.
@@ -214,3 +214,39 @@ void LRL_Packet_RX(packet_cfgType *packet)
 		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
 	}
 }
+
+void LRL_Protocol_RX(packet_cfgType *packet)
+{
+	if(packet->buffer[1] == 0x00)
+	{
+		uint8_t full_length = packet->buffer[2] + 3;
+		packet->byteReady = 1;
+		// If we only received the header, get the rest
+		if(full_length > packet->min_pkt_lenght)
+		{
+			HAL_UART_Receive_IT(packet->huart,
+							   &packet->buffer[packet->min_pkt_lenght],
+							   full_length - packet->min_pkt_lenght);
+		}
+		else
+		{
+			packet->byteReady = 1;
+			memcpy(packet->data,
+				 &packet->buffer[packet->min_pkt_lenght],
+				 packet->buffer[2]); // Copy remaining bytes
+
+			// Re-arm for next packet header
+			HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
+		}
+	}
+	else
+	{
+		// Second stage: full packet received or invalid header
+		packet->byteReady = 1;
+//            HAL_UART_Transmit(packet->huart, "HERE2", sizeof("HERE2"), 10);
+
+		// CRITICAL: Re-arm for next packet header
+		HAL_UART_Receive_IT(packet->huart, packet->buffer, packet->min_pkt_lenght);
+	}
+}
+

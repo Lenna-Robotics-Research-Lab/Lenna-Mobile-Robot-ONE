@@ -28,6 +28,7 @@
 ///@{
 #define MIN_PACKET_LENGTH	3	/**< Minimum expected packet length. */
 #define MAX_PACKET_LENGTH	144	/**< Maximum buffer size for a packet. */
+#define MAX_DATA_LENGTH		100
 ///@}
 
 /* Type Definitions ----------------------------------------------------------*/
@@ -40,7 +41,7 @@ typedef struct
 {
 	int16_t right_velocity;	/**< Desired right wheel velocity. */
 	int16_t left_velocity;	/**< Desired left wheel velocity. */
-} packet_data;
+} packet_vel_data;
 
 /**
  * @struct packet_cfgType
@@ -48,14 +49,15 @@ typedef struct
  */
 typedef struct
 {
-	UART_HandleTypeDef *huart;		/**< Pointer to the UART handle for communication. */
-	uint8_t				min_pkt_lenght;	/**< Minimum packet length. */
-	uint8_t				max_pkt_lenght;	/**< Maximum packet length. */
-	uint8_t				dataValid;	/**< Flag to indicate if received data is valid (CRC passed). */
-	uint8_t				byteReady;	/**< Flag to indicate a new byte has been received. */
+	UART_HandleTypeDef *huart;						/**< Pointer to the UART handle for communication. */
+	uint8_t				min_pkt_lenght;				/**< Minimum packet length. */
+	uint8_t				max_pkt_lenght;				/**< Maximum packet length. */
+	uint8_t				dataValid;					/**< Flag to indicate if received data is valid (CRC passed). */
+	uint8_t				byteReady;					/**< Flag to indicate a new byte has been received. */
 	uint8_t 			buffer[MAX_PACKET_LENGTH];	/**< Buffer to store incoming and outgoing data. */
-	uint8_t				ack;			/**< Acknowledgment byte for handshake. */
-	packet_data			data;			/**< Parsed data from a received packet. */
+	uint8_t				ack;						/**< Acknowledgment byte for handshake. */
+	packet_vel_data		vel_data;					/**< Parsed velocity data from a received packet. */
+	uint8_t				data[MAX_DATA_LENGTH];						/**< data packet inside the buffer >*/
 } packet_cfgType;
 
 /* Function Prototypes -------------------------------------------------------*/
@@ -65,6 +67,12 @@ typedef struct
  * @param packet Pointer to the packet configuration structure.
  */
 void LRL_Packet_Init(packet_cfgType *packet);
+
+/**
+ * @brief Callback for the protocol.
+ * @param packet Pointer to the packet configuration structure.
+ */
+void LRL_Protocol_RX(packet_cfgType *packet);
 
 /**
  * @brief Performs a handshake to establish a connection.
