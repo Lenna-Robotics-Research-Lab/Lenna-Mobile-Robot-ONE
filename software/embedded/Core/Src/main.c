@@ -376,26 +376,31 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-
-///* Run The Following for testing motors
-	  if(protocol_rx.dataValid == 1)
+	  if(pid_tim_flag == 1)
 	  {
+		  if(protocol_rx.byteReady == 1)
+		  {
+			  uint8_t _temp_buff[144];
+			  /*
+			   * CAUTION : The UART code only works for frequencies that would not
+			   * let the buffer update inside the loop. This code is designed for
+			   * frequency of 100 Hz but it would also work for 1KHz. Higher frequencies
+			   * have not been tested and may cause loss of packet.
+			   */
+			  memcpy(&_temp_buff, &protocol_rx.buffer, protocol_rx.buffer[2] + 3);
 
+			  for(int i = 0; i < _temp_buff[2]; i++){
+				  protocol_rx.data[i] = _temp_buff[3 + i];
+			  }
+	//	  	  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
+			  HAL_UART_Transmit(&huart1, protocol_rx.buffer, protocol_rx.buffer[2] + 3,1);
+			  HAL_UART_Transmit(&huart1, protocol_rx.data, protocol_rx.buffer[2],1);
+			  HAL_UART_Transmit(&huart1, _temp_buff, protocol_rx.buffer[2] + 3,1);
+	//	  	  memset(protocol_rx.buffer, 0, sizeof(protocol_rx.buffer));
+			  protocol_rx.byteReady = 0;
 
-
-//
-//	  	  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
-	  	  HAL_UART_Transmit(&huart1, protocol_rx.buffer, protocol_rx.buffer[2] + 3 ,1);
-	  	  memset(protocol_rx.buffer, 0, sizeof(protocol_rx.buffer));
-	  	  protocol_rx.dataValid = 0;
-
-
-
-
-//		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
-//		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
-
-
+		  }
+		 pid_tim_flag = 0;
 	  }
 // */
 //	  if(pid_tim_flag == 1)
@@ -481,40 +486,15 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 // ####################   UART Receive Callback   ####################
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+
 	if(huart == protocol_rx.huart)
 	{
-//		HAL_UART_Transmit(protocol_rx.huart, "HERE", sizeof("HERE"),10);
-		if(protocol_rx.buffer[1] == 0x00 && protocol_rx.dataValid == 0)
+		if(protocol_rx.byteReady == 0)
 		{
-            uint8_t full_length = protocol_rx.buffer[2] + 3;
-			protocol_rx.dataValid = 1;
-            // If we only received the header, get the rest
-            if(full_length > protocol_rx.min_pkt_lenght)
-            {
-                HAL_UART_Receive_IT(protocol_rx.huart,
-                                   &protocol_rx.buffer[protocol_rx.min_pkt_lenght],
-                                   full_length - protocol_rx.min_pkt_lenght);
-            }
-            else
-            {
-                // Full packet already received
-                protocol_rx.dataValid = 1;
-                HAL_UART_Transmit(protocol_rx.huart, "HERE1", sizeof("HERE1"), 10);
-
-                // Re-arm for next packet header
-                HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer, protocol_rx.min_pkt_lenght);
-            }
-        }
-        else
-        {
-            // Second stage: full packet received or invalid header
-            protocol_rx.dataValid = 1;
-            HAL_UART_Transmit(protocol_rx.huart, "HERE2", sizeof("HERE2"), 10);
-
-            // CRITICAL: Re-arm for next packet header
-            HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer, protocol_rx.min_pkt_lenght);
+			LRL_Protocol_RX(&protocol_rx);
 		}
 	}
+
 /* for jetson test
 	USART_TypeDef *inst = huart->Instance;
 	if(inst == USART2){
