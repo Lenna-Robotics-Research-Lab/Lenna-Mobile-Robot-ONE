@@ -51,8 +51,8 @@ typedef struct
 	UART_HandleTypeDef *huart;		/**< Pointer to the UART handle for communication. */
 	uint8_t				min_pkt_lenght;	/**< Minimum packet length. */
 	uint8_t				max_pkt_lenght;	/**< Maximum packet length. */
-	uint8_t				rx_dataValid;	/**< Flag to indicate if received data is valid (CRC passed). */
-	uint8_t				rx_byteReady;	/**< Flag to indicate a new byte has been received. */
+	uint8_t				dataValid;	/**< Flag to indicate if received data is valid (CRC passed). */
+	uint8_t				byteReady;	/**< Flag to indicate a new byte has been received. */
 	uint8_t 			buffer[MAX_PACKET_LENGTH];	/**< Buffer to store incoming and outgoing data. */
 	uint8_t				ack;			/**< Acknowledgment byte for handshake. */
 	packet_data			data;			/**< Parsed data from a received packet. */

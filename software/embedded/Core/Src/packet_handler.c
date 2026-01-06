@@ -173,9 +173,9 @@ void LRL_Packet_TX(packet_cfgType *packet, odom_cfgType *odom, imu_statetype *im
  */
 void LRL_Packet_RX(packet_cfgType *packet)
 {
-	if(packet->rx_byteReady)
+	if(packet->byteReady)
 	{
-		packet->rx_byteReady = 0;
+		packet->byteReady = 0;
 		uint8_t _total_pkt_len, _remain_pkt_length, _crc_packet_len;
 		unsigned short _temp_crc = 0;
 
@@ -195,15 +195,15 @@ void LRL_Packet_RX(packet_cfgType *packet)
 
 		if(_temp_crc == ((packet->buffer[_total_pkt_len - 2]<<8)|(packet->buffer[_total_pkt_len - 1])))
 		{
-			packet->rx_dataValid = 1;
+			packet->dataValid = 1;
 		}
 		else
 		{
-			packet->rx_dataValid = 0;
+			packet->dataValid = 0;
 		}
 
 		// Extract control data if the packet is valid.
-		if(packet->rx_dataValid)
+		if(packet->dataValid)
 		{
 			packet->data.left_velocity = (int16_t)((packet->buffer[4] << 8) | packet->buffer[5]);
 			packet->data.right_velocity = (int16_t)((packet->buffer[6] << 8) | packet->buffer[7]);
