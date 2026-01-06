@@ -3,3 +3,4 @@
 ../Core/Src/packet_handler.c:77:6:LRL_Packet_UpdateCRC	32	static
 ../Core/Src/packet_handler.c:106:6:LRL_Packet_TX	32	static
 ../Core/Src/packet_handler.c:174:6:LRL_Packet_RX	24	static
+../Core/Src/packet_handler.c:218:6:LRL_Protocol_RX	24	static
