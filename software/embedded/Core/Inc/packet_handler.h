@@ -58,6 +58,7 @@ typedef struct
 	uint8_t				ack;						/**< Acknowledgment byte for handshake. */
 	packet_vel_data		vel_data;					/**< Parsed velocity data from a received packet. */
 	uint8_t				data[MAX_DATA_LENGTH];						/**< data packet inside the buffer >*/
+	unsigned short 		crc_val;
 } packet_cfgType;
 
 /* Function Prototypes -------------------------------------------------------*/
@@ -87,7 +88,7 @@ void LRL_Packet_Handshake(packet_cfgType *packet);
  * @param data_blk_size Size of the data block.
  * @param crc_final A reference to store the final CRC value.
  */
-void LRL_Packet_UpdateCRC(uint16_t crc_accum, uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
+void LRL_Packet_UpdateCRC(uint8_t *data_blk_ptr, uint16_t data_blk_size, unsigned short crc_final );
 
 /**
  * @brief Handles an incoming data packet.
