@@ -23,8 +23,11 @@
 /*-------------------------- Code Body ---------------------------------------- */
 
 
-void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle)
+void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle, UART_HandleTypeDef *huart)
 {
+	rosserial_handle->huart = huart;
+    rosserial_handle->min_pkt_len = PACKET_HEADER_LENGTH;
+    rosserial_handle->max_pkt_len = MAX_PACKET_LENGTH;
 	HAL_UART_Receive_IT(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->min_pkt_len);
 }
 

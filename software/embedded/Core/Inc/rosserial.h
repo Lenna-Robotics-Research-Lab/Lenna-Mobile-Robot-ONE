@@ -46,7 +46,7 @@ typedef struct
 } rosserial_cfgType;
 
 /* Function Prototypes -------------------------------------------------------*/
-void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle);
+void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle, UART_HandleTypeDef *huart);
 
 void LRL_ROSSerial_Rx(rosserial_cfgType *rosserial_handle);
 
