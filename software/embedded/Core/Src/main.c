@@ -35,6 +35,7 @@
 #include "mcu_config.h"
 #include "packet_handler.h"
 #include "imu.h"
+#include "rosserial.h"
 
 
 
@@ -245,6 +246,8 @@ packet_cfgType tx_packet=
 	144,
 };
 
+rosserial_cfgType ros_packet;
+
 int16_t val_x;
 int16_t val_y;
 int16_t val_z;
@@ -356,13 +359,7 @@ int main(void)
   }
   */
 
-  // Handshake
-  LRL_Packet_Handshake(&rx_packet);
-
-  // Communication start after handshake
-  //  HAL_UART_Receive_IT(&huart1, testBuffer, 4); //for initializing the uart interrupt for test
-
-  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
+  LRL_ROSSerial_Init(&ros_packet, &huart1);
 
   txBuffer[0] = 0xFF;
   txBuffer[1] = 0xFF;
@@ -378,28 +375,7 @@ int main(void)
   {
 	  if(pid_tim_flag == 1)
 	  {
-		  if(protocol_rx.byteReady == 1)
-		  {
-			  uint8_t _temp_buff[144];
-			  /*
-			   * CAUTION : The UART code only works for frequencies that would not
-			   * let the buffer update inside the loop. This code is designed for
-			   * frequency of 100 Hz but it would also work for 1KHz. Higher frequencies
-			   * have not been tested and may cause loss of packet.
-			   */
-			  memcpy(&_temp_buff, &protocol_rx.buffer, protocol_rx.buffer[2] + 3);
-
-			  for(int i = 0; i < _temp_buff[2]; i++){
-				  protocol_rx.data[i] = _temp_buff[3 + i];
-			  }
-	//	  	  HAL_UART_Receive_IT(protocol_rx.huart, protocol_rx.buffer , protocol_rx.min_pkt_lenght);
-			  HAL_UART_Transmit(&huart1, protocol_rx.buffer, protocol_rx.buffer[2] + 3,1);
-			  HAL_UART_Transmit(&huart1, protocol_rx.data, protocol_rx.buffer[2],1);
-			  HAL_UART_Transmit(&huart1, _temp_buff, protocol_rx.buffer[2] + 3,1);
-	//	  	  memset(protocol_rx.buffer, 0, sizeof(protocol_rx.buffer));
-			  protocol_rx.byteReady = 0;
-
-		  }
+		 LRL_ROSSerial_Data_Handle(&ros_packet);
 		 pid_tim_flag = 0;
 	  }
 // */
@@ -489,10 +465,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
 	if(huart == protocol_rx.huart)
 	{
-		if(protocol_rx.byteReady == 0)
-		{
-			LRL_Protocol_RX(&protocol_rx);
-		}
+		LRL_ROSSerial_Rx(&ros_packet);
 	}
 
 /* for jetson test
