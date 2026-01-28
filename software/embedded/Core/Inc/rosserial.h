@@ -9,6 +9,9 @@
 #define INC_ROSSERIAL_H_
 
 #include "usart.h"
+#include "pid.h"
+#include "imu.h"
+#include "odometry.h"
 
 #define PACKET_HEADER_LENGTH	5	/**< Minimum expected packet length. */
 #define MAX_PACKET_LENGTH		255	/**< Maximum buffer size for a packet. */
@@ -16,15 +19,6 @@
 
 /* Type Definitions ----------------------------------------------------------*/
 
-/**
- * @struct packet_data
- * @brief Stores velocity data from an incoming command packet.
- */
-typedef struct
-{
-	int16_t right_velocity;	/**< Desired right wheel velocity. */
-	int16_t left_velocity;	/**< Desired left wheel velocity. */
-} packet_vel_data;
 
 /**
  * @struct rosserial_cfgType
@@ -54,11 +48,12 @@ void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle);
 
 void _LRL_ROSSerial_Function(rosserial_cfgType *rosserial_handle);
 
-void LRL_ROSSerial_ReadAll(rosserial_cfgType *rosserial_handle);
+void LRL_ROSSerial_ReadAll(rosserial_cfgType *rosserial_handle, odom_cfgType *odom, imu_statetype *imu);
 
 void LRL_ROSSerial_Query(rosserial_cfgType *rosserial_handle);
-//void LRL_ROSSerial_SetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg);
-//
-//void LRL_ROSSerial_getPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg);
+
+void LRL_ROSSerial_SetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg);
+
+void LRL_ROSSerial_getPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg);
 
 #endif /* INC_ROSSERIAL_H_ */

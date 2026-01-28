@@ -16,9 +16,9 @@
 #include "usart.h"
 #include "stdlib.h"
 #include "string.h"
-//#include "pid.h"
-//#include "imu.h"
-//#include "odometry.h"
+#include "pid.h"
+#include "imu.h"
+#include "odometry.h"
 
 /*-------------------------- Code Body ---------------------------------------- */
 
@@ -156,9 +156,12 @@ void LRL_ROSSerial_Query(rosserial_cfgType *rosserial_handle)
 	rosserial_handle->dataValid = 0;
 }
 
-/*
+
 void LRL_ROSSerial_ReadAll(rosserial_cfgType *rosserial_handle, odom_cfgType *odom, imu_statetype *imu)
 {
+    LRL_IMU_MPUReadAll(imu);
+    LRL_IMU_MagReadHeading(imu);
+    LRL_Odometry_ReadAngularSpeed(odom);
 	// Start of packet markers.
 	rosserial_handle->txbuffer[0] 	= 0xFF;
 	rosserial_handle->txbuffer[1] 	= 0xFE;
@@ -224,9 +227,9 @@ void LRL_ROSSerial_ReadAll(rosserial_cfgType *rosserial_handle, odom_cfgType *od
 
 void LRL_ROSSerial_SetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg)
 {
-	pid_cfg->kp = rosserial_handle->data[2];
-	pid_cfg->ki = rosserial_handle->data[3];
-	pid_cfg->kd = rosserial_handle->data[4];
+	pid_cfg->Kp = rosserial_handle->data[2];
+	pid_cfg->Ki = rosserial_handle->data[3];
+	pid_cfg->Kd = rosserial_handle->data[4];
 
 	HAL_UART_Transmit(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->pkt_len, 1);
 	rosserial_handle->dataValid = 0;
@@ -248,9 +251,9 @@ void LRL_ROSSerial_GetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_
 	rosserial_handle->txbuffer[5] 	= 0x02;
 	rosserial_handle->txbuffer[6] 	= 0x00;
 
-	rosserial_handle->txbuffer[7] 	= pid_cfg->kp;
-	rosserial_handle->txbuffer[8] 	= pid_cfg->ki;
-	rosserial_handle->txbuffer[9] 	= pid_cfg->kd;
+	rosserial_handle->txbuffer[7] 	= pid_cfg->Kp;
+	rosserial_handle->txbuffer[8] 	= pid_cfg->Ki;
+	rosserial_handle->txbuffer[9] 	= pid_cfg->Kd;
 
 	uint8_t _checksum = 0;
 
@@ -266,4 +269,4 @@ void LRL_ROSSerial_GetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_
 
 
 }
-*/
+
