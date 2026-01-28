@@ -1,6 +1,6 @@
-../Core/Src/packet_handler.c:30:6:LRL_Packet_Init	16	static
-../Core/Src/packet_handler.c:44:6:LRL_Packet_Handshake	80	static
-../Core/Src/packet_handler.c:77:6:LRL_Packet_UpdateCRC	32	static
-../Core/Src/packet_handler.c:106:6:LRL_Packet_TX	32	static
-../Core/Src/packet_handler.c:174:6:LRL_Packet_RX	24	static
-../Core/Src/packet_handler.c:218:6:LRL_Protocol_RX	24	static
+../Core/Src/packet_handler.c:93:6:LRL_Packet_Init	16	static
+../Core/Src/packet_handler.c:107:6:LRL_Packet_Handshake	80	static
+../Core/Src/packet_handler.c:140:6:LRL_Packet_UpdateCRC	24	static
+../Core/Src/packet_handler.c:203:6:LRL_Packet_TX	32	static
+../Core/Src/packet_handler.c:271:6:LRL_Packet_RX	24	static
+../Core/Src/packet_handler.c:315:6:LRL_Protocol_RX	24	static
