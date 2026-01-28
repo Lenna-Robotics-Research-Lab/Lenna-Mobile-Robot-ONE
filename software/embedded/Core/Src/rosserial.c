@@ -81,10 +81,14 @@ void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle)
 {
     if(rosserial_handle->packetReceived)
     {
-	    HAL_UART_Transmit(rosserial_handle->huart, "Stage 1", 7, 10);
+//	    HAL_UART_Transmit(rosserial_handle->huart, "Stage 1", 7, 10);
 	    if(rosserial_handle->headerValid)
 	    {
-	    	HAL_UART_Transmit(rosserial_handle->huart, "Stage 2", 7, 10);
+	    	while(rosserial_handle->rxbuffer[rosserial_handle->pkt_len - 1] == 0)
+	    	{
+
+	    	}
+//	    	HAL_UART_Transmit(rosserial_handle->huart, "Stage 2", 7, 10);
 		    memcpy(rosserial_handle->data, &rosserial_handle->rxbuffer[rosserial_handle->min_pkt_len], rosserial_handle->data_len);
 
 		    uint8_t _data_sum = 0, _data_checksum = 0;
@@ -98,7 +102,7 @@ void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle)
 
 		    if(_data_checksum == rosserial_handle->data[rosserial_handle->data_len])
 		    {
-		  	   HAL_UART_Transmit(rosserial_handle->huart, "Stage 3", 7, 10);
+//		  	   HAL_UART_Transmit(rosserial_handle->huart, "Stage 3", 7, 10);
 		  	   rosserial_handle->dataValid = 1;
 		  	   _LRL_ROSSerial_Function(rosserial_handle);
 		  	   memset(rosserial_handle->rxbuffer, 0 , sizeof(rosserial_handle->rxbuffer));
@@ -132,19 +136,13 @@ void _LRL_ROSSerial_Function(rosserial_cfgType *rosserial_handle)
 	 * our function ID.
 	 */
 	_id = rosserial_handle->data[0];
-	switch(_id)
+	if(_id == 0x00)
 	{
-		case 0x00:
-			LRL_ROSSerial_Query(rosserial_handle);
-			break;
-//		case 0x01:
-//			LRL_ROSSerial_ReadAll(rosserial_handle);
-//		case 0x02:
-//			LRL_ROSSerial_SetPID(rosserial_handle, pid);
-//		case 0x03:
-//			LRL_ROSSerial_GetPID(rosserial_handle, pid);
-		default:
-			rosserial_handle->dataValid = 0;
+		LRL_ROSSerial_Query(rosserial_handle);
+	}
+	else
+	{
+		rosserial_handle->dataValid = 0;
 
 	}
 }
