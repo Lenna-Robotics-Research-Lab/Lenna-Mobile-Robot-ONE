@@ -18,6 +18,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
 #include "stdbool.h"
+#include "odometry.h"
 
 
 /* Defines -------------------------------------------------------------------*/
@@ -57,21 +58,50 @@
  */
 typedef struct
 {
-	float Kp;						/**< Proportional gain. */
-	float Ki;						/**< Integral gain. */
-	float Kd;						/**< Derivative gain. */
-	float Ts;						/**< Sampling time in seconds. */
-	int8_t Lower_Limit_Saturation;	/**< Lower saturation limit for the control signal. */
-	int8_t Upper_Limit_Saturation;	/**< Upper saturation limit for the control signal. */
-	float Integrator_Amount;		/**< Accumulator for the integral term. */
-	float Differentiator_Amount;	/**< The derivative term. */
+	float 	Kp;						/**< Proportional gain. */
+	float 	Ki;						/**< Integral gain. */
+	float 	Kd;						/**< Derivative gain. */
+	float 	Ts;						/**< Sampling time in seconds. */
+	int8_t 	Lower_Limit_Saturation;	/**< Lower saturation limit for the control signal. */
+	int8_t 	Upper_Limit_Saturation;	/**< Upper saturation limit for the control signal. */
+	float 	Integrator_Amount;		/**< Accumulator for the integral term. */
+	float 	Differentiator_Amount;	/**< The derivative term. */
 	int16_t Prev_Measurement;		/**< Previous measurement for derivative calculation. */
-	float Prev_Error;				/**< Previous error for integral calculation. */
-	int8_t Control_Signal;			/**< The final calculated control signal. */
+	float 	Prev_Error;				/**< Previous error for integral calculation. */
+	int8_t 	Control_Signal;			/**< The final calculated control signal. */
 	uint8_t Anti_windup_EN;			/**< Flag to enable/disable anti-windup. */
-	float Wind_Up_Amount;			/**< Integral term value during saturation for anti-windup. */
-	float Error;					/**< Current error (set_point - measurement). */
-	int8_t dir;						/**< Direction of the motor. */
+	float 	Wind_Up_Amount;			/**< Integral term value during saturation for anti-windup. */
+	float 	Error;					/**< Current error (set_point - measurement). */
+	int8_t 	dir;						/**< Direction of the motor. */
+} pid_cfgType2;
+
+typedef struct
+{
+	float 	Kp_r;						/**< Proportional gain right. */
+	float 	Kp_l;						/**< Proportional gain left. */
+	float 	Ki_r;						/**< Integral gain right. */
+	float	Ki_l;						/**< Integral gain left. */
+	float 	Kd_r;						/**< Derivative gain right. */
+	float	Kd_l;						/**< Derivative gain left.*/
+	float 	Ts;							/**< Sampling time in seconds. */
+	int8_t 	Lower_Limit_Saturation;		/**< Lower saturation limit for the control signal. */
+	int8_t 	Upper_Limit_Saturation;		/**< Upper saturation limit for the control signal. */
+	float 	Integrator_Amount_r;		/**< Accumulator for the integral term right. */
+	float	Integrator_Amount_l;		/**< Accumulator for the integral term left. */
+	float 	Differentiator_Amount_r;	/**< The derivative term right. */
+	float 	Differentiator_Amount_l;	/**< The derivative term left. */
+	int16_t Prev_Measurement_r;			/**< Previous measurement for derivative calculation right. */
+	int16_t Prev_Measurement_l;			/**< Previous measurement for derivative calculation left. */
+	float 	Prev_Error_r;				/**< Previous error for integral calculation right. */
+	float 	Prev_Error_l;				/**< Previous error for integral calculation left. */
+	int8_t 	Control_Signal_r;			/**< The final calculated control signal right. */
+	int8_t 	Control_Signal_l;			/**< The final calculated control signal left. */
+	uint8_t Anti_windup_EN;				/**< Flag to enable/disable anti-windup. */
+	float 	Wind_Up_Amount_r;			/**< Integral term value during saturation for anti-windup right. */
+	float 	Wind_Up_Amount_l;			/**< Integral term value during saturation for anti-windup right. */
+	float 	Error_r;					/**< Current error (set_point - measurement) right. */
+	float  	Error_l;					/**< Current error (set_point - measurement) left. */
+	int8_t 	dir;						/**< Direction of the motor. */
 } pid_cfgType;
 
 /* Function Prototypes -------------------------------------------------------*/
@@ -89,6 +119,6 @@ void LRL_PID_Init(pid_cfgType *pid_cfg,uint8_t AntiWindup);
  * @param measurement The current measured value (e.g., speed).
  * @param set_point The desired set point.
  */
-void LRL_PID_Update(pid_cfgType *pid_cfg,int16_t measurement,int16_t set_point);
+void LRL_PID_Update(pid_cfgType *pid, odom_cfgType *odom, int16_t left_setpoint, int16_t right_setpoint);
 
 #endif /* INC_PID_H_ */
