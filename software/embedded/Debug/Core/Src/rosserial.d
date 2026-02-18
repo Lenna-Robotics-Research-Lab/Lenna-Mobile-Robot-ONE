@@ -35,9 +35,10 @@ Core/Src/rosserial.o: ../Core/Src/rosserial.c ../Core/Inc/rosserial.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
- ../Core/Inc/pid.h ../Core/Inc/imu.h ../Core/Inc/i2c.h ../Core/Inc/tim.h \
- ../Core/Inc/motion.h ../Core/Inc/odometry.h ../Core/Inc/usart.h \
- ../Core/Inc/pid.h ../Core/Inc/imu.h ../Core/Inc/odometry.h
+ ../Core/Inc/pid.h ../Core/Inc/odometry.h ../Core/Inc/i2c.h \
+ ../Core/Inc/tim.h ../Core/Inc/motion.h ../Core/Inc/imu.h \
+ ../Core/Inc/usart.h ../Core/Inc/pid.h ../Core/Inc/imu.h \
+ ../Core/Inc/odometry.h
 ../Core/Inc/rosserial.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/main.h:
@@ -77,11 +78,11 @@ Core/Src/rosserial.o: ../Core/Src/rosserial.c ../Core/Inc/rosserial.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h:
 ../Core/Inc/pid.h:
-../Core/Inc/imu.h:
+../Core/Inc/odometry.h:
 ../Core/Inc/i2c.h:
 ../Core/Inc/tim.h:
 ../Core/Inc/motion.h:
-../Core/Inc/odometry.h:
+../Core/Inc/imu.h:
 ../Core/Inc/usart.h:
 ../Core/Inc/pid.h:
 ../Core/Inc/imu.h:

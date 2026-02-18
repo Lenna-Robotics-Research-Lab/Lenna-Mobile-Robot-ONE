@@ -1,6 +1,0 @@
-../Core/Src/packet_handler.c:93:6:LRL_Packet_Init	16	static
-../Core/Src/packet_handler.c:107:6:LRL_Packet_Handshake	80	static
-../Core/Src/packet_handler.c:140:6:LRL_Packet_UpdateCRC	24	static
-../Core/Src/packet_handler.c:203:6:LRL_Packet_TX	32	static
-../Core/Src/packet_handler.c:271:6:LRL_Packet_RX	24	static
-../Core/Src/packet_handler.c:315:6:LRL_Protocol_RX	24	static

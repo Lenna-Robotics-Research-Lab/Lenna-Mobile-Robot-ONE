@@ -6,7 +6,6 @@
 "./Core/Src/main.o"
 "./Core/Src/motion.o"
 "./Core/Src/odometry.o"
-"./Core/Src/packet_handler.o"
 "./Core/Src/pid.o"
 "./Core/Src/rosserial.o"
 "./Core/Src/spi.o"
