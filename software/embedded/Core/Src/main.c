@@ -33,7 +33,6 @@
 #include "math.h"
 #include "odometry.h"
 #include "mcu_config.h"
-#include "packet_handler.h"
 #include "imu.h"
 #include "rosserial.h"
 
@@ -187,64 +186,31 @@ const ultrasonic_cfgType us_front =
 // ####################   PID struct Value Setting   ###################
 
 // definitions concerning PID gain values are made in the main.h header file
-pid_cfgType pid_motor_left =
-{
-	Proportional_Gain_LEFT_MOTOR,
-	Integral_Gain_LEFT_MOTOR,
-	Derivative_Gain_LEFT_MOTOR,
-	Sampling_Time,
-	Lower_Saturation_Limit,
-	Upper_Saturation_Limit,
-	0,
-	0,
-	0,
-	0,
-	0,
-	1,
-	0,
-	0
-};
+//pid_cfgType pid_motor_left =
+//{
+//	.Kp 					= Proportional_Gain_LEFT_MOTOR,
+//	.Ki 					= Integral_Gain_LEFT_MOTOR,
+//	.Kd 					= Derivative_Gain_LEFT_MOTOR,
+//	.Ts 					= Sampling_Time,
+//	.Lower_Limit_Saturation = Lower_Saturation_Limit,
+//	.Upper_Limit_Saturation = Upper_Saturation_Limit,
+//	.Wind_Up_Amount			= 1,
+//};
+//
+//pid_cfgType pid_motor_right =
+//{
+//	.Kp 					= Proportional_Gain_LEFT_MOTOR,
+//	.Ki 					= Integral_Gain_LEFT_MOTOR,
+//	.Kd 					= Derivative_Gain_LEFT_MOTOR,
+//	.Ts 					= Sampling_Time,
+//	.Lower_Limit_Saturation = Lower_Saturation_Limit,
+//	.Upper_Limit_Saturation = Upper_Saturation_Limit,
+//	.Wind_Up_Amount			= 1,
+//};
 
-pid_cfgType pid_motor_right =
-{
-	Proportional_Gain_RIGHT_MOTOR,
-	Integral_Gain_RIGHT_MOTOR,
-	Derivative_Gain_RIGHT_MOTOR,
-	Sampling_Time,
-	Lower_Saturation_Limit,
-	Upper_Saturation_Limit,
-	0,
-	0,
-	0,
-	0,
-	0,
-	1,
-	0,
-	0
-};
-
+pid_cfgType mypid;
 // ####################   Packet struct Value Setting   ###################
 
-packet_cfgType rx_packet=
-{
-	.huart 				= &huart1,
-	.min_pkt_lenght 	= 3,
-	.max_pkt_lenght		= 144,
-};
-
-packet_cfgType protocol_rx=
-{
-	.huart 				= &huart1,
-	.min_pkt_lenght 	= 5,
-	.max_pkt_lenght		= 144,
-};
-
-packet_cfgType tx_packet=
-{
-	&huart1,
-	3,
-	144,
-};
 
 rosserial_cfgType ros_packet;
 
@@ -338,8 +304,10 @@ int main(void)
 
 //  /* main code initialization
 
-  LRL_PID_Init(&pid_motor_left,  1);
-  LRL_PID_Init(&pid_motor_right, 1);
+//  LRL_PID_Init(&pid_motor_left,  1);
+//  LRL_PID_Init(&pid_motor_right, 1);
+
+  LRL_PID_Init(&mypid, 1);
 
   LRL_Odometry_Init(&odom);
 
@@ -347,7 +315,6 @@ int main(void)
 
   LRL_IMU_MagInit(&imu);
 
-  int16_t motor_speed_left = 0, motor_speed_right = 0;
 
   /* Testing purposes
   for(int c = 0; c< 3 ; c++)
@@ -375,25 +342,11 @@ int main(void)
   {
 	  if(pid_tim_flag == 1)
 	  {
-		 LRL_ROSSerial_Data_Handle(&ros_packet);
+		 LRL_ROSSerial_Data_Handle(&ros_packet, &imu, &odom, &mypid);
 		 pid_tim_flag = 0;
 	  }
-// */
-//	  if(pid_tim_flag == 1)
-//	  {
-//		  LRL_IMU_MPUReadAll(&imu);
-//		  LRL_IMU_MagReadHeading(&imu);
-//		  LRL_Odometry_ReadAngularSpeed(&odom);
-//		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
-//		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-//		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
-//
-//		  LRL_Packet_TX(&tx_packet, &odom, &imu);
-//		  pid_tim_flag = 0;
-//	  }
 
     /* USER CODE END WHILE */
-
 
     /* USER CODE BEGIN 3 */
   }
@@ -463,19 +416,12 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
-	if(huart == protocol_rx.huart)
+	if(huart == ros_packet.huart)
 	{
 		LRL_ROSSerial_Rx(&ros_packet);
 	}
 
-/* for jetson test
-	USART_TypeDef *inst = huart->Instance;
-	if(inst == USART2){
-//		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, GPIO_PIN_SET);
-		rx_packet.rx_byteReady = 1;
-		serial_flag = 1;
-	}
-*/
+
 }
 
 // ####################   Timer To Creat 0.01 Delay Callback   ####################

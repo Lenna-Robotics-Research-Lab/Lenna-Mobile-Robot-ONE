@@ -19,18 +19,23 @@
 #include "pid.h"
 #include "imu.h"
 #include "odometry.h"
-
+#include "stdio.h"
 /*-------------------------- Code Body ---------------------------------------- */
-
 
 void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle, UART_HandleTypeDef *huart)
 {
-	rosserial_handle->huart = huart;
-    rosserial_handle->min_pkt_len = PACKET_HEADER_LENGTH;
-    rosserial_handle->max_pkt_len = MAX_PACKET_LENGTH;
-	HAL_UART_Receive_IT(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->min_pkt_len);
-}
+	rosserial_handle->huart 			= huart;
+    rosserial_handle->min_pkt_len 		= PACKET_HEADER_LENGTH;
+    rosserial_handle->max_pkt_len 		= MAX_PACKET_LENGTH;
 
+    rosserial_handle->err_hdl			= 0x00;
+
+    rosserial_handle->packetReceived 	= 0;
+    rosserial_handle->headerValid 		= 0;
+
+    HAL_UART_Receive_IT(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->min_pkt_len);
+
+}
 
 void LRL_ROSSerial_Rx(rosserial_cfgType *rosserial_handle)
 {
@@ -62,16 +67,15 @@ void LRL_ROSSerial_Rx(rosserial_cfgType *rosserial_handle)
 			}
 			else
 			{
-				/*
-				 * this would deal with unauthorized checksum headers
-				 */
+				rosserial_handle->err_hdl = 0x02;
 				rosserial_handle->headerValid = 0;
 			}
 			rosserial_handle->packetReceived = 1;
 		}
 		else
 		{
-			// Second stage: full packet received or invalid header
+
+			rosserial_handle->err_hdl = 0x01;
 		}
 	}
 	else
@@ -80,18 +84,17 @@ void LRL_ROSSerial_Rx(rosserial_cfgType *rosserial_handle)
 	}
 }
 
-void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle)
+
+
+
+
+void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle, imu_statetype *imu, odom_cfgType *odom, pid_cfgType *pid)
 {
+	uint8_t _err_msg[9];
     if(rosserial_handle->packetReceived)
     {
-//	    HAL_UART_Transmit(rosserial_handle->huart, "Stage 1", 7, 10);
-	    if(rosserial_handle->headerValid)
+	    if(rosserial_handle->headerValid && rosserial_handle->rxbuffer[rosserial_handle->pkt_len - 1] != 0)
 	    {
-	    	while(rosserial_handle->rxbuffer[rosserial_handle->pkt_len - 1] == 0)
-	    	{
-
-	    	}
-//	    	HAL_UART_Transmit(rosserial_handle->huart, "Stage 2", 7, 10);
 		    memcpy(rosserial_handle->data, &rosserial_handle->rxbuffer[rosserial_handle->min_pkt_len], rosserial_handle->data_len);
 
 		    uint8_t _data_sum = 0, _data_checksum = 0;
@@ -105,30 +108,46 @@ void LRL_ROSSerial_Data_Handle(rosserial_cfgType *rosserial_handle)
 
 		    if(_data_checksum == rosserial_handle->data[rosserial_handle->data_len])
 		    {
-//		  	   HAL_UART_Transmit(rosserial_handle->huart, "Stage 3", 7, 10);
 		  	   rosserial_handle->dataValid = 1;
-		  	   _LRL_ROSSerial_Function(rosserial_handle);
+		  	   _LRL_ROSSerial_Function(rosserial_handle, imu, odom, pid);
 		  	   memset(rosserial_handle->rxbuffer, 0 , sizeof(rosserial_handle->rxbuffer));
 		  	   memset(rosserial_handle->data, 0 , sizeof(rosserial_handle->data));
 		    }
 		    else
 		    {
-		    	//something for second leg of data not being valid
+		    	rosserial_handle->err_hdl = 0x03;
 		    }
 
 
 		    rosserial_handle->headerValid = 0;
 	    }
-	    else
-	    {
-	    	// something to deal with data not being valid
-	    }
+
 	    rosserial_handle->packetReceived = 0;
 
     }
+    if(rosserial_handle->err_hdl == 0x01)
+    {
+    	_LRL_Clear_Buffer(rosserial_handle);
+    	memcpy(_err_msg, (uint8_t[]){0xFF, 0xFE, 0x00, 0x00, 0xFF, 0xF1, 0xFF, 0x0E}, 8);
+    	HAL_UART_Transmit(rosserial_handle->huart, _err_msg, 8, 1);
+
+
+    }
+    else if(rosserial_handle->err_hdl == 0x02)
+    {
+    	_LRL_Clear_Buffer(rosserial_handle);
+    	memcpy(_err_msg, (uint8_t[]){0xFF, 0xFE, 0x00, 0x00, 0xFF, 0xF2, 0xFF, 0x0D}, 8);
+    	HAL_UART_Transmit(rosserial_handle->huart, _err_msg, 8, 1);
+    }
+    else if(rosserial_handle->err_hdl== 0x03)
+    {
+    	_LRL_Clear_Buffer(rosserial_handle);
+    	memcpy(_err_msg, (uint8_t[]){0xFF, 0xFE, 0x00, 0x00, 0xFF, 0xF3, 0xFF, 0x0C}, 8);
+    	HAL_UART_Transmit(rosserial_handle->huart, _err_msg, 8, 1);
+    }
 }
 
-void _LRL_ROSSerial_Function(rosserial_cfgType *rosserial_handle)
+void _LRL_ROSSerial_Function(rosserial_cfgType *rosserial_handle, imu_statetype *imu, odom_cfgType *odom, pid_cfgType *pid)
 {
 	uint8_t _id;
 
@@ -142,6 +161,18 @@ void _LRL_ROSSerial_Function(rosserial_cfgType *rosserial_handle)
 	if(_id == 0x00)
 	{
 		LRL_ROSSerial_Query(rosserial_handle);
+	}
+	else if(_id == 0x01)
+	{
+		LRL_ROSSerial_ReadAll(rosserial_handle, odom, imu);
+	}
+	else if(_id == 0x02)
+	{
+		LRL_ROSSerial_SetPID(rosserial_handle, pid);
+	}
+	else if(_id == 0x03)
+	{
+		LRL_ROSSerial_GetPID(rosserial_handle, pid);
 	}
 	else
 	{
@@ -220,18 +251,48 @@ void LRL_ROSSerial_ReadAll(rosserial_cfgType *rosserial_handle, odom_cfgType *od
 	rosserial_handle->txbuffer[33] 	= _checksum;
 
 	// Transmit the complete packet.
-	HAL_UART_Transmit_IT(rosserial_handle->huart, rosserial_handle->txbuffer, 33);
-	memset(rosserial_handle->txbuffer, 0 , sizeof(rosserial_handle->txbuffer));
+	HAL_UART_Transmit(rosserial_handle->huart, rosserial_handle->txbuffer, 34, 10);
+//	memset(rosserial_handle->txbuffer, 0 , sizeof(rosserial_handle->txbuffer));
 	rosserial_handle->dataValid = 0;
 }
 
-void LRL_ROSSerial_SetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_cfg)
+void LRL_ROSSerial_SetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid)
 {
-	pid_cfg->Kp = rosserial_handle->data[2];
-	pid_cfg->Ki = rosserial_handle->data[3];
-	pid_cfg->Kd = rosserial_handle->data[4];
+	if(rosserial_handle->data[1] == 0x00)
+	{
+		pid->Kp_r = (float)(
+		    ((uint16_t)rosserial_handle->data[2]) |
+		    ((uint16_t)rosserial_handle->data[3] << 8)
+		) / PID_PRECISION;
 
-	HAL_UART_Transmit(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->pkt_len, 1);
+		pid->Ki_r = (float)(
+		    ((uint16_t)rosserial_handle->data[4]) |
+		    ((uint16_t)rosserial_handle->data[5] << 8)
+		) / PID_PRECISION;
+
+		pid->Kd_r = (float)(
+		    ((uint16_t)rosserial_handle->data[6]) |
+		    ((uint16_t)rosserial_handle->data[7] << 8)
+		) / PID_PRECISION;
+	}
+	else if(rosserial_handle->data[1] == 0x01)
+	{
+		pid->Kp_l = (float)(
+		    ((uint16_t)rosserial_handle->data[2]) |
+		    ((uint16_t)rosserial_handle->data[3] << 8)
+		) / PID_PRECISION;
+
+		pid->Ki_l = (float)(
+		    ((uint16_t)rosserial_handle->data[4]) |
+		    ((uint16_t)rosserial_handle->data[5] << 8)
+		) / PID_PRECISION;
+
+		pid->Kd_l = (float)(
+		    ((uint16_t)rosserial_handle->data[6]) |
+		    ((uint16_t)rosserial_handle->data[7] << 8)
+		) / PID_PRECISION;
+	}
+	HAL_UART_Transmit(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->pkt_len, 10);
 	rosserial_handle->dataValid = 0;
 
 }
@@ -248,25 +309,72 @@ void LRL_ROSSerial_GetPID(rosserial_cfgType *rosserial_handle, pid_cfgType *pid_
 
 	rosserial_handle->txbuffer[4] 	= 0xFF - 0x03;
 
-	rosserial_handle->txbuffer[5] 	= 0x02;
-	rosserial_handle->txbuffer[6] 	= 0x00;
+	rosserial_handle->txbuffer[5] 	= 0x03;
 
-	rosserial_handle->txbuffer[7] 	= pid_cfg->Kp;
-	rosserial_handle->txbuffer[8] 	= pid_cfg->Ki;
-	rosserial_handle->txbuffer[9] 	= pid_cfg->Kd;
+	uint16_t _temp;
+	if(rosserial_handle->data[1] == 0x00)
+	{
+		rosserial_handle->txbuffer[6] 	= 0x00;
+		_temp = (uint16_t)(pid_cfg->Kp_r * PID_PRECISION);
+		rosserial_handle->txbuffer[7] 	= (uint8_t)(_temp);
+		rosserial_handle->txbuffer[8] 	= (uint8_t)(_temp>>8);
 
+		_temp = (uint16_t)(pid_cfg->Ki_r * PID_PRECISION);
+		rosserial_handle->txbuffer[9] 	= (uint8_t)(_temp);
+		rosserial_handle->txbuffer[10] 	= (uint8_t)(_temp>>8);
+
+		_temp = (uint16_t)(pid_cfg->Kd_r * PID_PRECISION);
+		rosserial_handle->txbuffer[11] 	=  (uint8_t)(_temp);
+		rosserial_handle->txbuffer[12] 	=  (uint8_t)(_temp>>8);
+	}
+	else if(rosserial_handle->data[1] == 0x01)
+	{
+		rosserial_handle->txbuffer[6] 	= 0x01;
+		_temp = (uint16_t)(pid_cfg->Kp_l * PID_PRECISION);
+		rosserial_handle->txbuffer[7] 	= (uint8_t)(_temp);
+		rosserial_handle->txbuffer[8] 	= (uint8_t)(_temp>>8);
+
+		_temp = (uint16_t)(pid_cfg->Ki_l * PID_PRECISION);
+		rosserial_handle->txbuffer[9] 	= (uint8_t)(_temp);
+		rosserial_handle->txbuffer[10] 	= (uint8_t)(_temp>>8);
+
+		_temp = (uint16_t)(pid_cfg->Kd_l * PID_PRECISION);
+		rosserial_handle->txbuffer[11] 	=  (uint8_t)(_temp);
+		rosserial_handle->txbuffer[12] 	=  (uint8_t)(_temp>>8);
+	}
 	uint8_t _checksum = 0;
 
-	for(int i = 0; i < (0x03 + 0x02) ; i++)
+	for(int i = 0; i < 8 ; i++)
 	{
 		_checksum += rosserial_handle->txbuffer[i+5];
 	}
 
-	rosserial_handle->txbuffer[10]	= _checksum;
+	rosserial_handle->txbuffer[13]	= _checksum;
 
-	HAL_UART_Transmit_IT(rosserial_handle->huart, rosserial_handle->txbuffer, 10);
-	memset(rosserial_handle->txbuffer, 0 , sizeof(rosserial_handle->txbuffer));
+	HAL_UART_Transmit(rosserial_handle->huart, rosserial_handle->txbuffer, 14, 10);
+//	memset(rosserial_handle->txbuffer, 0 , sizeof(rosserial_handle->txbuffer));
+	rosserial_handle->dataValid = 0;
+}
 
+void _LRL_Clear_Buffer(rosserial_cfgType *rosserial_handle)
+{
+	do {
+	  if(__HAL_UART_GET_FLAG(rosserial_handle->huart, UART_FLAG_RXNE)) {
+		volatile uint8_t tmp = rosserial_handle->huart->Instance->DR;  // Read FIFO
+		(void)tmp;
+	  }
+	} while(__HAL_UART_GET_FLAG(rosserial_handle->huart, UART_FLAG_RXNE));
 
+//	    Clear ALL error flags
+	__HAL_UART_CLEAR_OREFLAG(rosserial_handle->huart);
+	__HAL_UART_CLEAR_PEFLAG(rosserial_handle->huart);
+	__HAL_UART_CLEAR_FEFLAG(rosserial_handle->huart);
+	__HAL_UART_CLEAR_NEFLAG(rosserial_handle->huart);
+
+//	    Reset HAL state
+	rosserial_handle->huart->RxState = HAL_UART_STATE_READY;
+	rosserial_handle->huart->ErrorCode = 0;
+	HAL_UART_Receive_IT(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->min_pkt_len);
+	rosserial_handle->err_hdl = 0x00;
 }
 
