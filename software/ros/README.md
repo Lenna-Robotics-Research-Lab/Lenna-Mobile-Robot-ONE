@@ -17,7 +17,6 @@
     │   │   ├── maps/  
     │   │   ├── CMakeLists.txt  
     │   │   └── package.xml  
-    │   ├── lenna_description/  
     │   ├── lenna_msgs/  
     │   └── ldlidar_stl_ros/  
     │
