@@ -1,1 +1,0 @@
-# lenna_description
