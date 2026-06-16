@@ -326,10 +326,7 @@ int main(void)
   }
   */
 
-  LRL_ROSSerial_Init(&ros_packet, &huart1);
-
-  txBuffer[0] = 0xFF;
-  txBuffer[1] = 0xFF;
+  LRL_ROSSerial_Init(&ros_packet, &huart2);
 
   odom.dist.right = 0;
   odom.dist.left = 0;
@@ -419,6 +416,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 	if(huart == ros_packet.huart)
 	{
 		LRL_ROSSerial_Rx(&ros_packet);
+		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
 	}
 
 

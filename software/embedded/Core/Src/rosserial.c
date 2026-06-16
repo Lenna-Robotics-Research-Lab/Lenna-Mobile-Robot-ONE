@@ -33,7 +33,9 @@ void LRL_ROSSerial_Init(rosserial_cfgType *rosserial_handle, UART_HandleTypeDef 
     rosserial_handle->packetReceived 	= 0;
     rosserial_handle->headerValid 		= 0;
 
+    _LRL_Clear_Buffer(rosserial_handle);
     HAL_UART_Receive_IT(rosserial_handle->huart, rosserial_handle->rxbuffer, rosserial_handle->min_pkt_len);
+
 
 }
 
