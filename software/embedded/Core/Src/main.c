@@ -213,6 +213,7 @@ pid_cfgType mypid;
 
 
 rosserial_cfgType ros_packet;
+rosserial_cfgType usb2serial_packet;
 
 int16_t val_x;
 int16_t val_y;
@@ -307,6 +308,8 @@ int main(void)
 //  LRL_PID_Init(&pid_motor_left,  1);
 //  LRL_PID_Init(&pid_motor_right, 1);
 
+  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
+
   LRL_PID_Init(&mypid, 1);
 
   LRL_Odometry_Init(&odom);
@@ -315,18 +318,10 @@ int main(void)
 
   LRL_IMU_MagInit(&imu);
 
+  LRL_ROSSerial_Init(&usb2serial_packet, USB2SERIAL_UART_HANDLER);
+  LRL_ROSSerial_Init(&ros_packet, JETSON_UART_HANDLER);
 
-  /* Testing purposes
-  for(int c = 0; c< 3 ; c++)
-  {
-	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-	  HAL_Delay(250);
-	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
-	  HAL_Delay(250);
-  }
-  */
-
-  LRL_ROSSerial_Init(&ros_packet, &huart2);
+  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
 
   odom.dist.right = 0;
   odom.dist.left = 0;
@@ -340,6 +335,7 @@ int main(void)
 	  if(pid_tim_flag == 1)
 	  {
 		 LRL_ROSSerial_Data_Handle(&ros_packet, &imu, &odom, &mypid);
+		 LRL_ROSSerial_Data_Handle(&usb2serial_packet, &imu, &odom, &mypid);
 		 pid_tim_flag = 0;
 	  }
 
@@ -413,11 +409,13 @@ void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
 
-	if(huart == ros_packet.huart)
+	if((huart == ros_packet.huart) || (huart == usb2serial_packet.huart))
 	{
 		LRL_ROSSerial_Rx(&ros_packet);
-		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
+		LRL_ROSSerial_Rx(&usb2serial_packet);
+//		HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1); // this is for testing purposes
 	}
+
 
 
 }
