@@ -20,6 +20,9 @@
 
 #define PROTOCOL_VERSION		0xFEu
 
+#define USB2SERIAL_UART_HANDLER    (&huart1)
+#define JETSON_UART_HANDLER   (&huart2)
+
 /* Type Definitions ----------------------------------------------------------*/
 
 
