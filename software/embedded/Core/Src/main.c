@@ -330,31 +330,31 @@ int main(void)
 
   LRL_Odometry_Init(&odom);
 
-  LRL_IMU_MPUInit(&imu);
-
-  LRL_IMU_MagInit(&imu);
+//  LRL_IMU_MPUInit(&imu);
+//
+//  LRL_IMU_MagInit(&imu);
 
   int16_t motor_speed_left = 0, motor_speed_right = 0;
 
-  for(int c = 0; c< 3 ; c++)
-  {
-	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
-	  HAL_Delay(250);
-	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
-	  HAL_Delay(250);
-  }
-
-  // Handshake
-  LRL_Packet_Handshake(&rx_packet);
-
-  // Communication start after handshake
-  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
-
-  txBuffer[0] = 0xFF;
-  txBuffer[1] = 0xFF;
-
-  odom.dist.right = 0;
-  odom.dist.left = 0;
+//  for(int c = 0; c< 3 ; c++)
+//  {
+//	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 1);
+//	  HAL_Delay(250);
+//	  HAL_GPIO_WritePin(BLINK_LED_PORT, BLINK_LED_PIN, 0);
+//	  HAL_Delay(250);
+//  }
+//
+//  // Handshake
+//  LRL_Packet_Handshake(&rx_packet);
+//
+//  // Communication start after handshake
+//  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
+//
+//  txBuffer[0] = 0xFF;
+//  txBuffer[1] = 0xFF;
+//
+//  odom.dist.right = 0;
+//  odom.dist.left = 0;
 
   /* USER CODE END 2 */
 
@@ -363,27 +363,29 @@ int main(void)
   while (1)
   {
 
-	  if(serial_flag == 1)
-	  {
-		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
-	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
-		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
-		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
+	  LRL_Motion_MotorTest(diff_robot);
 
-	  	  serial_flag = 0;
-	  }
-	  if(pid_tim_flag == 1)
-	  {
-		  LRL_IMU_MPUReadAll(&imu);
-		  LRL_IMU_MagReadHeading(&imu);
-		  LRL_Odometry_ReadAngularSpeed(&odom);
-		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
-		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
-
-		  LRL_Packet_TX(&tx_packet, &odom, &imu);
-		  pid_tim_flag = 0;
-	  }
+//	  if(serial_flag == 1)
+//	  {
+//		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
+//	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
+//		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
+//		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
+//
+//	  	  serial_flag = 0;
+//	  }
+//	  if(pid_tim_flag == 1)
+//	  {
+//		  LRL_IMU_MPUReadAll(&imu);
+//		  LRL_IMU_MagReadHeading(&imu);
+//		  LRL_Odometry_ReadAngularSpeed(&odom);
+//		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
+//		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
+//		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+//
+//		  LRL_Packet_TX(&tx_packet, &odom, &imu);
+//		  pid_tim_flag = 0;
+//	  }
 
     /* USER CODE END WHILE */
 
