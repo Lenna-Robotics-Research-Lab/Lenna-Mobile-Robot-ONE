@@ -1,0 +1,170 @@
+# ============================================
+# STM32 CubeMX / CubeIDE Generated Files
+# ============================================
+
+# CubeMX generated files
+
+*.mxproject
+*.project
+*.cproject
+*.settings/
+*.launch
+*.memorymap
+*.build
+*.makefile
+
+# Debug and Release folders
+/Debug/
+/Release/
+/build/
+/bin/
+/obj/
+
+# IDE specific
+/.idea/
+/.vscode/
+/.vs/
+/.*/
+!.gitignore
+
+# ============================================
+# Compiler Output Files
+# ============================================
+
+# Object files
+*.o
+*.obj
+*.ko
+*.out
+*.app
+
+# Executable files
+*.exe
+*.bin
+*.mot
+*.s19
+
+# Map files
+*.map
+*.lst
+
+# ============================================
+# STM32CubeIDE Specific
+# ============================================
+
+# CubeIDE build files
+*.elf
+*.map
+*.lst
+*.srec
+*.hex
+*.bin
+*.d
+*.o
+*.depend
+*.pre
+*.lst
+*.sym
+
+# CubeIDE debug files
+*.launch
+*.dbg
+*.jlink
+
+# CubeIDE project files
+/.project
+/.cproject
+/.settings/
+/.mxproject
+
+# ============================================
+# Editor / OS Files
+# ============================================
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor files
+*.swp
+*.swo
+*~
+*.bak
+*.tmp
+*.temp
+*.log
+
+# ============================================
+# Dependency Management
+# ============================================
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+
+# C/C++
+*.d
+*.dll
+*.lib
+*.a
+*.so
+*.sl
+*.lo
+*.la
+*.lai
+
+# ============================================
+# Documentation / Temporary
+# ============================================
+
+*.tmp
+*.temp
+*.log
+*.cache
+
+# ============================================
+# Git / Version Control
+# ============================================
+
+.git/
+.gitattributes
+.gitmodules
+
+# ============================================
+# Third Party Libraries
+# ============================================
+
+# Keep the library but ignore build artifacts
+/Drivers/CMSIS/*/Source/*.o
+/Drivers/STM32*_HAL_Driver/*.o
+/Middlewares/**/*.o
+
+# ============================================
+# Custom Project Files
+# ============================================
+
+# Ignore user-specific config files
+*.user
+*.userprefs
+*.private
+*.swp
+*.swo
+
+# Ignore backup files
+*.backup
+*.old
+*.orig
+
+# Ignore temporary test files
+/test/
+/temp/
+/tmp/
