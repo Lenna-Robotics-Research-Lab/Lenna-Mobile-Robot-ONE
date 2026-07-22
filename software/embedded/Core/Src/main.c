@@ -363,29 +363,29 @@ int main(void)
   while (1)
   {
 
-	  LRL_Motion_MotorTest(diff_robot);
+//	  LRL_Motion_MotorTest(diff_robot);
 
-//	  if(serial_flag == 1)
-//	  {
-//		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
-//	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
-//		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
-//		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
-//
-//	  	  serial_flag = 0;
-//	  }
-//	  if(pid_tim_flag == 1)
-//	  {
-//		  LRL_IMU_MPUReadAll(&imu);
-//		  LRL_IMU_MagReadHeading(&imu);
-//		  LRL_Odometry_ReadAngularSpeed(&odom);
-//		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
-//		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
-//		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
-//
-//		  LRL_Packet_TX(&tx_packet, &odom, &imu);
-//		  pid_tim_flag = 0;
-//	  }
+	  if(serial_flag == 1)
+	  {
+		  HAL_UART_Receive_IT(&huart2, testBuffer, 10);
+	  	  HAL_UART_Transmit(&huart1, testBuffer,sizeof(testBuffer),1);
+		  motor_speed_left = (int16_t)((testBuffer[4] << 8) | testBuffer[5]);
+		  motor_speed_right = (int16_t)((testBuffer[6] << 8) | testBuffer[7]);
+
+	  	  serial_flag = 0;
+	  }
+	  if(pid_tim_flag == 1)
+	  {
+		  LRL_IMU_MPUReadAll(&imu);
+		  LRL_IMU_MagReadHeading(&imu);
+		  LRL_Odometry_ReadAngularSpeed(&odom);
+		  LRL_PID_Update(&pid_motor_left, odom.vel.left, motor_speed_left);
+		  LRL_PID_Update(&pid_motor_right, odom.vel.right,motor_speed_right);
+		  LRL_Motion_Control(diff_robot, pid_motor_left.Control_Signal,pid_motor_right.Control_Signal);
+
+		  LRL_Packet_TX(&tx_packet, &odom, &imu);
+		  pid_tim_flag = 0;
+	  }
 
     /* USER CODE END WHILE */
 
